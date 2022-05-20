@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="emperatriz.fluviatilis.liveWallpaper">
+
+    <uses-feature
+        android:name="android.software.live_wallpaper"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- TODO replace app icon -->
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/SettingsTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <service
+            android:name="emperatriz.fluviatilis.liveWallpaper.WallpaperService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
+        </service>
+
+        <activity
+            android:name="emperatriz.fluviatilis.settings.SettingsActivity"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.PREFERENCE" />
+            </intent-filter>
+        </activity>
+        <activity-alias
+            android:name="LauncherSettingsActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:targetActivity="emperatriz.fluviatilis.settings.SettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+    </application>
+</manifest>
