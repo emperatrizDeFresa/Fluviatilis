@@ -157,9 +157,11 @@ public class SpinDrawer implements WidgetDrawer {
         else if (outmode==EXCENTRIC){
                 SpinDrawUtils.initMask();
 
-                SpinDrawUtils.drawExcentric(color, 2.3f, chunk * 4, clockwise1);
-                SpinDrawUtils.drawExcentric(color, 4.3f, chunk * 4, clockwise2);
-                SpinDrawUtils.drawExcentric(color, 3.1f, chunk * 4, clockwise3);
+            float millis = System.currentTimeMillis()%(Math.round(2.5*1000));
+            double angle = (2*Math.PI*millis/(Math.round(2.5*1000)))-Math.PI / 2;
+            SpinDrawUtils.drawExcentric(color, angle-0.37, chunk * 4, clockwise1);
+            SpinDrawUtils.drawExcentric(color, angle+0.09, chunk * 4, clockwise2);
+            SpinDrawUtils.drawExcentric(color, angle+1.6, chunk * 4, clockwise3);
 //            SpinDrawUtils.drawBackground(0xffffffff, p);
 //            SpinDrawUtils.endMask(p);
                 SpinDrawUtils.drawSpin(color, angle4, chunk * 4, 1, clockwise4, true);
@@ -167,9 +169,11 @@ public class SpinDrawer implements WidgetDrawer {
         }
         else if (outmode==EXCENTRIC_CIRCLE){
             SpinDrawUtils.initMask();
-                SpinDrawUtils.drawExcentric(color, 2.3f, chunk * 4, clockwise1);
-                SpinDrawUtils.drawExcentric(color, 4.3f, chunk * 4, clockwise2);
-                SpinDrawUtils.drawExcentric(color, 3.1f, chunk * 4, clockwise3);
+            float millis = System.currentTimeMillis()%(Math.round(2.5*1000));
+            double angle = (2*Math.PI*millis/(Math.round(2.5*1000)))-Math.PI / 2;
+                SpinDrawUtils.drawExcentric(color, angle-0.37, chunk * 4, clockwise1);
+                SpinDrawUtils.drawExcentric(color, angle+0.09, chunk * 4, clockwise2);
+                SpinDrawUtils.drawExcentric(color, angle+1.6, chunk * 4, clockwise3);
                 SpinDrawUtils.drawSpin(color, angle4, chunk * 4, 1, clockwise4, true);
                 SpinDrawUtils.drawCircle(color, chunk, paintText, true);
         }

@@ -23,8 +23,7 @@ import emperatriz.fluviatilis.liveWallpaper.WallpaperService
 import emperatriz.fluviatilis.widgets.pypots.SysPypots
 import emperatriz.fluviatilis.widgets.spin.SpinDrawUtils
 import kotlinx.android.synthetic.main.activity_settings.*
-import top.defaults.colorpicker.ColorPickerPopup
-import top.defaults.colorpicker.ColorPickerPopup.ColorPickerObserver
+
 
 
 class SettingsActivity : BaseSettingsActivity() {
@@ -33,7 +32,6 @@ class SettingsActivity : BaseSettingsActivity() {
     var widgetsVisible=false;
     var colorPickerVisible=false;
 
-    lateinit var colorGradient: LinearGradient
 
     override val settingsActivityComponent by lazy { ComponentName(this, "$packageName.LauncherSettingsActivity") }
     override val wallpaperServiceComponent by lazy { ComponentName(this, WallpaperService::class.java) }
@@ -41,10 +39,6 @@ class SettingsActivity : BaseSettingsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-        colorGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (widgetsPanel.paddingLeft + widgetsPanel.paddingRight + spinColor.paddingLeft.toFloat() + spinColor.paddingRight.toFloat()),
-                0.0f, intArrayOf(Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED),
-                null, TileMode.CLAMP)
-
     }
 
 
@@ -83,21 +77,12 @@ class SettingsActivity : BaseSettingsActivity() {
     private fun closeColorPicker(lambda: () -> Unit){
         settingsPanel.visibility = View.GONE
         widgetsPanel.visibility = View.GONE
-        colorPicker.visibility = VISIBLE
-        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
-        anim.duration = 300
-        anim.start()
-        anim.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                colorPicker.setVisibility(View.INVISIBLE)
-                lambda()
-            }
-        })
+        colorPicker.visibility = INVISIBLE
         colorPickerVisible=false
+        lambda()
     }
 
     private fun openWidgets(){
-        separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
         settingsPanel.visibility = View.GONE
         widgetsPanel.visibility = View.VISIBLE
         colorPicker.visibility = GONE
@@ -105,14 +90,10 @@ class SettingsActivity : BaseSettingsActivity() {
         anim.duration = 300
         anim.start()
         widgetsVisible=true
-
         val shape = ShapeDrawable(RectShape())
-        shape.paint.shader = colorGradient
-        spinColor.progressDrawable = shape
     }
 
     private fun openSettings(){
-        separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
         settingsPanel.visibility = View.VISIBLE
         widgetsPanel.visibility = View.GONE
         colorPicker.visibility = GONE
@@ -123,7 +104,6 @@ class SettingsActivity : BaseSettingsActivity() {
     }
 
     private fun openColorPicker(){
-        separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
         settingsPanel.visibility = View.GONE
         widgetsPanel.visibility = View.GONE
         colorPicker.visibility = VISIBLE
@@ -148,6 +128,9 @@ class SettingsActivity : BaseSettingsActivity() {
             if (widgetsVisible){
                 closeWidgets{openSettings()}
             }
+            else if (colorPickerVisible){
+                closeColorPicker{openSettings()}
+            }
             else{
                 if (settingsVisible){
                     closeSettings{}
@@ -164,6 +147,9 @@ class SettingsActivity : BaseSettingsActivity() {
         widgetClock.setOnClickListener {
             if (settingsVisible){
                 closeSettings{openWidgets()}
+            }
+            else if (colorPickerVisible){
+                closeColorPicker{openWidgets()}
             }
             else{
                 if (widgetsVisible){
@@ -336,76 +322,19 @@ class SettingsActivity : BaseSettingsActivity() {
         colorMiddle.background.setColorFilter(preferences.getInt("color", Color.BLACK), PorterDuff.Mode.SRC_IN)
         colorMiddle.setColorFilter(if (isBrightColor(preferences.getInt("color", Color.BLACK))) Color.BLACK else Color.WHITE)
         colorMiddle.setOnClickListener {
-
-            setColorFor(preferences, "color", Color.valueOf(0xffff00ff.toInt()))
-
-//            ColorPickerPopup.Builder(this)
-//                    .initialColor(preferences.getInt("color", Color.BLACK)) // Set initial color
-//                    .enableBrightness(true) // Enable brightness slider or not
-//                    .enableAlpha(false) // Enable alpha slider or not
-//                    .okTitle("Seleccionar")
-//                    .cancelTitle("")
-//                    .showIndicator(true)
-//                    .showValue(false)
-//                    .build()
-//                    .show(colorMiddle, object : ColorPickerObserver() {
-//                        override fun onColorPicked(color: Int) {
-//                            colorMiddle.background.setColorFilter(color, PorterDuff.Mode.SRC_IN)
-//                            colorMiddle.setColorFilter(if (isBrightColor(color)) Color.BLACK else Color.WHITE)
-//                            preferences.edit().putInt("color", color).apply()
-//                            preferences.edit().putBoolean("changed", true).apply()
-//                        }
-//
-//                        fun onColor(color: Int, fromUser: Boolean) {}
-//                    })
+            setColorFor(preferences, "color", it!! as ImageButton)
             }
 
         colorLeft.background.setColorFilter(preferences.getInt("colorLeft", Color.rgb(50, 50, 50)), PorterDuff.Mode.SRC_IN)
         colorLeft.setColorFilter(if (isBrightColor(preferences.getInt("colorLeft", Color.rgb(50, 50, 50)))) Color.BLACK else Color.WHITE)
         colorLeft.setOnClickListener {
-            ColorPickerPopup.Builder(this)
-                    .initialColor(preferences.getInt("colorLeft", Color.BLACK)) // Set initial color
-                    .enableBrightness(true) // Enable brightness slider or not
-                    .enableAlpha(false) // Enable alpha slider or not
-                    .okTitle("Seleccionar")
-                    .cancelTitle("")
-                    .showIndicator(true)
-                    .showValue(false)
-                    .build()
-                    .show(colorLeft, object : ColorPickerObserver() {
-                        override fun onColorPicked(color: Int) {
-                            colorLeft.background.setColorFilter(color, PorterDuff.Mode.SRC_IN)
-                            colorLeft.setColorFilter(if (isBrightColor(color)) Color.BLACK else Color.WHITE)
-                            preferences.edit().putInt("colorLeft", color).apply()
-                            preferences.edit().putBoolean("changed", true).apply()
-                        }
-
-                        fun onColor(color: Int, fromUser: Boolean) {}
-                    })
+            setColorFor(preferences, "colorLeft", it!! as ImageButton)
         }
 
         colorRight.background.setColorFilter(preferences.getInt("colorRight", Color.rgb(100, 100, 100)), PorterDuff.Mode.SRC_IN)
         colorRight.setColorFilter(if (isBrightColor(preferences.getInt("colorRight", Color.rgb(100, 100, 100)))) Color.BLACK else Color.WHITE)
         colorRight.setOnClickListener {
-            ColorPickerPopup.Builder(this)
-                    .initialColor(preferences.getInt("colorRight", Color.BLACK)) // Set initial color
-                    .enableBrightness(true) // Enable brightness slider or not
-                    .enableAlpha(false) // Enable alpha slider or not
-                    .okTitle("Seleccionar")
-                    .cancelTitle("")
-                    .showIndicator(true)
-                    .showValue(false)
-                    .build()
-                    .show(colorRight, object : ColorPickerObserver() {
-                        override fun onColorPicked(color: Int) {
-                            colorRight.background.setColorFilter(color, PorterDuff.Mode.SRC_IN)
-                            colorRight.setColorFilter(if (isBrightColor(color)) Color.BLACK else Color.WHITE)
-                            preferences.edit().putInt("colorRight", color).apply()
-                            preferences.edit().putBoolean("changed", true).apply()
-                        }
-
-                        fun onColor(color: Int, fromUser: Boolean) {}
-                    })
+            setColorFor(preferences, "colorRight", it!! as ImageButton)
         }
 
 
@@ -614,27 +543,31 @@ class SettingsActivity : BaseSettingsActivity() {
             }
         })
 
-        val shape = ShapeDrawable(RectShape())
-        shape.paint.shader = colorGradient
-        spinColor.progressDrawable = shape
-        spinColor.progress = preferences.getInt(SpinDrawUtils.ACCENT_COLOR, 0xffff00ff.toInt())
-        spinColor.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(widgetsPanel, spinSettings_)
-                widgetsPanel2.visibility = View.VISIBLE
-            }
+        colorSpin.background.setColorFilter(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK), PorterDuff.Mode.SRC_IN)
+        colorSpin.setColorFilter(if (isBrightColor(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK))) Color.BLACK else Color.WHITE)
+        colorSpin.setOnClickListener { setColorFor(preferences,SpinDrawUtils.ACCENT_COLOR, it!! as ImageButton ) }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, widgetsPanel, spinSettings_)
-                widgetsPanel2.visibility = View.INVISIBLE
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                val color = getColorFromSpinner(progress)
-                preferences.edit().putInt(SpinDrawUtils.ACCENT_COLOR, color).apply()
-                preferences.edit().putBoolean("changedWidget", true).apply()
-            }
-        })
+//        val shape = ShapeDrawable(RectShape())
+//        shape.paint.shader = colorGradient
+//        spinColor.progressDrawable = shape
+//        spinColor.progress = preferences.getInt(SpinDrawUtils.ACCENT_COLOR, 0xffff00ff.toInt())
+//        spinColor.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+//            override fun onStopTrackingTouch(seekBar: SeekBar) {
+//                showAll(widgetsPanel, spinSettings_)
+//                widgetsPanel2.visibility = View.VISIBLE
+//            }
+//
+//            override fun onStartTrackingTouch(seekBar: SeekBar) {
+//                showOnlyMe(seekBar, widgetsPanel, spinSettings_)
+//                widgetsPanel2.visibility = View.INVISIBLE
+//            }
+//
+//            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+//                val color = getColorFromSpinner(progress)
+//                preferences.edit().putInt(SpinDrawUtils.ACCENT_COLOR, color).apply()
+//                preferences.edit().putBoolean("changedWidget", true).apply()
+//            }
+//        })
 
         initWidgetSelector()
     }
@@ -820,42 +753,152 @@ class SettingsActivity : BaseSettingsActivity() {
 
 
 
-    fun setColorFor(preferences: SharedPreferences, preferencesKey:String, currentColor:Color){
+    fun setColorFor(preferences: SharedPreferences, preferencesKey:String, view:ImageButton){
+
+        var currentColor = Color.valueOf(preferences.getInt(preferencesKey,Color.WHITE))
 
         val cpGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
                 0.0f, intArrayOf(Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED),
                 null, TileMode.CLAMP)
+
+        var colorComponents = FloatArray(3)
+        ColorUtils.colorToHSL(currentColor.toArgb(), colorComponents)
+        var matiz = colorComponents.get(0)
+        var saturacion = colorComponents.get(1)
+        var luminosidad = colorComponents.get(2)
+
+        val maxSat = getHSLColor(matiz, 1f, 0.5f)
+        val actualSat = getHSLColor(matiz, saturacion, 0.5f)
+        val satGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
+                80.0f, intArrayOf(Color.GRAY, maxSat),
+                null, TileMode.CLAMP)
+        val lumGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
+                40.0f, intArrayOf(Color.BLACK, actualSat, Color.WHITE),
+                null, TileMode.CLAMP)
+
+
         val shape = ShapeDrawable(RectShape())
         shape.paint.shader = cpGradient
         cpColor.progressDrawable = shape
 
+        val shapeSat = ShapeDrawable(RectShape())
+        shapeSat.paint.shader = satGradient
+        cpSaturacion.progressDrawable = shapeSat
 
-        openColorPicker()
+        val shapeLum = ShapeDrawable(RectShape())
+        shapeLum.paint.shader = lumGradient
+        cpLuminosidad.progressDrawable = shapeLum
 
-        var colorComponents = FloatArray(3)
-        ColorUtils.colorToHSL(currentColor.toArgb(), colorComponents)
 
 
-        cpColor.progress = Math.round(colorComponents.get(0))
-        cpColor.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+
+
+
+
+
+        cpSaturacion.progress = Math.round(saturacion*100)
+        cpSaturacion.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(colorPicker, colorPicker)
+                showAll(colorPicker2, colorPicker2)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, colorPicker, colorPicker)
+                showOnlyMe(seekBar, colorPicker2, colorPicker2)
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                colorComponents.set(0,progress.toFloat())
-                val color = ColorUtils.HSLToColor(colorComponents)
-                preferences.edit().putInt(preferencesKey, color).apply()
-                //preferences.edit().putBoolean("changed", true).apply()
+                saturacion = progress/100f
+                preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
+
+                val lumGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
+                        0.0f, intArrayOf(Color.BLACK, getHSLColor(matiz, saturacion, 0.5f), Color.WHITE),
+                        null, TileMode.CLAMP)
+                val shapeLum = ShapeDrawable(RectShape())
+                shapeLum.paint.shader = lumGradient
+                cpLuminosidad.progressDrawable = shapeLum
             }
         })
 
+        cpLuminosidad.progress = Math.round(luminosidad*100)
+        cpLuminosidad.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                showAll(colorPicker2, colorPicker2)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                showOnlyMe(seekBar, colorPicker2, colorPicker2)
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                luminosidad = progress/100f
+                preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
+            }
+        })
+
+        cpColor.progress = Math.round(matiz)
+        cpColor.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                showAll(colorPicker2, colorPicker2)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                showOnlyMe(seekBar, colorPicker2, colorPicker2)
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                matiz = progress.toFloat()
+                preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
+
+                val satGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
+                        0.0f, intArrayOf(Color.GRAY, getHSLColor(matiz, 1f, 0.5f)),
+                        null, TileMode.CLAMP)
+                val shapeSat = ShapeDrawable(RectShape())
+                shapeSat.paint.shader = satGradient
+                cpSaturacion.progressDrawable = shapeSat
+
+                val lumGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
+                        0.0f, intArrayOf(Color.BLACK, getHSLColor(matiz, 1f, 0.5f), Color.WHITE),
+                        null, TileMode.CLAMP)
+                val shapeLum = ShapeDrawable(RectShape())
+                shapeLum.paint.shader = lumGradient
+                cpLuminosidad.progressDrawable = shapeLum
+            }
+        })
+
+
+        openColorPicker()
+
+        okColorPicker.setOnClickListener {
+            view?.let{
+                it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
+                it.setColorFilter(if (isBrightColor(getHSLColor(matiz, saturacion, luminosidad))) Color.BLACK else Color.WHITE)
+            }
+
+            cpColor.setOnSeekBarChangeListener(null)
+            cpSaturacion.setOnSeekBarChangeListener(null)
+            cpLuminosidad.setOnSeekBarChangeListener(null)
+
+            if (settingsVisible){
+                closeColorPicker{openSettings()}
+            }
+            else if (widgetsVisible){
+                closeColorPicker{openWidgets()}
+            }
+            else{
+                closeColorPicker{}
+            }
+        }
+
     }
 
+    fun getHSLColor(h:Float, s:Float, l:Float):Int{
+        var colorComponents_ = FloatArray(3)
+        colorComponents_.set(0,h)
+        colorComponents_.set(1,s)
+        colorComponents_.set(2,l)
+        var color = ColorUtils.HSLToColor(colorComponents_)
+        return color
+    }
 
 }
 

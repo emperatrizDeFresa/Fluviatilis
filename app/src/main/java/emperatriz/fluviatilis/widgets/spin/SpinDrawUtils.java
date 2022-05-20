@@ -389,7 +389,7 @@ public class SpinDrawUtils {
 
     }
 
-    public static void drawExcentric(int color, float speed, float widthStroke, boolean clockwise){
+    public static void drawExcentric(int color, double angle, float widthStroke, boolean clockwise){
 
         if (!isInAmbientMode) {
 
@@ -403,8 +403,8 @@ public class SpinDrawUtils {
             float radius2 =  p20(widthStroke);
 
 
-            float millis = System.currentTimeMillis()%(Math.round(speed*1000));
-            double angle = (2*Math.PI*millis/(Math.round(speed*1000)))-Math.PI / 2;
+//            float millis = System.currentTimeMillis()%(Math.round(speed*1000));
+//            double angle = (2*Math.PI*millis/(Math.round(speed*1000)))-Math.PI / 2;
 
             angle = clockwise?angle:-angle;
 
