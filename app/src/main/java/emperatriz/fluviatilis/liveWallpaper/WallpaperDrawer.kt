@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import emperatriz.fluviatilis.model.WallpaperModel
 import emperatriz.fluviatilis.widgets.WidgetDrawer
+import emperatriz.fluviatilis.widgets.custom.CustomDrawer
 import emperatriz.fluviatilis.widgets.pypots.PypotsDrawer
 import emperatriz.fluviatilis.widgets.spin.SpinDrawer
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -24,7 +25,7 @@ class WallpaperDrawer : WallpaperRenderer {
     lateinit var widget: WidgetDrawer
     lateinit var pypotsWidget : PypotsDrawer
     lateinit var spinWidget : SpinDrawer
-    lateinit var customWidget : PypotsDrawer
+    lateinit var customWidget : CustomDrawer
 
     constructor(context: Context, isWallpaper: Boolean) {
         this.context=context
@@ -38,7 +39,7 @@ class WallpaperDrawer : WallpaperRenderer {
 
         pypotsWidget = PypotsDrawer()
         spinWidget = SpinDrawer()
-        customWidget = PypotsDrawer()
+        customWidget = CustomDrawer()
 
         if (preferences.getBoolean("showWidget", false)) {
             when(preferences.getString("selectedWidget", "pypots")){
@@ -244,19 +245,22 @@ class WallpaperDrawer : WallpaperRenderer {
             }
 
             if (preferences.getBoolean("showWidget", false)){
+
+                val widgetX =  preferences.getInt("widgetX", 0) - preferences.getInt("widgetXsize", 454) / 2
+                val widgetY =  preferences.getInt("widgetY", 0) - preferences.getInt("widgetXsize", 454) / 2
                 if (!widget.isInitialized()){
-                    widget.init(context, preferences.getInt("widgetX", 0), preferences.getInt("widgetY", 0), preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
+                    widget.init(context, widgetX, widgetY, preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
                 }
                 if (isWallpaper && preferences.getBoolean("changedWidgetWallpaper", false)){
-                    widget.init(context, preferences.getInt("widgetX", 0),preferences.getInt("widgetY",0),preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
+                    widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
                     preferences.edit().putBoolean("changedWidgetWallpaper", false).apply()
                 }
                 if (!isWallpaper && preferences.getBoolean("changedWidget", false)){
-                    widget.init(context, preferences.getInt("widgetX", 0),preferences.getInt("widgetY",0),preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
+                    widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
                     preferences.edit().putBoolean("changedWidget", false).apply()
                 }
 
-                widget.draw(canvas, isWallpaper, preferences.getInt("widgetX", 0), preferences.getInt("widgetY", 0))
+                widget.draw(canvas, isWallpaper, widgetX, widgetY)
             }
 
 

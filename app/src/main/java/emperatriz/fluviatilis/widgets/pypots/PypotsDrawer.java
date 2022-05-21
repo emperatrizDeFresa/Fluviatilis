@@ -42,6 +42,8 @@ public class PypotsDrawer implements WidgetDrawer {
     public Bitmap n57_;
     public Bitmap by;
     public Bitmap halo;
+    public Bitmap shadowLeft;
+    public Bitmap shadowRight;
     Paint p2;
     Typeface font2;
     public Context context;
@@ -95,6 +97,9 @@ public class PypotsDrawer implements WidgetDrawer {
 
         halo = BitmapFactory.decodeResource(context.getResources(), R.drawable.halo);
 
+        shadowLeft = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradientleft);
+        shadowRight = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradientright);
+
 
 
         PypotsDrawUtils.offsetX=x;
@@ -128,6 +133,8 @@ public class PypotsDrawer implements WidgetDrawer {
         by = Bitmap.createScaledBitmap(by,SysPypots.size(114, PypotsDrawUtils.width),SysPypots.size(27, PypotsDrawUtils.width), true);
         halo = Bitmap.createScaledBitmap(halo, PypotsDrawUtils.width, PypotsDrawUtils.width, true);
 
+        shadowLeft = Bitmap.createScaledBitmap(shadowLeft, SysPypots.size(20, PypotsDrawUtils.width),SysPypots.size(30, PypotsDrawUtils.width), true);
+        shadowRight = Bitmap.createScaledBitmap(shadowRight, SysPypots.size(20, PypotsDrawUtils.width),SysPypots.size(30, PypotsDrawUtils.width), true);
     }
 
 
@@ -161,6 +168,9 @@ public class PypotsDrawer implements WidgetDrawer {
 
         by = Bitmap.createScaledBitmap(by,SysPypots.size(114, PypotsDrawUtils.width),SysPypots.size(27, PypotsDrawUtils.width), true);
         halo = Bitmap.createScaledBitmap(halo, PypotsDrawUtils.width, PypotsDrawUtils.width, true);
+
+        shadowLeft = Bitmap.createScaledBitmap(shadowLeft, SysPypots.size(20, PypotsDrawUtils.width),SysPypots.size(30, PypotsDrawUtils.width), true);
+        shadowRight = Bitmap.createScaledBitmap(shadowRight, SysPypots.size(20, PypotsDrawUtils.width),SysPypots.size(30, PypotsDrawUtils.width), true);
     }
 
     @Override
@@ -193,6 +203,9 @@ public class PypotsDrawer implements WidgetDrawer {
 
         by = Bitmap.createScaledBitmap(by,SysPypots.size(114, PypotsDrawUtils.width),SysPypots.size(27, PypotsDrawUtils.width), true);
         halo = Bitmap.createScaledBitmap(halo, PypotsDrawUtils.width, PypotsDrawUtils.width, true);
+
+        shadowLeft = Bitmap.createScaledBitmap(shadowLeft, SysPypots.size(20, PypotsDrawUtils.width),SysPypots.size(30, PypotsDrawUtils.width), true);
+        shadowRight = Bitmap.createScaledBitmap(shadowRight, SysPypots.size(20, PypotsDrawUtils.width),SysPypots.size(30, PypotsDrawUtils.width), true);
     }
 
     @Override
@@ -259,7 +272,7 @@ public class PypotsDrawer implements WidgetDrawer {
         PypotsDrawUtils.drawLeftComplication(0xffff4466, yearPerc,now.get(Calendar.YEAR)+"",""+yearPerc, p2, !SysPypots.getBoolean(SysPypots.SETTINGS_DISCRETO,false, context));
         PypotsDrawUtils.drawRightComplication(0xff00bbee, monthPerc, month.format(now.getTime()).substring(0,3), day.format(now.getTime()), p2, !SysPypots.getBoolean(SysPypots.SETTINGS_DISCRETO,false, context));
 
-        PypotsDrawUtils.drawDate(now,  font2);
+        PypotsDrawUtils.drawDate(now,  font2, shadowRight,shadowLeft);
         PypotsDrawUtils.drawNoNotifications(by,p2);
 
     }

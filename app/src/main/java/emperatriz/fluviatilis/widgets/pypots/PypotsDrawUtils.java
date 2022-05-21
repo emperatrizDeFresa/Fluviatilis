@@ -923,7 +923,7 @@ public class PypotsDrawUtils {
         canvas.drawTextOnPath(title, circle2, (float)(radius*Math.PI*-0.12f), SysPypots.size(9, width), paint2);
     }
 
-    public static void drawDate(Calendar now, Typeface font2){
+    public static void drawDate(Calendar now, Typeface font2, Bitmap shadowRight, Bitmap shadowLeft){
 
         SimpleDateFormat dia = new SimpleDateFormat("d");
         SimpleDateFormat diaNombre = new SimpleDateFormat("EE");
@@ -956,11 +956,14 @@ public class PypotsDrawUtils {
         canvas.drawText(diaNombre.format(now.getTime()).replace(".",""),(width/2-Math.round(textWidth/2))-(textWidth2+1)-margin+offsetX+1, SysPypots.size(168, width)+offsetY,p);
         canvas.drawText(mes3,(width/2+Math.round(textWidth/2))+margin+offsetX-1, SysPypots.size(168, width)+offsetY,p);
 
+
+        float right = (width/2+Math.round(textWidth/2))+margin+offsetX-1;
+        float left = (width/2-Math.round(textWidth/2))-(1)-margin+offsetX+1;
+
         if (width==454){
             Paint p4 = new Paint();
 
-            float right = (width/2+Math.round(textWidth/2))+margin+offsetX-1;
-            float left = (width/2-Math.round(textWidth/2))-(1)-margin+offsetX+1;
+
 
 
             p4.setColor(0x3f000000);
@@ -974,6 +977,13 @@ public class PypotsDrawUtils {
             canvas.drawRect(left-5,145+offsetY, left-7, 170+offsetY, p4);
 
         }
+        else{
+            paint.setAlpha(120);
+            canvas.drawBitmap(shadowLeft, left-SysPypots.size(20f,width), SysPypots.size(145f,width)+offsetY, paint);
+            canvas.drawBitmap(shadowRight, right, SysPypots.size(145f,width)+offsetY, paint);
+            paint.setAlpha(255);
+        }
+
 
     }
 

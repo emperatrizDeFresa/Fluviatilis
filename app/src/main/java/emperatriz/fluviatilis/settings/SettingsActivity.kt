@@ -362,7 +362,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
 
         widgetX.max = dm.widthPixels
-        widgetX.progress = preferences.getInt("widgetX", 0)+preferences.getInt("widgetXsize", 454)/2
+        widgetX.progress = preferences.getInt("widgetX", 0)//+preferences.getInt("widgetXsize", 454)/2
         widgetX.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(widgetsPanel, pypotsSettings_)
@@ -375,14 +375,14 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                preferences.edit().putInt("widgetX", progress - widgetXsize.progress / 2).apply()
+                preferences.edit().putInt("widgetX", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
             }
         })
 
         widgetY.max = dm.heightPixels
-        widgetY.progress = preferences.getInt("widgetY", 0)+preferences.getInt("widgetXsize", 454)/2
+        widgetY.progress = preferences.getInt("widgetY", 0)//+preferences.getInt("widgetXsize", 454)/2
         widgetY.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(widgetsPanel, pypotsSettings_)
@@ -395,7 +395,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                preferences.edit().putInt("widgetY", progress - widgetXsize.progress / 2).apply()
+                preferences.edit().putInt("widgetY", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
             }
@@ -415,6 +415,13 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+
+                val diff = Math.round((preferences.getInt("widgetXsize", 454)-progress)/2f)
+
+
+                preferences.edit().putInt("widgetX", widgetX.progress+diff).apply()
+                preferences.edit().putInt("widgetY",  widgetY.progress+diff).apply()
+
                 preferences.edit().putInt("widgetXsize", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
@@ -517,6 +524,13 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+
+                val diff = Math.round((preferences.getInt("widgetXsize", 454)-progress)/2f)
+
+
+                preferences.edit().putInt("widgetX", widgetX.progress+diff).apply()
+                preferences.edit().putInt("widgetY",  widgetY.progress+diff).apply()
+
                 preferences.edit().putInt("widgetXsize", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
@@ -547,79 +561,12 @@ class SettingsActivity : BaseSettingsActivity() {
         colorSpin.setColorFilter(if (isBrightColor(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK))) Color.BLACK else Color.WHITE)
         colorSpin.setOnClickListener { setColorFor(preferences,SpinDrawUtils.ACCENT_COLOR, it!! as ImageButton ) }
 
-//        val shape = ShapeDrawable(RectShape())
-//        shape.paint.shader = colorGradient
-//        spinColor.progressDrawable = shape
-//        spinColor.progress = preferences.getInt(SpinDrawUtils.ACCENT_COLOR, 0xffff00ff.toInt())
-//        spinColor.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-//            override fun onStopTrackingTouch(seekBar: SeekBar) {
-//                showAll(widgetsPanel, spinSettings_)
-//                widgetsPanel2.visibility = View.VISIBLE
-//            }
-//
-//            override fun onStartTrackingTouch(seekBar: SeekBar) {
-//                showOnlyMe(seekBar, widgetsPanel, spinSettings_)
-//                widgetsPanel2.visibility = View.INVISIBLE
-//            }
-//
-//            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-//                val color = getColorFromSpinner(progress)
-//                preferences.edit().putInt(SpinDrawUtils.ACCENT_COLOR, color).apply()
-//                preferences.edit().putBoolean("changedWidget", true).apply()
-//            }
-//        })
-
         initWidgetSelector()
     }
 
 
 
 
-    fun getColorFromSpinner(v: Int):Int{
-
-//Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED
-
-        var r:Int = 0
-        var g:Int = 0
-        var b:Int = 0
-
-        val seccion = (v/256)+1
-        val value = v % 256
-
-        when(seccion){
-            1->{
-                r = 255
-                g = value
-            }
-            2->{
-                r = 256 - value
-                g = 255
-            }
-            3->{
-                g = 255
-                b = value
-            }
-            4->{
-                g = 256 - value
-                b = 255
-            }
-            5->{
-                r = value
-                b = 255
-            }
-            6->{
-                r = 255
-                b = 256 - value
-            }
-
-        }
-
-        r = r shl 16 and 0x00FF0000
-        g = g shl 8 and 0x0000FF00
-        b = b and 0x000000FF
-
-        return 0xFF000000.toInt() or r or g or b
-    }
 
     fun ImageView.toGrayscale(){
         val matrix = ColorMatrix().apply {
@@ -755,6 +702,11 @@ class SettingsActivity : BaseSettingsActivity() {
 
     fun setColorFor(preferences: SharedPreferences, preferencesKey:String, view:ImageButton){
 
+
+        cpColor.setOnSeekBarChangeListener(null)
+        cpSaturacion.setOnSeekBarChangeListener(null)
+        cpLuminosidad.setOnSeekBarChangeListener(null)
+
         var currentColor = Color.valueOf(preferences.getInt(preferencesKey,Color.WHITE))
 
         val cpGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
@@ -816,6 +768,11 @@ class SettingsActivity : BaseSettingsActivity() {
                 val shapeLum = ShapeDrawable(RectShape())
                 shapeLum.paint.shader = lumGradient
                 cpLuminosidad.progressDrawable = shapeLum
+
+                view?.let{
+                    it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
+                    it.setColorFilter(if (isBrightColor(getHSLColor(matiz, saturacion, luminosidad))) Color.BLACK else Color.WHITE)
+                }
             }
         })
 
@@ -832,6 +789,11 @@ class SettingsActivity : BaseSettingsActivity() {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 luminosidad = progress/100f
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
+
+                view?.let{
+                    it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
+                    it.setColorFilter(if (isBrightColor(getHSLColor(matiz, saturacion, luminosidad))) Color.BLACK else Color.WHITE)
+                }
             }
         })
 
@@ -857,11 +819,16 @@ class SettingsActivity : BaseSettingsActivity() {
                 cpSaturacion.progressDrawable = shapeSat
 
                 val lumGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
-                        0.0f, intArrayOf(Color.BLACK, getHSLColor(matiz, 1f, 0.5f), Color.WHITE),
+                        0.0f, intArrayOf(Color.BLACK, getHSLColor(matiz, saturacion, 0.5f), Color.WHITE),
                         null, TileMode.CLAMP)
                 val shapeLum = ShapeDrawable(RectShape())
                 shapeLum.paint.shader = lumGradient
                 cpLuminosidad.progressDrawable = shapeLum
+
+                view?.let{
+                    it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
+                    it.setColorFilter(if (isBrightColor(getHSLColor(matiz, saturacion, luminosidad))) Color.BLACK else Color.WHITE)
+                }
             }
         })
 
@@ -869,14 +836,9 @@ class SettingsActivity : BaseSettingsActivity() {
         openColorPicker()
 
         okColorPicker.setOnClickListener {
-            view?.let{
-                it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
-                it.setColorFilter(if (isBrightColor(getHSLColor(matiz, saturacion, luminosidad))) Color.BLACK else Color.WHITE)
-            }
 
-            cpColor.setOnSeekBarChangeListener(null)
-            cpSaturacion.setOnSeekBarChangeListener(null)
-            cpLuminosidad.setOnSeekBarChangeListener(null)
+
+
 
             if (settingsVisible){
                 closeColorPicker{openSettings()}
