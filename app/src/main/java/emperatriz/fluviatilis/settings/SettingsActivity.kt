@@ -91,6 +91,7 @@ class SettingsActivity : BaseSettingsActivity() {
         anim.start()
         widgetsVisible=true
         val shape = ShapeDrawable(RectShape())
+        initWidgetSelector()
     }
 
     private fun openSettings(){
@@ -119,7 +120,7 @@ class SettingsActivity : BaseSettingsActivity() {
         val preferences = getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
 
 
-        
+
 
 
 
@@ -471,7 +472,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
 
         widgetX2.max = dm.widthPixels
-        widgetX2.progress = preferences.getInt("widgetX", 0)+preferences.getInt("widgetXsize", 454)/2
+        widgetX2.progress = preferences.getInt("widgetX", 0)//+preferences.getInt("widgetXsize", 454)/2
         widgetX2.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(widgetsPanel, spinSettings_)
@@ -484,14 +485,14 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                preferences.edit().putInt("widgetX", progress - widgetXsize2.progress / 2).apply()
+                preferences.edit().putInt("widgetX", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
             }
         })
 
         widgetY2.max = dm.heightPixels
-        widgetY2.progress = preferences.getInt("widgetY", 0)+preferences.getInt("widgetXsize", 454)/2
+        widgetY2.progress = preferences.getInt("widgetY", 0)//+preferences.getInt("widgetXsize", 454)/2
         widgetY2.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(widgetsPanel, spinSettings_)
@@ -504,11 +505,13 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                preferences.edit().putInt("widgetY", progress - widgetXsize2.progress / 2).apply()
+                preferences.edit().putInt("widgetY", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
             }
         })
+
+
 
         widgetXsize2.max = dm.widthPixels
         widgetXsize2.progress = preferences.getInt("widgetXsize", 454)
@@ -528,8 +531,8 @@ class SettingsActivity : BaseSettingsActivity() {
                 val diff = Math.round((preferences.getInt("widgetXsize", 454)-progress)/2f)
 
 
-                preferences.edit().putInt("widgetX", widgetX.progress+diff).apply()
-                preferences.edit().putInt("widgetY",  widgetY.progress+diff).apply()
+                preferences.edit().putInt("widgetX", widgetX2.progress+diff).apply()
+                preferences.edit().putInt("widgetY",  widgetY2.progress+diff).apply()
 
                 preferences.edit().putInt("widgetXsize", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
@@ -560,6 +563,91 @@ class SettingsActivity : BaseSettingsActivity() {
         colorSpin.background.setColorFilter(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK), PorterDuff.Mode.SRC_IN)
         colorSpin.setColorFilter(if (isBrightColor(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK))) Color.BLACK else Color.WHITE)
         colorSpin.setOnClickListener { setColorFor(preferences,SpinDrawUtils.ACCENT_COLOR, it!! as ImageButton ) }
+
+
+
+        widgetX3.max = dm.widthPixels
+        widgetX3.progress = preferences.getInt("widgetX", 0)-preferences.getInt("widgetXsize", 454)/2
+        widgetX3.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                showAll(widgetsPanel, customSettings_)
+                widgetsPanel2.visibility = View.VISIBLE
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                showOnlyMe(seekBar, widgetsPanel, customSettings_)
+                widgetsPanel2.visibility = View.INVISIBLE
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                preferences.edit().putInt("widgetX", progress ).apply()
+                preferences.edit().putBoolean("changedWidget", true).apply()
+                preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
+            }
+        })
+
+        widgetY3.max = dm.heightPixels
+        widgetY3.progress = preferences.getInt("widgetY", 0)-preferences.getInt("widgetXsize", 454)/2
+        widgetY3.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                showAll(widgetsPanel, customSettings_)
+                widgetsPanel2.visibility = View.VISIBLE
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                showOnlyMe(seekBar, widgetsPanel, customSettings_)
+                widgetsPanel2.visibility = View.INVISIBLE
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                preferences.edit().putInt("widgetY", progress).apply()
+                preferences.edit().putBoolean("changedWidget", true).apply()
+                preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
+            }
+        })
+
+        widgetXsize3.max = dm.widthPixels
+        widgetXsize3.progress = preferences.getInt("widgetXsize", 454)
+        widgetXsize3.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                showAll(widgetsPanel, customSettings_)
+                widgetsPanel2.visibility = View.VISIBLE
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                showOnlyMe(seekBar, widgetsPanel, customSettings_)
+                widgetsPanel2.visibility = View.INVISIBLE
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+
+                val diff = Math.round((preferences.getInt("widgetXsize", 454)-progress)/2f)
+
+
+                preferences.edit().putInt("widgetX", widgetX3.progress+diff).apply()
+                preferences.edit().putInt("widgetY",  widgetY3.progress+diff).apply()
+
+                preferences.edit().putInt("widgetXsize", progress).apply()
+                preferences.edit().putBoolean("changedWidget", true).apply()
+                preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
+            }
+        })
+
+        customAgujas.background.setColorFilter(preferences.getInt("colorAgujas", Color.BLACK), PorterDuff.Mode.SRC_IN)
+        customAgujas.setColorFilter(if (isBrightColor(preferences.getInt("colorAgujas", Color.BLACK))) Color.BLACK else Color.WHITE)
+        customAgujas.setOnClickListener { setColorFor(preferences,"colorAgujas", it!! as ImageButton ) }
+
+        customDial.background.setColorFilter(preferences.getInt("colorEsfera", Color.WHITE), PorterDuff.Mode.SRC_IN)
+        customDial.setColorFilter(if (isBrightColor(preferences.getInt("colorEsfera", Color.WHITE))) Color.BLACK else Color.WHITE)
+        customDial.setOnClickListener { setColorFor(preferences,"colorEsfera", it!! as ImageButton ) }
+
+        customMarcadores.background.setColorFilter(preferences.getInt("colorBorde", Color.DKGRAY), PorterDuff.Mode.SRC_IN)
+        customMarcadores.setColorFilter(if (isBrightColor(preferences.getInt("colorBorde", Color.DKGRAY))) Color.BLACK else Color.WHITE)
+        customMarcadores.setOnClickListener { setColorFor(preferences,"colorBorde", it!! as ImageButton ) }
+
+        customSegundero.background.setColorFilter(preferences.getInt("colorSegundo", Color.RED), PorterDuff.Mode.SRC_IN)
+        customSegundero.setColorFilter(if (isBrightColor(preferences.getInt("colorSegundo", Color.RED))) Color.BLACK else Color.WHITE)
+        customSegundero.setOnClickListener { setColorFor(preferences,"colorSegundo", it!! as ImageButton ) }
 
         initWidgetSelector()
     }

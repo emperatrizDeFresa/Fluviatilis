@@ -639,7 +639,131 @@
                     android:id="@+id/customSettings_"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textVieww613"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="Posición horizontal"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+                    <SeekBar
+                        android:id="@+id/widgetX3"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+
+                    <TextView
+                        android:id="@+id/textVieww623"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="Posición vertical"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+                    <SeekBar
+                        android:id="@+id/widgetY3"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+
+                    <TextView
+                        android:id="@+id/textVieww633"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="Tamaño"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+                    <SeekBar
+                        android:id="@+id/widgetXsize3"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:min="120"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageButton
+                            android:id="@+id/customAgujas"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="8dp"
+                            android:background="@drawable/color_middle"
+                            android:padding="9dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/customagujas" />
+                        <ImageButton
+                            android:id="@+id/customDial"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/color_middle"
+                            android:padding="9dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/customdial" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageButton
+                            android:id="@+id/customSegundero"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="8dp"
+                            android:background="@drawable/color_middle"
+                            android:padding="9dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/customsegundo" />
+                        <ImageButton
+                            android:id="@+id/customMarcadores"
+                            android:layout_width="0dp"
+                            android:layout_height="60dp"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/color_middle"
+                            android:padding="9dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/custommarcadores" />
+                    </LinearLayout>
+                </LinearLayout>
             </ScrollView>
 
 
