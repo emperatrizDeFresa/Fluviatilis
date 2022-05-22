@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wallpaper
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:thumbnail="@drawable/wallpaper_thumbnail"
+    android:thumbnail="@mipmap/ic_launcher_foreground"
     android:description="@string/app_name"
-    android:settingsActivity="com.raybritton.liveWallpaper.SettingsActivity"
+    android:settingsActivity="cemperatriz.fluviatilis.settings.SettingsActivity"
     />
 
 <!-- TODO settingsActivity must be manually updated to match your setting activity FQCN -->

@@ -80,8 +80,8 @@ public class CustomDrawer implements WidgetDrawer {
 
         float radius = width/2f;
 
-        x = Math.round(x+width/2f);
-        y = Math.round(y+height/2f);
+//        x = Math.round(x+width/2f);
+//        y = Math.round(y+height/2f);
 
         paint.setColor(colorEsfera);
         canvas.drawCircle(x,y, radius,paint);
@@ -136,6 +136,6 @@ public class CustomDrawer implements WidgetDrawer {
 
     @Override
     public boolean isInitialized() {
-        return this.ctx!=null;
+        return this.ctx!=null && preferences != null;
     }
 }

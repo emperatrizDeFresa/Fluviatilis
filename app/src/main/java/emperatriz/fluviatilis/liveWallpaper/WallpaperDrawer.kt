@@ -246,8 +246,8 @@ class WallpaperDrawer : WallpaperRenderer {
 
             if (preferences.getBoolean("showWidget", false)){
 
-                val widgetX =  preferences.getInt("widgetX", 0) - preferences.getInt("widgetXsize", 454) / 2
-                val widgetY =  preferences.getInt("widgetY", 0) - preferences.getInt("widgetXsize", 454) / 2
+                val widgetX =  preferences.getInt("widgetX", 0)// - preferences.getInt("widgetXsize", 454) / 2
+                val widgetY =  preferences.getInt("widgetY", 0)// - preferences.getInt("widgetXsize", 454) / 2
                 if (!widget.isInitialized()){
                     widget.init(context, widgetX, widgetY, preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
                 }

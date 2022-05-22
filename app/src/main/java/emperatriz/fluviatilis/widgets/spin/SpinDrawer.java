@@ -16,6 +16,8 @@ import java.util.Calendar;
 
 import emperatriz.fluviatilis.widgets.WidgetDrawer;
 
+import static emperatriz.fluviatilis.widgets.spin.SpinDrawUtils.width;
+
 public class SpinDrawer implements WidgetDrawer {
 
     float chunk = SpinDrawUtils.p20(0.014f);
@@ -54,8 +56,8 @@ public class SpinDrawer implements WidgetDrawer {
         SpinDrawUtils.ctx = context;
         SpinDrawUtils.p20 = width/20;
 
-        SpinDrawUtils.offsetX=100;
-        SpinDrawUtils.offsetY=520;
+        SpinDrawUtils.offsetX=x-width/2;
+        SpinDrawUtils.offsetY=y-width/2;
 
 
         preferences = context.getSharedPreferences("fluviatilis", Context.MODE_PRIVATE);
@@ -103,10 +105,10 @@ public class SpinDrawer implements WidgetDrawer {
         color = preferences.getInt(SpinDrawUtils.ACCENT_COLOR, 0xff00ffdd);
         outmode = preferences.getInt("outmode", 0);
 
-        SpinDrawUtils.p20 = SpinDrawUtils.width/20;
-        chunk = SpinDrawUtils.p20(0.014f)*570/SpinDrawUtils.width;
-        SpinDrawUtils.offsetX=x;
-        SpinDrawUtils.offsetY=y;
+        SpinDrawUtils.p20 = width/20;
+        chunk = SpinDrawUtils.p20(0.014f)*570/ width;
+        SpinDrawUtils.offsetX=x-width/2;
+        SpinDrawUtils.offsetY=y-width/2;
         //chunk = SpinDrawUtils.p20(0.014f);
         SpinDrawUtils.drawBackground(0xff000000, new Paint());
 
@@ -210,6 +212,6 @@ public class SpinDrawer implements WidgetDrawer {
 
     @Override
     public boolean isInitialized() {
-        return SpinDrawUtils.ctx!=null;
+        return SpinDrawUtils.ctx!=null && preferences != null;
     }
 }

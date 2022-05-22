@@ -11,7 +11,10 @@ import android.graphics.Shader.TileMode
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.DisplayMetrics
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.View.*
 import android.widget.*
@@ -23,7 +26,6 @@ import emperatriz.fluviatilis.liveWallpaper.WallpaperService
 import emperatriz.fluviatilis.widgets.pypots.SysPypots
 import emperatriz.fluviatilis.widgets.spin.SpinDrawUtils
 import kotlinx.android.synthetic.main.activity_settings.*
-
 
 
 class SettingsActivity : BaseSettingsActivity() {
@@ -174,6 +176,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvWeight = Math.max(1, progress)
                 preferences.edit().putInt("fluvWeight", Math.max(1, progress)).apply()
                 preferences.edit().putBoolean("changed", true).apply()
@@ -193,6 +196,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvNumber = Math.max(12, progress)
                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight = Math.round(((settings_live_wallpaper.renderer as WallpaperDrawer).model.height * ((preferences.getInt("heightness", 15)).toFloat() / 100)) / Math.max(12, progress)).toInt()
                 wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight * 2
@@ -237,6 +241,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.wideness = Math.max(1, progress)
                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
                 preferences.edit().putInt("wideness", Math.max(1, progress)).apply()
@@ -256,6 +261,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 preferences.edit().putInt("heightness", Math.max(1, progress)).apply()
 //                fluvNumber.progress = Math.min(Math.max(12, Math.round((dm.heightPixels * ((progress).toFloat() / 100)) / (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight)),
 //                        (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvNumber())
@@ -281,6 +287,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 preferences.edit().putInt("dimAlpha", progress).apply()
                 preferences.edit().putBoolean("changed", true).apply()
             }
@@ -298,6 +305,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 preferences.edit().putInt("dimHeight", progress).apply()
                 preferences.edit().putBoolean("changed", true).apply()
             }
@@ -314,6 +322,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 preferences.edit().putInt("rotation", progress).apply()
                 preferences.edit().putBoolean("changed", true).apply()
             }
@@ -376,6 +385,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                widgetX2.progress = progress
+                widgetX3.progress = progress
                 preferences.edit().putInt("widgetX", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
@@ -396,6 +408,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                widgetY2.progress = progress
+                widgetY3.progress = progress
                 preferences.edit().putInt("widgetY", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
@@ -416,12 +431,14 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                widgetXsize2.progress = progress
+                widgetXsize3.progress = progress
+                val diff = Math.round((preferences.getInt("widgetXsize", 454) - progress) / 2f)
 
-                val diff = Math.round((preferences.getInt("widgetXsize", 454)-progress)/2f)
 
-
-                preferences.edit().putInt("widgetX", widgetX.progress+diff).apply()
-                preferences.edit().putInt("widgetY",  widgetY.progress+diff).apply()
+                preferences.edit().putInt("widgetX", widgetX.progress + diff).apply()
+                preferences.edit().putInt("widgetY", widgetY.progress + diff).apply()
 
                 preferences.edit().putInt("widgetXsize", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
@@ -485,6 +502,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                widgetX.progress = progress
+                widgetX3.progress = progress
                 preferences.edit().putInt("widgetX", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
@@ -505,6 +525,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                widgetY.progress = progress
+                widgetY3.progress = progress
                 preferences.edit().putInt("widgetY", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
@@ -527,12 +550,14 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                widgetXsize.progress = progress
+                widgetXsize3.progress = progress
+                val diff = Math.round((preferences.getInt("widgetXsize", 454) - progress) / 2f)
 
-                val diff = Math.round((preferences.getInt("widgetXsize", 454)-progress)/2f)
 
-
-                preferences.edit().putInt("widgetX", widgetX2.progress+diff).apply()
-                preferences.edit().putInt("widgetY",  widgetY2.progress+diff).apply()
+                preferences.edit().putInt("widgetX", widgetX2.progress + diff).apply()
+                preferences.edit().putInt("widgetY", widgetY2.progress + diff).apply()
 
                 preferences.edit().putInt("widgetXsize", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
@@ -555,6 +580,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 preferences.edit().putInt("outmode", progress).apply()
 
             }
@@ -562,12 +588,12 @@ class SettingsActivity : BaseSettingsActivity() {
 
         colorSpin.background.setColorFilter(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK), PorterDuff.Mode.SRC_IN)
         colorSpin.setColorFilter(if (isBrightColor(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK))) Color.BLACK else Color.WHITE)
-        colorSpin.setOnClickListener { setColorFor(preferences,SpinDrawUtils.ACCENT_COLOR, it!! as ImageButton ) }
+        colorSpin.setOnClickListener { setColorFor(preferences, SpinDrawUtils.ACCENT_COLOR, it!! as ImageButton) }
 
 
 
         widgetX3.max = dm.widthPixels
-        widgetX3.progress = preferences.getInt("widgetX", 0)-preferences.getInt("widgetXsize", 454)/2
+        widgetX3.progress = preferences.getInt("widgetX", 0)
         widgetX3.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(widgetsPanel, customSettings_)
@@ -580,14 +606,17 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                preferences.edit().putInt("widgetX", progress ).apply()
+                vibra(2)
+                widgetX2.progress = progress
+                widgetX.progress = progress
+                preferences.edit().putInt("widgetX", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
             }
         })
 
         widgetY3.max = dm.heightPixels
-        widgetY3.progress = preferences.getInt("widgetY", 0)-preferences.getInt("widgetXsize", 454)/2
+        widgetY3.progress = preferences.getInt("widgetY", 0)
         widgetY3.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(widgetsPanel, customSettings_)
@@ -600,6 +629,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                widgetY2.progress = progress
+                widgetY.progress = progress
                 preferences.edit().putInt("widgetY", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
@@ -620,12 +652,14 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                widgetXsize2.progress = progress
+                widgetXsize.progress = progress
+                val diff = Math.round((preferences.getInt("widgetXsize", 454) - progress) / 2f)
 
-                val diff = Math.round((preferences.getInt("widgetXsize", 454)-progress)/2f)
 
-
-                preferences.edit().putInt("widgetX", widgetX3.progress+diff).apply()
-                preferences.edit().putInt("widgetY",  widgetY3.progress+diff).apply()
+                preferences.edit().putInt("widgetX", widgetX3.progress + diff).apply()
+                preferences.edit().putInt("widgetY", widgetY3.progress + diff).apply()
 
                 preferences.edit().putInt("widgetXsize", progress).apply()
                 preferences.edit().putBoolean("changedWidget", true).apply()
@@ -635,19 +669,19 @@ class SettingsActivity : BaseSettingsActivity() {
 
         customAgujas.background.setColorFilter(preferences.getInt("colorAgujas", Color.BLACK), PorterDuff.Mode.SRC_IN)
         customAgujas.setColorFilter(if (isBrightColor(preferences.getInt("colorAgujas", Color.BLACK))) Color.BLACK else Color.WHITE)
-        customAgujas.setOnClickListener { setColorFor(preferences,"colorAgujas", it!! as ImageButton ) }
+        customAgujas.setOnClickListener { setColorFor(preferences, "colorAgujas", it!! as ImageButton) }
 
         customDial.background.setColorFilter(preferences.getInt("colorEsfera", Color.WHITE), PorterDuff.Mode.SRC_IN)
         customDial.setColorFilter(if (isBrightColor(preferences.getInt("colorEsfera", Color.WHITE))) Color.BLACK else Color.WHITE)
-        customDial.setOnClickListener { setColorFor(preferences,"colorEsfera", it!! as ImageButton ) }
+        customDial.setOnClickListener { setColorFor(preferences, "colorEsfera", it!! as ImageButton) }
 
         customMarcadores.background.setColorFilter(preferences.getInt("colorBorde", Color.DKGRAY), PorterDuff.Mode.SRC_IN)
         customMarcadores.setColorFilter(if (isBrightColor(preferences.getInt("colorBorde", Color.DKGRAY))) Color.BLACK else Color.WHITE)
-        customMarcadores.setOnClickListener { setColorFor(preferences,"colorBorde", it!! as ImageButton ) }
+        customMarcadores.setOnClickListener { setColorFor(preferences, "colorBorde", it!! as ImageButton) }
 
         customSegundero.background.setColorFilter(preferences.getInt("colorSegundo", Color.RED), PorterDuff.Mode.SRC_IN)
         customSegundero.setColorFilter(if (isBrightColor(preferences.getInt("colorSegundo", Color.RED))) Color.BLACK else Color.WHITE)
-        customSegundero.setOnClickListener { setColorFor(preferences,"colorSegundo", it!! as ImageButton ) }
+        customSegundero.setOnClickListener { setColorFor(preferences, "colorSegundo", it!! as ImageButton) }
 
         initWidgetSelector()
     }
@@ -710,6 +744,62 @@ class SettingsActivity : BaseSettingsActivity() {
             }
         }
 
+        pypots.setOnLongClickListener{
+            val dm = DisplayMetrics()
+            windowManager.defaultDisplay.getRealMetrics(dm)
+            preferences.edit().putInt("widgetX", dm.widthPixels / 2)
+            preferences.edit().putInt("widgetY", dm.heightPixels / 2)
+
+            widgetX.progress = dm.widthPixels/2
+            widgetX2.progress = dm.widthPixels/2
+            widgetX3.progress = dm.widthPixels/2
+
+            widgetY.progress = dm.heightPixels/2
+            widgetY2.progress = dm.heightPixels/2
+            widgetY3.progress = dm.heightPixels/2
+
+            vibra(5)
+
+            false
+        }
+
+        spin.setOnLongClickListener{
+            val dm = DisplayMetrics()
+            windowManager.defaultDisplay.getRealMetrics(dm)
+            preferences.edit().putInt("widgetX", dm.widthPixels / 2)
+            preferences.edit().putInt("widgetY", dm.heightPixels / 2)
+
+            widgetX.progress = dm.widthPixels/2
+            widgetX2.progress = dm.widthPixels/2
+            widgetX3.progress = dm.widthPixels/2
+
+            widgetY.progress = dm.heightPixels/2
+            widgetY2.progress = dm.heightPixels/2
+            widgetY3.progress = dm.heightPixels/2
+
+            vibra(5)
+
+            false
+        }
+
+        custom.setOnLongClickListener{
+            val dm = DisplayMetrics()
+            windowManager.defaultDisplay.getRealMetrics(dm)
+            preferences.edit().putInt("widgetX", dm.widthPixels / 2)
+            preferences.edit().putInt("widgetY", dm.heightPixels / 2)
+
+            widgetX.progress = dm.widthPixels/2
+            widgetX2.progress = dm.widthPixels/2
+            widgetX3.progress = dm.widthPixels/2
+
+            widgetY.progress = dm.heightPixels/2
+            widgetY2.progress = dm.heightPixels/2
+            widgetY3.progress = dm.heightPixels/2
+
+            vibra(5)
+
+            false
+        }
 
 
 
@@ -722,6 +812,7 @@ class SettingsActivity : BaseSettingsActivity() {
             spinSettings.visibility = GONE
             customSettings.visibility = GONE
             preferences.edit().putString("selectedWidget", "pypots").apply()
+            preferences.edit().putBoolean("changedWidget", true).apply()
         }
 
         spin.setOnClickListener {
@@ -733,6 +824,7 @@ class SettingsActivity : BaseSettingsActivity() {
             spinSettings.visibility = VISIBLE
             customSettings.visibility = GONE
             preferences.edit().putString("selectedWidget", "spin").apply()
+            preferences.edit().putBoolean("changedWidget", true).apply()
         }
 
         custom.setOnClickListener {
@@ -744,6 +836,7 @@ class SettingsActivity : BaseSettingsActivity() {
             spinSettings.visibility = GONE
             customSettings.visibility = VISIBLE
             preferences.edit().putString("selectedWidget", "custom").apply()
+            preferences.edit().putBoolean("changedWidget", true).apply()
         }
     }
 
@@ -788,14 +881,14 @@ class SettingsActivity : BaseSettingsActivity() {
 
 
 
-    fun setColorFor(preferences: SharedPreferences, preferencesKey:String, view:ImageButton){
+    fun setColorFor(preferences: SharedPreferences, preferencesKey: String, view: ImageButton){
 
 
         cpColor.setOnSeekBarChangeListener(null)
         cpSaturacion.setOnSeekBarChangeListener(null)
         cpLuminosidad.setOnSeekBarChangeListener(null)
 
-        var currentColor = Color.valueOf(preferences.getInt(preferencesKey,Color.WHITE))
+        var currentColor = Color.valueOf(preferences.getInt(preferencesKey, Color.WHITE))
 
         val cpGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
                 0.0f, intArrayOf(Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED),
@@ -836,7 +929,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
 
 
-        cpSaturacion.progress = Math.round(saturacion*100)
+        cpSaturacion.progress = Math.round(saturacion * 100)
         cpSaturacion.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(colorPicker2, colorPicker2)
@@ -847,7 +940,8 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                saturacion = progress/100f
+                vibra(2)
+                saturacion = progress / 100f
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
 
                 val lumGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
@@ -857,15 +951,16 @@ class SettingsActivity : BaseSettingsActivity() {
                 shapeLum.paint.shader = lumGradient
                 cpLuminosidad.progressDrawable = shapeLum
 
-                view?.let{
+                view?.let {
                     it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
                     it.setColorFilter(if (isBrightColor(getHSLColor(matiz, saturacion, luminosidad))) Color.BLACK else Color.WHITE)
                 }
             }
         })
 
-        cpLuminosidad.progress = Math.round(luminosidad*100)
+        cpLuminosidad.progress = Math.round(luminosidad * 100)
         cpLuminosidad.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(colorPicker2, colorPicker2)
             }
@@ -875,10 +970,11 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                luminosidad = progress/100f
+                vibra(2)
+                luminosidad = progress / 100f
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
 
-                view?.let{
+                view?.let {
                     it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
                     it.setColorFilter(if (isBrightColor(getHSLColor(matiz, saturacion, luminosidad))) Color.BLACK else Color.WHITE)
                 }
@@ -887,6 +983,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
         cpColor.progress = Math.round(matiz)
         cpColor.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(colorPicker2, colorPicker2)
             }
@@ -896,6 +993,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
                 matiz = progress.toFloat()
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
 
@@ -913,7 +1011,7 @@ class SettingsActivity : BaseSettingsActivity() {
                 shapeLum.paint.shader = lumGradient
                 cpLuminosidad.progressDrawable = shapeLum
 
-                view?.let{
+                view?.let {
                     it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
                     it.setColorFilter(if (isBrightColor(getHSLColor(matiz, saturacion, luminosidad))) Color.BLACK else Color.WHITE)
                 }
@@ -941,11 +1039,16 @@ class SettingsActivity : BaseSettingsActivity() {
 
     }
 
-    fun getHSLColor(h:Float, s:Float, l:Float):Int{
+    fun vibra(tiempo:Long){
+        val v = getSystemService(VIBRATOR_SERVICE) as Vibrator
+        v.vibrate(VibrationEffect.createOneShot(tiempo, VibrationEffect.DEFAULT_AMPLITUDE));
+    }
+
+    fun getHSLColor(h: Float, s: Float, l: Float):Int{
         var colorComponents_ = FloatArray(3)
-        colorComponents_.set(0,h)
-        colorComponents_.set(1,s)
-        colorComponents_.set(2,l)
+        colorComponents_.set(0, h)
+        colorComponents_.set(1, s)
+        colorComponents_.set(2, l)
         var color = ColorUtils.HSLToColor(colorComponents_)
         return color
     }

@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Anchura de la línea central"
+                        android:text="@string/wide"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -120,7 +120,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Cantidad de pliegues"
+                        android:text="@string/wrinkles"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -143,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Velocidad"
+                        android:text="@string/speed"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Amplitud horizontal"
+                        android:text="@string/amphor"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -189,7 +189,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Amplitud vertical"
+                        android:text="@string/ampver"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -212,7 +212,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Intensidad de la oscuridad de los bordes"
+                        android:text="@string/darkint"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -235,7 +235,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Tamaño de la oscuridad de los bordes"
+                        android:text="@string/darksize"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -258,7 +258,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Rotación"
+                        android:text="@string/rotation"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -297,7 +297,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="left"
                             android:paddingLeft="15dp"
-                            android:text="Mostrar reloj"
+                            android:text="@string/showclock"
                             android:textColor="#000"
                             android:textSize="12dp" />
                     </LinearLayout>
@@ -390,7 +390,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Posición horizontal"
+                        android:text="@string/horpos"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -413,7 +413,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Posición vertical"
+                        android:text="@string/verpos"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -436,7 +436,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Tamaño"
+                        android:text="@string/size"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -475,7 +475,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="left"
                             android:paddingLeft="15dp"
-                            android:text="Complicaciones discretas"
+                            android:text="@string/complications"
                             android:textColor="#000"
                             android:textSize="12dp" />
                     </LinearLayout>
@@ -501,7 +501,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="left"
                             android:paddingLeft="15dp"
-                            android:text="Profundidad en el borde"
+                            android:text="@string/edgedepth"
                             android:textColor="#000"
                             android:textSize="12dp" />
                     </LinearLayout>
@@ -528,7 +528,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Posición horizontal"
+                        android:text="@string/horpos"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -551,7 +551,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Posición vertical"
+                        android:text="@string/verpos"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -574,7 +574,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Tamaño"
+                        android:text="@string/size"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -599,7 +599,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Estilo"
+                        android:text="@string/style"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -647,7 +647,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Posición horizontal"
+                        android:text="@string/horpos"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -670,7 +670,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Posición vertical"
+                        android:text="@string/verpos"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -693,7 +693,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:gravity="center"
-                        android:text="Tamaño"
+                        android:text="@string/size"
                         android:textColor="#000"
                         android:textSize="12dp" />
 
@@ -852,7 +852,7 @@
                 android:layout_marginRight="0dp"
                 android:background="@drawable/button_background"
                 android:textColor="#000"
-                android:text="Cerrar"
+                android:text="close"
                 android:height="0dp"
  />
             </LinearLayout>

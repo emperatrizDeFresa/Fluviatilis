@@ -17,6 +17,9 @@ import java.util.Calendar;
 
 import emperatriz.fluviatilis.liveWallpaper.R;
 import emperatriz.fluviatilis.widgets.WidgetDrawer;
+import emperatriz.fluviatilis.widgets.spin.SpinDrawUtils;
+
+import static emperatriz.fluviatilis.widgets.pypots.PypotsDrawUtils.width;
 
 public class PypotsDrawer implements WidgetDrawer {
 
@@ -53,8 +56,8 @@ public class PypotsDrawer implements WidgetDrawer {
     private Paint blackPaint;
 
     @Override
-    public boolean isInitialized(){
-        return context!=null;
+    public boolean isInitialized() {
+        return context!=null;// && preferences != null;
     }
 
     @Override
@@ -102,10 +105,10 @@ public class PypotsDrawer implements WidgetDrawer {
 
 
 
-        PypotsDrawUtils.offsetX=x;
-        PypotsDrawUtils.offsetY=y;
+        PypotsDrawUtils.offsetX=x-width/2;
+        PypotsDrawUtils.offsetY=y-width/2;
         PypotsDrawUtils.height=height;
-        PypotsDrawUtils.width=width;
+        PypotsDrawUtils.width =width;
         PypotsDrawUtils.p20=Math.round(width/20);
 
         n0_ = Bitmap.createScaledBitmap(n0_,SysPypots.size(62, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
@@ -141,7 +144,7 @@ public class PypotsDrawer implements WidgetDrawer {
     @Override
     public void resize(int width, int height){
         PypotsDrawUtils.height=height;
-        PypotsDrawUtils.width=width;
+        PypotsDrawUtils.width =width;
         PypotsDrawUtils.p20=Math.round(width/20);
 
         n0_ = Bitmap.createScaledBitmap(n0_,SysPypots.size(62, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
@@ -176,7 +179,7 @@ public class PypotsDrawer implements WidgetDrawer {
     @Override
     public void refresh(int width, int height){
         PypotsDrawUtils.height=height;
-        PypotsDrawUtils.width=width;
+        PypotsDrawUtils.width =width;
         PypotsDrawUtils.p20=Math.round(width/20);
 
         n0_ = Bitmap.createScaledBitmap(n0_,SysPypots.size(62, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
@@ -210,11 +213,11 @@ public class PypotsDrawer implements WidgetDrawer {
 
     @Override
     public void draw(Canvas canvas, boolean isWallpaper, int x, int y) {
-        PypotsDrawUtils.offsetX=x;
-        PypotsDrawUtils.offsetY=y;
+        PypotsDrawUtils.offsetX=x-width/2;
+        PypotsDrawUtils.offsetY=y-width/2;
         PypotsDrawUtils.canvas=canvas;
 
-        canvas.drawOval(PypotsDrawUtils.offsetX, PypotsDrawUtils.offsetY, PypotsDrawUtils.offsetX+ PypotsDrawUtils.width, PypotsDrawUtils.offsetY+ PypotsDrawUtils.height,blackPaint);
+        canvas.drawOval(PypotsDrawUtils.offsetX, PypotsDrawUtils.offsetY, PypotsDrawUtils.offsetX+ width, PypotsDrawUtils.offsetY+ PypotsDrawUtils.height,blackPaint);
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         SimpleDateFormat month = new SimpleDateFormat("MMMM");

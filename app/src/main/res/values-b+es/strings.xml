@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vandavot</string>
+
+    <string-array name="ceroseis">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>0 fino</item>
+        <item>1 fino</item>
+        <item>2 fino</item>
+        <item>3 fino</item>
+        <item>Animado</item>
+        <item>Relleno</item>
+    </string-array>
+
+    <string name="wide">Anchura de la línea central</string>
+    <string name="wrinkles">Cantidad de pliegues</string>
+    <string name="speed">Velocidad</string>
+    <string name="amphor">Amplitud horizontal</string>
+    <string name="ampver">Amplitud vertical</string>
+    <string name="darkint">Intensidad de la oscuridad de los bordes</string>
+    <string name="darksize">Tamaño de la oscuridad de los bordes</string>
+    <string name="rotation">Rotación</string>
+    <string name="showclock">Mostrar reloj</string>
+    <string name="horpos">Posición horizontal</string>
+    <string name="verpos">Posición vertical</string>
+    <string name="size">Tamaño</string>
+    <string name="complications">Complicaciones discretas</string>
+    <string name="edgedepth">Profundidad en el borde</string>
+    <string name="style">Estilo</string>
+    <string name="close">Cerrar</string>
+</resources>
