@@ -74,8 +74,8 @@ abstract class BaseWallpaperService : WallpaperService() {
                     if (clickDuration < MAX_CLICK_DURATION) {
                         val preferences = getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
                         val radius = preferences.getInt("widgetXsize", 454)*0.5F
-                        val x = preferences.getInt("widgetX", 0) + radius
-                        val y = preferences.getInt("widgetY", 0) + radius
+                        val x = preferences.getInt("widgetX", 0)
+                        val y = preferences.getInt("widgetY", 0)
 
 
                         if ((event.rawX-x).pow(2) + (event.rawY-y).pow(2) < radius.pow(2)){

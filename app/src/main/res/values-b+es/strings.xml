@@ -23,6 +23,8 @@
     <string name="darkint">Intensidad de la oscuridad de los bordes</string>
     <string name="darksize">Tamaño de la oscuridad de los bordes</string>
     <string name="rotation">Rotación</string>
+    <string name="verticalOffset">Desplazamiento vertical</string>
+    <string name="horizontalOffset">Desplazamiento horizontal</string>
     <string name="showclock">Mostrar reloj</string>
     <string name="horpos">Posición horizontal</string>
     <string name="verpos">Posición vertical</string>
@@ -31,4 +33,5 @@
     <string name="edgedepth">Profundidad en el borde</string>
     <string name="style">Estilo</string>
     <string name="close">Cerrar</string>
+    <string name="lastColors">Últimos colores usados</string>
 </resources>

@@ -23,6 +23,8 @@
     <string name="darkint">Edge darkness intensity</string>
     <string name="darksize">Edge darkness size</string>
     <string name="rotation">Rotation</string>
+    <string name="verticalOffset">Vertical offset</string>
+    <string name="horizontalOffset">Horizontal offset</string>
     <string name="showclock">Show clock</string>
     <string name="horpos">Horizontal position</string>
     <string name="verpos">Vertical position</string>
@@ -31,4 +33,5 @@
     <string name="edgedepth">Edge depth</string>
     <string name="style">Style</string>
     <string name="close">Close</string>
+    <string name="lastColors">Last used colors</string>
 </resources>

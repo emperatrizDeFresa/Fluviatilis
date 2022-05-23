@@ -159,6 +159,11 @@ class WallpaperDrawer : WallpaperRenderer {
             }
         }
 
+        val verticalOffset = preferences.getInt("verticalOffset",0)
+        val horizontalOffset = preferences.getInt("horizontalOffset",0)
+        canvas.save()
+        canvas.translate(horizontalOffset.toFloat(),verticalOffset.toFloat())
+
         canvas.rotate(preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height-200)/2).toFloat())
 
         model.fluvHeight = Math.round(((height-200) * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt()
@@ -225,6 +230,9 @@ class WallpaperDrawer : WallpaperRenderer {
 
 
             canvas.rotate(-preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height-200)/2).toFloat())
+
+            canvas.restore()
+
             val shaderHeight=preferences.getInt("dimHeight", 100)
             paintAlpha.alpha = preferences.getInt("dimAlpha", 125)
             canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha)
@@ -243,6 +251,8 @@ class WallpaperDrawer : WallpaperRenderer {
                     }
                 }
             }
+
+
 
             if (preferences.getBoolean("showWidget", false)){
 

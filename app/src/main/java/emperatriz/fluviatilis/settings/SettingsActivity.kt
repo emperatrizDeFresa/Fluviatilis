@@ -26,6 +26,7 @@ import emperatriz.fluviatilis.liveWallpaper.WallpaperService
 import emperatriz.fluviatilis.widgets.pypots.SysPypots
 import emperatriz.fluviatilis.widgets.spin.SpinDrawUtils
 import kotlinx.android.synthetic.main.activity_settings.*
+import java.util.*
 
 
 class SettingsActivity : BaseSettingsActivity() {
@@ -33,6 +34,8 @@ class SettingsActivity : BaseSettingsActivity() {
     var settingsVisible=false;
     var widgetsVisible=false;
     var colorPickerVisible=false;
+
+    var lastColors = LinkedList<Int>()
 
 
     override val settingsActivityComponent by lazy { ComponentName(this, "$packageName.LauncherSettingsActivity") }
@@ -114,7 +117,10 @@ class SettingsActivity : BaseSettingsActivity() {
         anim.duration = 300
         anim.start()
         colorPickerVisible=true
+        setLastColors()
     }
+
+
 
     override fun onResume() {
         super.onResume()
@@ -322,8 +328,61 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+                if (progress%45==0){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
                 preferences.edit().putInt("rotation", progress).apply()
+                preferences.edit().putBoolean("changed", true).apply()
+            }
+        })
+
+        horizontalOffset.max = dm.widthPixels
+        horizontalOffset.progress = preferences.getInt("horizontalOffset", 0)+dm.widthPixels / 2
+        horizontalOffset.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                showAll(settingsPanel, settingsPanel2)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress_: Int, fromUser: Boolean) {
+                val progress = progress_- dm.widthPixels / 2
+                if (progress==0){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
+                preferences.edit().putInt("horizontalOffset", progress).apply()
+                preferences.edit().putBoolean("changed", true).apply()
+            }
+        })
+
+        verticalOffset.max = dm.heightPixels
+        verticalOffset.progress = preferences.getInt("verticalOffset", 0)+ dm.heightPixels / 2
+        verticalOffset.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                showAll(settingsPanel, settingsPanel2)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress_: Int, fromUser: Boolean) {
+                val progress = progress_- dm.heightPixels / 2
+                if (progress==0){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
+                preferences.edit().putInt("verticalOffset", progress).apply()
                 preferences.edit().putBoolean("changed", true).apply()
             }
         })
@@ -385,7 +444,12 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+                if (progress==dm.widthPixels/2){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
                 widgetX2.progress = progress
                 widgetX3.progress = progress
                 preferences.edit().putInt("widgetX", progress).apply()
@@ -408,7 +472,12 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+                if (progress==dm.heightPixels/2){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
                 widgetY2.progress = progress
                 widgetY3.progress = progress
                 preferences.edit().putInt("widgetY", progress).apply()
@@ -446,6 +515,28 @@ class SettingsActivity : BaseSettingsActivity() {
             }
         })
 
+        style.max = 7
+        style.progress = preferences.getInt(SysPypots.SETTINGS_DIVISIONES, 1)
+        style.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                showAll(widgetsPanel, pypotsSettings_)
+                widgetsPanel2.visibility = View.VISIBLE
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                showOnlyMe(seekBar, widgetsPanel, pypotsSettings_)
+                widgetsPanel2.visibility = View.INVISIBLE
+            }
+
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                vibra(2)
+                SysPypots.save(SysPypots.SETTINGS_DIVISIONES, if (progress==7) 9 else progress+1, this@SettingsActivity)
+                preferences.edit().putBoolean("changedWidget", true).apply()
+                preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
+
+            }
+        })
+
         complicationsLL.setOnClickListener{
             complications.performClick()
         }
@@ -468,24 +559,6 @@ class SettingsActivity : BaseSettingsActivity() {
             preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
         }
 
-        haloLL.setOnLongClickListener{
-            val popupMenu = PopupMenu(this@SettingsActivity, it)
-            var i = 0
-            for (item in resources.getStringArray(R.array.ceroseis)) {
-                popupMenu.menu.add(i, i, i, item)
-                i++
-            }
-            popupMenu.setOnMenuItemClickListener { item ->
-                SysPypots.save(SysPypots.SETTINGS_DIVISIONES, item.groupId, this@SettingsActivity)
-                preferences.edit().putBoolean("changedWidget", true).apply()
-                preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
-                false
-            }
-            popupMenu.show()
-            false
-        }
-
-
 
 
         widgetX2.max = dm.widthPixels
@@ -502,7 +575,12 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+                if (progress==dm.widthPixels/2){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
                 widgetX.progress = progress
                 widgetX3.progress = progress
                 preferences.edit().putInt("widgetX", progress).apply()
@@ -525,7 +603,12 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+                if (progress==dm.heightPixels/2){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
                 widgetY.progress = progress
                 widgetY3.progress = progress
                 preferences.edit().putInt("widgetY", progress).apply()
@@ -606,7 +689,12 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+                if (progress==dm.widthPixels/2){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
                 widgetX2.progress = progress
                 widgetX.progress = progress
                 preferences.edit().putInt("widgetX", progress).apply()
@@ -629,7 +717,12 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+                if (progress==dm.heightPixels/2){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
                 widgetY2.progress = progress
                 widgetY.progress = progress
                 preferences.edit().putInt("widgetY", progress).apply()
@@ -933,6 +1026,7 @@ class SettingsActivity : BaseSettingsActivity() {
         cpSaturacion.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(colorPicker2, colorPicker2)
+                setLastColors()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -940,7 +1034,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+
+                    vibra(2)
+
                 saturacion = progress / 100f
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
 
@@ -963,6 +1059,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(colorPicker2, colorPicker2)
+                setLastColors()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -970,7 +1067,12 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
+                if (progress==50){
+                    vibraFuerte()
+                }
+                else{
+                    vibra(2)
+                }
                 luminosidad = progress / 100f
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
 
@@ -986,6 +1088,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(colorPicker2, colorPicker2)
+                setLastColors()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -1023,8 +1126,10 @@ class SettingsActivity : BaseSettingsActivity() {
 
         okColorPicker.setOnClickListener {
 
-
-
+            if (lastColors.size>=3){
+                lastColors.pollFirst()
+            }
+            lastColors.add(getHSLColor(matiz, saturacion, luminosidad))
 
             if (settingsVisible){
                 closeColorPicker{openSettings()}
@@ -1039,9 +1144,73 @@ class SettingsActivity : BaseSettingsActivity() {
 
     }
 
+    fun setLastColors(){
+        if (lastColors.size==0){
+            lastColorsLL.visibility = GONE
+            return
+        }
+        lastColorsLL.visibility = VISIBLE
+        if (lastColors.size==1){
+            lastColor1.visibility = VISIBLE
+            lastColor2.visibility = GONE
+            lastColor3.visibility = GONE
+            lastColor1.setColorFilter(lastColors.get(0), PorterDuff.Mode.MULTIPLY)
+        }
+        else if (lastColors.size==2){
+            lastColor1.visibility = VISIBLE
+            lastColor2.visibility = VISIBLE
+            lastColor3.visibility = GONE
+            lastColor1.setColorFilter(lastColors.get(0), PorterDuff.Mode.MULTIPLY)
+            lastColor2.setColorFilter(lastColors.get(1), PorterDuff.Mode.MULTIPLY)
+        } else{
+            lastColor1.visibility = VISIBLE
+            lastColor2.visibility = VISIBLE
+            lastColor3.visibility = VISIBLE
+            lastColor1.setColorFilter(lastColors.get(0), PorterDuff.Mode.MULTIPLY)
+            lastColor2.setColorFilter(lastColors.get(1), PorterDuff.Mode.MULTIPLY)
+            lastColor3.setColorFilter(lastColors.get(2), PorterDuff.Mode.MULTIPLY)
+        }
+
+
+        lastColor1.setOnClickListener {
+            var colorComponents = FloatArray(3)
+            ColorUtils.colorToHSL(lastColors.get(0), colorComponents)
+            cpColor.progress = colorComponents.get(0).toInt()
+            cpSaturacion.progress = Math.round(colorComponents.get(1)*100).toInt()
+            cpLuminosidad.progress = Math.round(colorComponents.get(2)*100).toInt()
+        }
+        lastColor2.setOnClickListener {
+            var colorComponents = FloatArray(3)
+            ColorUtils.colorToHSL(lastColors.get(1), colorComponents)
+            cpColor.progress = colorComponents.get(0).toInt()
+            cpSaturacion.progress = Math.round(colorComponents.get(1)*100).toInt()
+            cpLuminosidad.progress = Math.round(colorComponents.get(2)*100).toInt()
+        }
+        lastColor3.setOnClickListener {
+            var colorComponents = FloatArray(3)
+            ColorUtils.colorToHSL(lastColors.get(2), colorComponents)
+            cpColor.progress = colorComponents.get(0).toInt()
+            cpSaturacion.progress = Math.round(colorComponents.get(1)*100).toInt()
+            cpLuminosidad.progress = Math.round(colorComponents.get(2)*100).toInt()
+        }
+    }
+
     fun vibra(tiempo:Long){
         val v = getSystemService(VIBRATOR_SERVICE) as Vibrator
-        v.vibrate(VibrationEffect.createOneShot(tiempo, VibrationEffect.DEFAULT_AMPLITUDE));
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK))
+        }else{
+            v.vibrate(VibrationEffect.createOneShot(tiempo, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
+    }
+
+    fun vibraFuerte(){
+        val v = getSystemService(VIBRATOR_SERVICE) as Vibrator
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
+        }else{
+            v.vibrate(VibrationEffect.createOneShot(5, VibrationEffect.DEFAULT_AMPLITUDE));
+        }
     }
 
     fun getHSLColor(h: Float, s: Float, l: Float):Int{

@@ -275,6 +275,52 @@
                         android:progressDrawable="@drawable/custom_seekbar"
                         android:thumb="@drawable/thumb_seekbar"
                         android:thumbOffset="-0dp" />
+                    <TextView
+                        android:id="@+id/textView897"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/horizontalOffset"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+
+                    <SeekBar
+                        android:id="@+id/horizontalOffset"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+                    <TextView
+                        android:id="@+id/textView8977"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/verticalOffset"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+
+                    <SeekBar
+                        android:id="@+id/verticalOffset"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
 
                     <LinearLayout
                         android:id="@+id/showWidgetLL"
@@ -453,7 +499,29 @@
                         android:progressDrawable="@drawable/custom_seekbar"
                         android:thumb="@drawable/thumb_seekbar"
                         android:thumbOffset="-0dp" />
+                    <TextView
+                        android:id="@+id/textVieww63188"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/style"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
 
+                    <SeekBar
+                        android:id="@+id/style"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:min="0"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
                     <LinearLayout
                         android:id="@+id/complicationsLL"
                         android:layout_width="match_parent"
@@ -842,6 +910,48 @@
                 android:progressDrawable="@drawable/custom_seekbar"
                 android:thumbOffset="-0dp" />
 
+                <LinearLayout
+                    android:id="@+id/lastColorsLL"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textVieww639"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="left"
+                        android:text="@string/lastColors"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+                    <ImageView
+                        android:id="@+id/lastColor3"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/lastcolorshape"
+ />
+                    <ImageView
+                        android:id="@+id/lastColor2"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/lastcolorshape"
+                        />
+                    <ImageView
+                        android:id="@+id/lastColor1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/lastcolorshape"
+                        />
+                </LinearLayout>
             <Button
                 android:id="@+id/okColorPicker"
                 android:layout_width="match_parent"
@@ -852,7 +962,7 @@
                 android:layout_marginRight="0dp"
                 android:background="@drawable/button_background"
                 android:textColor="#000"
-                android:text="close"
+                android:text="@string/close"
                 android:height="0dp"
  />
             </LinearLayout>
