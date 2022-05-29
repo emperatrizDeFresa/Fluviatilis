@@ -20,6 +20,7 @@ import java.util.*
 class WallpaperDrawer : WallpaperRenderer {
 
 
+    var hOffset:Int = 200
     lateinit var context: Context
     var isWallpaper: Boolean = false
     lateinit var widget: WidgetDrawer
@@ -113,7 +114,7 @@ class WallpaperDrawer : WallpaperRenderer {
 
     override fun setCanvasSize(width: Int, height: Int) {
         this.width = width
-        this.height = height+200
+        this.height = height+hOffset
         var margin = preferences.getInt("fluvWeight", 12)*2
         model = WallpaperModel(Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt(),
                 margin,
@@ -144,6 +145,7 @@ class WallpaperDrawer : WallpaperRenderer {
 
     override fun draw(canvas: Canvas) {
 
+        hOffset = height
 
         if (preferences.getBoolean("showWidget", false)) {
             when(preferences.getString("selectedWidget", "pypots")){
@@ -164,9 +166,9 @@ class WallpaperDrawer : WallpaperRenderer {
         canvas.save()
         canvas.translate(horizontalOffset.toFloat(),verticalOffset.toFloat())
 
-        canvas.rotate(preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height-200)/2).toFloat())
+        canvas.rotate(preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height)/2).toFloat())
 
-        model.fluvHeight = Math.round(((height-200) * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt()
+        model.fluvHeight = Math.round(((height) * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt()
         model.fluvNumber = preferences.getInt("fluvNumber", 16)
         model.speed = preferences.getInt("speed", 2)
         model.fluvWeight = preferences.getInt("fluvWeight", 12)
@@ -192,13 +194,16 @@ class WallpaperDrawer : WallpaperRenderer {
 
         if (model.fluvWeight!=0){
             paintArc.strokeWidth = model.fluvWeight.toFloat()
+            paintLeft.strokeWidth = 0f
+            paintRight.strokeWidth = 0f
+
+            canvas.drawRect((-height-hOffset).toFloat(),-hOffset*1f,width/2f,(height+hOffset*1f).toFloat(),paintLeft)
+            canvas.drawRect((width/2).toFloat(),-hOffset*1f,(height+hOffset).toFloat(),(height+hOffset*1f).toFloat(),paintRight)
+
             paintLeft.strokeWidth = model.fluvHeight.toFloat()+1
             paintRight.strokeWidth = model.fluvHeight.toFloat()+1
 
-            canvas.drawRect((-width).toFloat(),-100F,0F,(height-100).toFloat(),paintLeft)
-            canvas.drawRect((width).toFloat(),-100F,(width*2).toFloat(),(height-100).toFloat(),paintRight)
-
-            var y = (height-200)/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
+            var y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
             var i = 0
             drawFirstBackground(canvas, y.toFloat(), true)
             model.fluvs.forEach{
@@ -212,7 +217,7 @@ class WallpaperDrawer : WallpaperRenderer {
                 y += model.fluvHeight
             }
             drawLastBackground(canvas, y.toFloat(), i % 2 != 0)
-            y = (height-200)/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
+            y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
             i = 0
             drawFirst(canvas, y.toFloat(), true)
             model.fluvs.forEach{
@@ -229,14 +234,14 @@ class WallpaperDrawer : WallpaperRenderer {
 
 
 
-            canvas.rotate(-preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height-200)/2).toFloat())
+            canvas.rotate(-preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height-hOffset)/2).toFloat())
 
             canvas.restore()
 
             val shaderHeight=preferences.getInt("dimHeight", 100)
             paintAlpha.alpha = preferences.getInt("dimAlpha", 125)
             canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha)
-            canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height-200)-shaderHeight).toFloat(), width.toFloat(), (height-200).toFloat()), paintAlpha)
+            canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height)-shaderHeight).toFloat(), width.toFloat(), (height).toFloat()), paintAlpha)
 
 
 
@@ -332,20 +337,20 @@ class WallpaperDrawer : WallpaperRenderer {
 
     fun drawFirst(canvas: Canvas, y: Float, left: Boolean){
         val diameter = model.fluvHeight+model.fluvWeight
-        canvas.drawRect((width.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), -100F, (width.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), y - diameter / 2 + model.fluvWeight.toFloat() / 2 + 1, paint)
+        canvas.drawRect((width.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), -hOffset*1f, (width.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), y - diameter / 2 + model.fluvWeight.toFloat() / 2 + 1, paint)
         canvas.drawArc((width.toFloat() / 2).toFloat(), y + model.fluvWeight.toFloat() / 2 - diameter, (width.toFloat() / 2 + diameter).toFloat() + 1, y + model.fluvWeight.toFloat() / 2, -180F, -90F, false, paintArc)
     }
 
     fun drawFirstBackground(canvas: Canvas, y: Float, left: Boolean){
         val radius = (model.fluvHeight+model.fluvWeight)/2
-        canvas.drawRect(0F, -100F, (width.toFloat() / 2 + radius / 2).toFloat(), y + model.fluvWeight, paintLeft2)
-        canvas.drawRect((width.toFloat() / 2).toFloat(), -100F, width.toFloat(), y - radius + model.fluvWeight, paintRight2)
+        canvas.drawRect(0F, -hOffset/2f, (width.toFloat() / 2 + radius / 2).toFloat(), y + model.fluvWeight, paintLeft2)
+        canvas.drawRect((width.toFloat() / 2).toFloat(), -hOffset/2f, width.toFloat(), y - radius + model.fluvWeight, paintRight2)
         canvas.drawLine((width.toFloat() / 2 + radius).toFloat(), y - radius + model.fluvWeight, width.toFloat(), y - radius + model.fluvWeight, paintRight)
     }
 
     fun drawLast(canvas: Canvas, y: Float, left: Boolean){
         val diameter = model.fluvHeight+model.fluvWeight
-        canvas.drawRect((width.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), y + diameter / 2 + model.fluvWeight.toFloat() / 2 - 1, (width.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), height+200.toFloat(), paint)
+        canvas.drawRect((width.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), y + diameter / 2 + model.fluvWeight.toFloat() / 2 - 1, (width.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), height+hOffset.toFloat(), paint)
         if (left){
             canvas.drawArc((width.toFloat() / 2).toFloat(), y + model.fluvWeight.toFloat() / 2, (width.toFloat() / 2 + diameter).toFloat() + 1, y + diameter + model.fluvWeight.toFloat() / 2, 270F, -90F, false, paintArc)
         }
