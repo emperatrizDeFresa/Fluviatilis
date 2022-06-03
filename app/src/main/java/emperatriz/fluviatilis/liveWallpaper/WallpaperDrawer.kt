@@ -20,13 +20,15 @@ import java.util.*
 class WallpaperDrawer : WallpaperRenderer {
 
 
-    var hOffset:Int = 200
+    var hOffset:Int = 0
     lateinit var context: Context
     var isWallpaper: Boolean = false
     lateinit var widget: WidgetDrawer
     lateinit var pypotsWidget : PypotsDrawer
     lateinit var spinWidget : SpinDrawer
     lateinit var customWidget : CustomDrawer
+    var verticalOffset:Int=0
+    var horizontalOffset:Int=0
 
     constructor(context: Context, isWallpaper: Boolean) {
         this.context=context
@@ -56,6 +58,10 @@ class WallpaperDrawer : WallpaperRenderer {
             }
             widget.init(context, preferences.getInt("widgetX", 0), preferences.getInt("widgetY", 0), preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
         }
+
+        verticalOffset = preferences.getInt("verticalOffset",0)
+        horizontalOffset = preferences.getInt("horizontalOffset",0)
+
 
     }
 
@@ -187,7 +193,22 @@ class WallpaperDrawer : WallpaperRenderer {
             model.initFluvs()
             preferences.edit().putBoolean("changed", false).apply()
         }
-
+        if (isWallpaper && preferences.getBoolean("changedWallpaper", false)){
+            var margin = preferences.getInt("fluvWeight", 12)*2
+            model = WallpaperModel(Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt(),
+                    margin,
+                    (width / 2) - margin,
+                    preferences.getInt("fluvNumber", 16),
+                    preferences.getInt("fluvWeight", 12),
+                    60,
+                    isWallpaper,
+                    height,
+                    width,
+                    preferences.getInt("speed", 2),
+                    preferences.getInt("wideness", 380))
+            model.initFluvs()
+            preferences.edit().putBoolean("changedWallpaper", false).apply()
+        }
 
 
         canvas.drawColor(Color.BLACK)
@@ -343,7 +364,7 @@ class WallpaperDrawer : WallpaperRenderer {
 
     fun drawFirstBackground(canvas: Canvas, y: Float, left: Boolean){
         val radius = (model.fluvHeight+model.fluvWeight)/2
-        canvas.drawRect(0F, -hOffset/2f, (width.toFloat() / 2 + radius / 2).toFloat(), y + model.fluvWeight, paintLeft2)
+        canvas.drawRect(0F, -hOffset/2f, (width.toFloat() / 2 + radius ).toFloat(), y + model.fluvWeight, paintLeft2)
         canvas.drawRect((width.toFloat() / 2).toFloat(), -hOffset/2f, width.toFloat(), y - radius + model.fluvWeight, paintRight2)
         canvas.drawLine((width.toFloat() / 2 + radius).toFloat(), y - radius + model.fluvWeight, width.toFloat(), y - radius + model.fluvWeight, paintRight)
     }

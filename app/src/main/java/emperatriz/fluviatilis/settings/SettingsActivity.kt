@@ -252,6 +252,7 @@ class SettingsActivity : BaseSettingsActivity() {
                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
                 preferences.edit().putInt("wideness", Math.max(1, progress)).apply()
                 preferences.edit().putBoolean("changed", true).apply()
+                preferences.edit().putBoolean("changedWallpaper", true).apply()
             }
         })
 
@@ -277,6 +278,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
                 separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
                 preferences.edit().putBoolean("changed", true).apply()
+                preferences.edit().putBoolean("changedWallpaper", true).apply()
 
             }
         })
