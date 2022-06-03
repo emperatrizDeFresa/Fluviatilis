@@ -23,6 +23,8 @@ import androidx.core.graphics.ColorUtils
 import emperatriz.fluviatilis.liveWallpaper.R
 import emperatriz.fluviatilis.liveWallpaper.WallpaperDrawer
 import emperatriz.fluviatilis.liveWallpaper.WallpaperService
+import emperatriz.fluviatilis.repository.DatabaseBuilder
+import emperatriz.fluviatilis.repository.DatabaseHelperImpl
 import emperatriz.fluviatilis.widgets.pypots.SysPypots
 import emperatriz.fluviatilis.widgets.spin.SpinDrawUtils
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -37,6 +39,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
     var lastColors = LinkedList<Int>()
 
+    lateinit var dbHelper: DatabaseHelperImpl
 
     override val settingsActivityComponent by lazy { ComponentName(this, "$packageName.LauncherSettingsActivity") }
     override val wallpaperServiceComponent by lazy { ComponentName(this, WallpaperService::class.java) }
@@ -44,6 +47,7 @@ class SettingsActivity : BaseSettingsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
+        dbHelper = DatabaseHelperImpl(DatabaseBuilder.getInstance(applicationContext))
     }
 
 
@@ -252,6 +256,7 @@ class SettingsActivity : BaseSettingsActivity() {
                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
                 preferences.edit().putInt("wideness", Math.max(1, progress)).apply()
                 preferences.edit().putBoolean("changed", true).apply()
+                preferences.edit().putBoolean("changedWallpaper", true).apply()
             }
         })
 
@@ -277,6 +282,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
                 separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
                 preferences.edit().putBoolean("changed", true).apply()
+                preferences.edit().putBoolean("changedWallpaper", true).apply()
 
             }
         })
@@ -516,7 +522,7 @@ class SettingsActivity : BaseSettingsActivity() {
         })
 
         style.max = 7
-        style.progress = preferences.getInt(SysPypots.SETTINGS_DIVISIONES, 1)
+        style.progress = preferences.getInt(SysPypots.SETTINGS_DIVISIONES, 1)-1
         style.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 showAll(widgetsPanel, pypotsSettings_)
