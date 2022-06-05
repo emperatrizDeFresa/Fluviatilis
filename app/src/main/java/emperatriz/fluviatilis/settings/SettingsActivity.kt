@@ -23,6 +23,9 @@ import androidx.core.graphics.ColorUtils
 import emperatriz.fluviatilis.liveWallpaper.R
 import emperatriz.fluviatilis.liveWallpaper.WallpaperDrawer
 import emperatriz.fluviatilis.liveWallpaper.WallpaperService
+import emperatriz.fluviatilis.model.WallpaperModel
+import emperatriz.fluviatilis.themes.Theme
+import emperatriz.fluviatilis.themes.ThemePreview
 import emperatriz.fluviatilis.widgets.pypots.SysPypots
 import emperatriz.fluviatilis.widgets.spin.SpinDrawUtils
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -34,6 +37,7 @@ class SettingsActivity : BaseSettingsActivity() {
     var settingsVisible=false;
     var widgetsVisible=false;
     var colorPickerVisible=false;
+    var themesVisible=false;
 
     var lastColors = LinkedList<Int>()
 
@@ -51,6 +55,7 @@ class SettingsActivity : BaseSettingsActivity() {
         settingsPanel.visibility = View.GONE
         widgetsPanel.visibility = View.VISIBLE
         colorPicker.visibility = GONE
+        themesPanel.visibility = GONE
         val anim = ObjectAnimator.ofFloat(widgetsPanel, "alpha", 0f)
         anim.duration = 300
         anim.start()
@@ -67,6 +72,7 @@ class SettingsActivity : BaseSettingsActivity() {
         settingsPanel.visibility = View.VISIBLE
         widgetsPanel.visibility = View.GONE
         colorPicker.visibility = GONE
+        themesPanel.visibility = GONE
         val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
         anim.duration = 300
         anim.start()
@@ -83,14 +89,35 @@ class SettingsActivity : BaseSettingsActivity() {
         settingsPanel.visibility = View.GONE
         widgetsPanel.visibility = View.GONE
         colorPicker.visibility = INVISIBLE
+        themesPanel.visibility = GONE
+
         colorPickerVisible=false
         lambda()
+    }
+
+    private fun closeThemes(lambda: () -> Unit){
+        settingsPanel.visibility = View.GONE
+        widgetsPanel.visibility = View.GONE
+        colorPicker.visibility = GONE
+        themesPanel.visibility = VISIBLE
+
+        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
+        anim.duration = 300
+        anim.start()
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                themesPanel.setVisibility(View.INVISIBLE)
+                lambda()
+            }
+        })
+        themesVisible=false
     }
 
     private fun openWidgets(){
         settingsPanel.visibility = View.GONE
         widgetsPanel.visibility = View.VISIBLE
         colorPicker.visibility = GONE
+        themesPanel.visibility = GONE
         val anim = ObjectAnimator.ofFloat(widgetsPanel, "alpha", 1f)
         anim.duration = 300
         anim.start()
@@ -103,6 +130,7 @@ class SettingsActivity : BaseSettingsActivity() {
         settingsPanel.visibility = View.VISIBLE
         widgetsPanel.visibility = View.GONE
         colorPicker.visibility = GONE
+        themesPanel.visibility = GONE
         val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 1f)
         anim.duration = 300
         anim.start()
@@ -113,6 +141,7 @@ class SettingsActivity : BaseSettingsActivity() {
         settingsPanel.visibility = View.GONE
         widgetsPanel.visibility = View.GONE
         colorPicker.visibility = VISIBLE
+        themesPanel.visibility = GONE
         val anim = ObjectAnimator.ofFloat(colorPicker, "alpha", 1f)
         anim.duration = 300
         anim.start()
@@ -120,7 +149,16 @@ class SettingsActivity : BaseSettingsActivity() {
         setLastColors()
     }
 
-
+    private fun openThemes(){
+        settingsPanel.visibility = View.GONE
+        widgetsPanel.visibility = View.GONE
+        colorPicker.visibility = GONE
+        themesPanel.visibility = VISIBLE
+        val anim = ObjectAnimator.ofFloat(themesPanel, "alpha", 1f)
+        anim.duration = 300
+        anim.start()
+        themesVisible=true
+    }
 
     override fun onResume() {
         super.onResume()
@@ -129,7 +167,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
 
 
-
+        themes.setColorFilter(Color.BLACK)
 
 
 
@@ -139,6 +177,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
             else if (colorPickerVisible){
                 closeColorPicker{openSettings()}
+            }
+            else if (themesVisible){
+                closeThemes{openSettings()}
             }
             else{
                 if (settingsVisible){
@@ -160,12 +201,35 @@ class SettingsActivity : BaseSettingsActivity() {
             else if (colorPickerVisible){
                 closeColorPicker{openWidgets()}
             }
+            else if (themesVisible){
+                closeThemes{openWidgets()}
+            }
             else{
                 if (widgetsVisible){
                     closeWidgets{}
                 }
                 else{
                     openWidgets()
+                }
+            }
+        }
+
+        themes.setOnClickListener {
+            if (settingsVisible){
+                closeSettings{openThemes()}
+            }
+            else if (colorPickerVisible){
+                closeColorPicker{openThemes()}
+            }
+            else if (widgetsVisible){
+                closeWidgets{openThemes()}
+            }
+            else{
+                if (themesVisible){
+                    closeThemes{}
+                }
+                else{
+                    openThemes()
                 }
             }
         }
@@ -779,6 +843,8 @@ class SettingsActivity : BaseSettingsActivity() {
         customSegundero.setOnClickListener { setColorFor(preferences, "colorSegundo", it!! as ImageButton) }
 
         initWidgetSelector()
+
+        initThemes()
     }
 
 
@@ -800,6 +866,8 @@ class SettingsActivity : BaseSettingsActivity() {
         }
         colorFilter = ColorMatrixColorFilter(matrix)
     }
+
+
 
     private fun initWidgetSelector() {
 
@@ -935,7 +1003,32 @@ class SettingsActivity : BaseSettingsActivity() {
         }
     }
 
+    private fun initThemes(){
 
+        val theme1 = Theme(50,32,8,0,80,150,100,100,0,0,0,0xff000000.toInt(),
+                0xffffff00.toInt(),0xff00ffff.toInt(),0,0,0,0,0,false,false,0xff00ffff.toInt(),0xff00ffff.toInt(),0xff00ffff.toInt(),
+                0xff00ffff.toInt())
+        val model1 = WallpaperModel(theme1.fluvHeight, 0,100,theme1.fluvNumber, theme1.fluvWeight, 0,false,300,150,0,theme1.wideness)
+        val preview1 = ThemePreview(this, null,  theme1, model1)
+        val preview2 = ThemePreview(this, null,  theme1, model1)
+        val preview3 = ThemePreview(this, null,  theme1, model1)
+        val preview4 = ThemePreview(this, null,  theme1, model1)
+        val preview5 = ThemePreview(this, null,  theme1, model1)
+        val preview6 = ThemePreview(this, null,  theme1, model1)
+        val preview7 = ThemePreview(this, null,  theme1, model1)
+        val preview8 = ThemePreview(this, null,  theme1, model1)
+        val preview9 = ThemePreview(this, null,  theme1, model1)
+        themeLL1.addView(preview1)
+        themeLL2.addView(preview2)
+        themeLL3.addView(preview3)
+        themeLL4.addView(preview4)
+        themeLL5.addView(preview5)
+        themeLL6.addView(preview6)
+        themeLL7.addView(preview7)
+        themeLL8.addView(preview8)
+        themeLL9.addView(preview9)
+
+    }
 
     private fun Int.dp(): Int {
         return (this / resources.displayMetrics.density).toInt()
