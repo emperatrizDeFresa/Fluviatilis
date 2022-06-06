@@ -1003,11 +1003,38 @@ class SettingsActivity : BaseSettingsActivity() {
         }
     }
 
+    private fun getCurrentTheme(preferences:SharedPreferences, height:Int, width:Int): Theme{
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(dm)
+        val hProportion = width / (1f*dm.widthPixels)
+        val vProportion = height / (1f*dm.heightPixels)
+        var margin = Math.round(preferences.getInt("fluvWeight", 12)*2*hProportion)
+        val model = WallpaperModel(Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt(),
+                margin,
+                (width / 2) - margin,
+                Math.round(preferences.getInt("fluvNumber", 16)*1f),
+                        Math.round(preferences.getInt("fluvWeight", 12)*vProportion),
+                60,
+                false,
+                height,
+                width,
+                0,
+                Math.round(preferences.getInt("wideness", 380)*hProportion))
+
+        val theme = Theme(model.fluvHeight,model.fluvNumber,model.fluvWeight,0,model.wideness,Math.round(preferences.getInt("heightness", 15)*1f),preferences.getInt("dimAlpha", 125),Math.round(preferences.getInt("dimHeight", 100)*vProportion),
+                preferences.getInt("rotation", 0),Math.round(preferences.getInt("horizontalOffset", 0)*hProportion),Math.round(preferences.getInt("verticalOffset", 0)*vProportion),preferences.getInt("color", Color.BLACK),
+                preferences.getInt("colorLeft", Color.rgb(50, 50, 50)),preferences.getInt("colorRight", Color.rgb(100, 100, 100)),0,0,0,0,0,false,false,0xff00ffff.toInt(),0xff00ffff.toInt(),0xff00ffff.toInt(),
+                0xff00ffff.toInt())
+
+        return theme
+    }
+
     private fun initThemes(){
 
-        val theme1 = Theme(50,32,8,0,80,150,100,100,0,0,0,0xff000000.toInt(),
-                0xffffff00.toInt(),0xff00ffff.toInt(),0,0,0,0,0,false,false,0xff00ffff.toInt(),0xff00ffff.toInt(),0xff00ffff.toInt(),
-                0xff00ffff.toInt())
+        val llWidth = 252
+        val llHeight = 472
+
+        val theme1 = getCurrentTheme(getSharedPreferences("fluviatilis", Context.MODE_PRIVATE),llHeight, llWidth)
         val model1 = WallpaperModel(theme1.fluvHeight, 0,100,theme1.fluvNumber, theme1.fluvWeight, 0,false,300,150,0,theme1.wideness)
         val preview1 = ThemePreview(this, null,  theme1, model1)
         val preview2 = ThemePreview(this, null,  theme1, model1)

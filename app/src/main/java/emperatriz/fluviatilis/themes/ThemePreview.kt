@@ -104,7 +104,7 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         canvas.rotate(theme.rotation.toFloat(), (width / 2).toFloat(), ((height) / 2).toFloat())
 
-        model.fluvHeight = Math.round(((height) * theme.heightness.toFloat() / 100) / theme.fluvNumber).toInt()
+        //model.fluvHeight = Math.round(((height) * (theme.heightness.toFloat() / 100f)) / theme.fluvNumber).toInt()
         model.fluvNumber = theme.fluvNumber
         model.speed = 0
         model.fluvWeight = theme.fluvWeight
@@ -126,15 +126,13 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         if (model.fluvWeight!=0){
             paintArc.style = Paint.Style.STROKE
-            paintArc.strokeWidth = model.fluvWeight.toFloat()
-            paintLeft.strokeWidth = 0f
-            paintRight.strokeWidth = 0f
+            paintArc.strokeWidth = model.fluvHeight.toFloat()
 
             canvas.drawRect((-height - hOffset).toFloat(), -hOffset * 1f, width / 2f, (height + hOffset * 1f).toFloat(), paintLeft)
             canvas.drawRect((width / 2).toFloat(), -hOffset * 1f, (height + hOffset).toFloat(), (height + hOffset * 1f).toFloat(), paintRight)
 
-            paintLeft.strokeWidth = model.fluvHeight.toFloat()+1
-            paintRight.strokeWidth = model.fluvHeight.toFloat()+1
+            paintLeft.strokeWidth = model.fluvHeight.toFloat()
+            paintRight.strokeWidth = model.fluvHeight.toFloat()
 
             var y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
             var i = 0
