@@ -30,6 +30,8 @@ class WallpaperView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     var posted = false
 
+    var canDragWidget = true
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         if (!posted && renderer != null) {
@@ -58,26 +60,28 @@ class WallpaperView @JvmOverloads constructor(context: Context, attrs: Attribute
     var firstTouch = true
     override fun onTouchEvent(event: MotionEvent): Boolean {
 
-        val preferences = context.getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
-        val radius = preferences.getInt("widgetXsize", 454)*0.5F
-        val x = preferences.getInt("widgetX", 0)
-        val y = preferences.getInt("widgetY", 0)
+        if (canDragWidget){
+            val preferences = context.getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
+            val radius = preferences.getInt("widgetXsize", 454)*0.5F
+            val x = preferences.getInt("widgetX", 0)
+            val y = preferences.getInt("widgetY", 0)
 
 
-        if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
-            if (firstTouch){
-                firstTouch=false
-                if ((event.rawX-x).pow(2) + (event.rawY-y).pow(2) < radius.pow(2)){
-                    move=true
+            if (event.action == MotionEvent.ACTION_DOWN || event.action == MotionEvent.ACTION_MOVE) {
+                if (firstTouch){
+                    firstTouch=false
+                    if ((event.rawX-x).pow(2) + (event.rawY-y).pow(2) < radius.pow(2)){
+                        move=true
+                    }
                 }
+                else if (move){
+                    preferences.edit().putInt("widgetX", Math.round(event.rawX)).apply()
+                    preferences.edit().putInt("widgetY", Math.round(event.rawY)).apply()
+                }
+            } else if (event.action == MotionEvent.ACTION_UP) {
+                move = false
+                firstTouch = true
             }
-            else if (move){
-                preferences.edit().putInt("widgetX", Math.round(event.rawX)).apply()
-                preferences.edit().putInt("widgetY", Math.round(event.rawY)).apply()
-            }
-        } else if (event.action == MotionEvent.ACTION_UP) {
-            move = false
-            firstTouch = true
         }
         return true
     }

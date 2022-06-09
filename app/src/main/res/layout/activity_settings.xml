@@ -995,12 +995,14 @@
                 android:orientation="vertical"
                 android:layout_margin="8dp"
                 android:padding="20dp"
+
                 android:background="@drawable/settings_panel"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="0.33"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:orientation="horizontal">
                     <LinearLayout
@@ -1008,7 +1010,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:padding="10dp"
+                        android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -1018,7 +1020,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:padding="10dp"
+                        android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -1028,7 +1030,6 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:padding="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -1039,13 +1040,14 @@
                     android:layout_height="0dp"
                     android:layout_weight="0.33"
                     android:gravity="center"
+                    android:layout_marginBottom="10dp"
                     android:orientation="horizontal">
                     <LinearLayout
                         android:id="@+id/themeLL4"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:padding="10dp"
+                        android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -1055,7 +1057,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:padding="10dp"
+                        android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -1065,7 +1067,6 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:padding="10dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -1082,7 +1083,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:padding="10dp"
+                        android:layout_marginEnd="10dp"
+
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -1092,7 +1094,8 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
-                        android:padding="10dp"
+                        android:layout_marginEnd="10dp"
+
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -1103,7 +1106,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="0.33"
                         android:gravity="center"
-                        android:padding="10dp"
+
                         android:orientation="horizontal">
 
                     </LinearLayout>

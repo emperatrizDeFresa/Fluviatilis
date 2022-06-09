@@ -14,9 +14,9 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.DisplayMetrics
-import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.View.*
+import android.view.Window
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.graphics.ColorUtils
@@ -66,6 +66,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
         })
         widgetsVisible=false
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
     private fun closeSettings(lambda: () -> Unit){
@@ -83,6 +84,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
         })
         settingsVisible=false
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
     private fun closeColorPicker(lambda: () -> Unit){
@@ -93,6 +95,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
         colorPickerVisible=false
         lambda()
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
     private fun closeThemes(lambda: () -> Unit){
@@ -111,6 +114,7 @@ class SettingsActivity : BaseSettingsActivity() {
             }
         })
         themesVisible=false
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
     private fun openWidgets(){
@@ -124,6 +128,7 @@ class SettingsActivity : BaseSettingsActivity() {
         widgetsVisible=true
         val shape = ShapeDrawable(RectShape())
         initWidgetSelector()
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
     private fun openSettings(){
@@ -135,6 +140,7 @@ class SettingsActivity : BaseSettingsActivity() {
         anim.duration = 300
         anim.start()
         settingsVisible=true
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
     private fun openColorPicker(){
@@ -147,6 +153,7 @@ class SettingsActivity : BaseSettingsActivity() {
         anim.start()
         colorPickerVisible=true
         setLastColors()
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
     private fun openThemes(){
@@ -158,6 +165,7 @@ class SettingsActivity : BaseSettingsActivity() {
         anim.duration = 300
         anim.start()
         themesVisible=true
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
     override fun onResume() {
@@ -394,10 +402,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress%45==0){
+                if (progress % 45 == 0) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 preferences.edit().putInt("rotation", progress).apply()
@@ -417,11 +424,10 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress_: Int, fromUser: Boolean) {
-                val progress = progress_- dm.widthPixels / 2
-                if (progress==0){
+                val progress = progress_ - dm.widthPixels / 2
+                if (progress == 0) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 preferences.edit().putInt("horizontalOffset", progress).apply()
@@ -441,11 +447,10 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress_: Int, fromUser: Boolean) {
-                val progress = progress_- dm.heightPixels / 2
-                if (progress==0){
+                val progress = progress_ - dm.heightPixels / 2
+                if (progress == 0) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 preferences.edit().putInt("verticalOffset", progress).apply()
@@ -510,10 +515,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress==dm.widthPixels/2){
+                if (progress == dm.widthPixels / 2) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 widgetX2.progress = progress
@@ -538,10 +542,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress==dm.heightPixels/2){
+                if (progress == dm.heightPixels / 2) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 widgetY2.progress = progress
@@ -596,7 +599,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 vibra(2)
-                SysPypots.save(SysPypots.SETTINGS_DIVISIONES, if (progress==7) 9 else progress+1, this@SettingsActivity)
+                SysPypots.save(SysPypots.SETTINGS_DIVISIONES, if (progress == 7) 9 else progress + 1, this@SettingsActivity)
                 preferences.edit().putBoolean("changedWidget", true).apply()
                 preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
 
@@ -641,10 +644,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress==dm.widthPixels/2){
+                if (progress == dm.widthPixels / 2) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 widgetX.progress = progress
@@ -669,10 +671,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress==dm.heightPixels/2){
+                if (progress == dm.heightPixels / 2) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 widgetY.progress = progress
@@ -755,10 +756,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress==dm.widthPixels/2){
+                if (progress == dm.widthPixels / 2) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 widgetX2.progress = progress
@@ -783,10 +783,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress==dm.heightPixels/2){
+                if (progress == dm.heightPixels / 2) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 widgetY2.progress = progress
@@ -1003,48 +1002,81 @@ class SettingsActivity : BaseSettingsActivity() {
         }
     }
 
-    private fun getCurrentTheme(preferences:SharedPreferences, height:Int, width:Int): Theme{
+    private fun getCurrentTheme(preferences: SharedPreferences, height: Int, width: Int): Theme{
         val dm = DisplayMetrics()
         windowManager.defaultDisplay.getRealMetrics(dm)
         val hProportion = width / (1f*dm.widthPixels)
         val vProportion = height / (1f*dm.heightPixels)
-        var margin = Math.round(preferences.getInt("fluvWeight", 12)*2*hProportion)
+        var margin = Math.round(preferences.getInt("fluvWeight", 12) * 2 * hProportion)
         val model = WallpaperModel(Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt(),
                 margin,
                 (width / 2) - margin,
-                Math.round(preferences.getInt("fluvNumber", 16)*1f),
-                        Math.round(preferences.getInt("fluvWeight", 12)*vProportion),
+                Math.round(preferences.getInt("fluvNumber", 16) * 1f),
+                Math.round(preferences.getInt("fluvWeight", 12) * vProportion),
                 60,
                 false,
                 height,
                 width,
                 0,
-                Math.round(preferences.getInt("wideness", 380)*hProportion))
+                Math.round(preferences.getInt("wideness", 380) * hProportion))
 
-        val theme = Theme(model.fluvHeight,model.fluvNumber,model.fluvWeight,0,model.wideness,Math.round(preferences.getInt("heightness", 15)*1f),preferences.getInt("dimAlpha", 125),Math.round(preferences.getInt("dimHeight", 100)*vProportion),
-                preferences.getInt("rotation", 0),Math.round(preferences.getInt("horizontalOffset", 0)*hProportion),Math.round(preferences.getInt("verticalOffset", 0)*vProportion),preferences.getInt("color", Color.BLACK),
-                preferences.getInt("colorLeft", Color.rgb(50, 50, 50)),preferences.getInt("colorRight", Color.rgb(100, 100, 100)),0,0,0,0,0,false,false,0xff00ffff.toInt(),0xff00ffff.toInt(),0xff00ffff.toInt(),
-                0xff00ffff.toInt())
+
+        var widgetSelected=0
+        var style=0
+        var color1=0
+        var color2=0
+        var color3=0
+        var color4=0
+
+        when (preferences.getString("selectedWidget", "pypots")){
+            "pypots" -> {
+                widgetSelected=1
+                style = preferences.getInt(SysPypots.SETTINGS_DIVISIONES, 0)
+            }
+            "spin"   -> {
+                widgetSelected=2
+                style = preferences.getInt("outmode", 0)
+                color1 = preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK)
+            }
+            "custom" -> {
+                widgetSelected=3
+                color1 = preferences.getInt("colorAgujas",  Color.BLACK)
+                color2 = preferences.getInt("colorEsfera",  Color.WHITE)
+                color3 = preferences.getInt("colorBorde",  Color.DKGRAY)
+                color4 = preferences.getInt("colorSegundo",  Color.RED)
+            }
+        }
+
+        val theme = Theme(model.fluvHeight, model.fluvNumber, model.fluvWeight, 0, model.wideness, Math.round(preferences.getInt("heightness", 15) * 1f), preferences.getInt("dimAlpha", 125), Math.round(preferences.getInt("dimHeight", 100) * vProportion),
+                preferences.getInt("rotation", 0), Math.round(preferences.getInt("horizontalOffset", 0) * hProportion), Math.round(preferences.getInt("verticalOffset", 0) * vProportion), preferences.getInt("color", Color.BLACK),
+                preferences.getInt("colorLeft", Color.rgb(50, 50, 50)), preferences.getInt("colorRight", Color.rgb(100, 100, 100)), widgetSelected,
+                Math.round(preferences.getInt("widgetX", 0)* vProportion), Math.round(preferences.getInt("widgetY", 0)* vProportion), Math.round(preferences.getInt("widgetXsize", 454)* vProportion),
+                style, preferences.getBoolean(SysPypots.SETTINGS_DISCRETO, false),preferences.getBoolean(SysPypots.SETTINGS_HALO, false), color1, color2, color3, color4)
 
         return theme
     }
 
     private fun initThemes(){
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(dm)
 
-        val llWidth = 252
-        val llHeight = 472
+        val rectangle = Rect()
+        val window: Window = window
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle)
+        val llWidth = (dm.widthPixels-56.dp()-20.dp())/3
+        val llHeight = (rectangle.bottom-186.dp()-20.dp())/3
 
-        val theme1 = getCurrentTheme(getSharedPreferences("fluviatilis", Context.MODE_PRIVATE),llHeight, llWidth)
-        val model1 = WallpaperModel(theme1.fluvHeight, 0,100,theme1.fluvNumber, theme1.fluvWeight, 0,false,300,150,0,theme1.wideness)
-        val preview1 = ThemePreview(this, null,  theme1, model1)
-        val preview2 = ThemePreview(this, null,  theme1, model1)
-        val preview3 = ThemePreview(this, null,  theme1, model1)
-        val preview4 = ThemePreview(this, null,  theme1, model1)
-        val preview5 = ThemePreview(this, null,  theme1, model1)
-        val preview6 = ThemePreview(this, null,  theme1, model1)
-        val preview7 = ThemePreview(this, null,  theme1, model1)
-        val preview8 = ThemePreview(this, null,  theme1, model1)
-        val preview9 = ThemePreview(this, null,  theme1, model1)
+        val theme1 = getCurrentTheme(getSharedPreferences("fluviatilis", Context.MODE_PRIVATE), llHeight, llWidth)
+        val model1 = WallpaperModel(theme1.fluvHeight, 0, 100, theme1.fluvNumber, theme1.fluvWeight, 0, false, llHeight, llWidth, 0, theme1.wideness)
+        val preview1 = ThemePreview(this, null, theme1, model1)
+        val preview2 = ThemePreview(this, null, theme1, model1)
+        val preview3 = ThemePreview(this, null, theme1, model1)
+        val preview4 = ThemePreview(this, null, theme1, model1)
+        val preview5 = ThemePreview(this, null, theme1, model1)
+        val preview6 = ThemePreview(this, null, theme1, model1)
+        val preview7 = ThemePreview(this, null, theme1, model1)
+        val preview8 = ThemePreview(this, null, theme1, model1)
+        val preview9 = ThemePreview(this, null, theme1, model1)
         themeLL1.addView(preview1)
         themeLL2.addView(preview2)
         themeLL3.addView(preview3)
@@ -1157,7 +1189,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 
-                    vibra(2)
+                vibra(2)
 
                 saturacion = progress / 100f
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
@@ -1189,10 +1221,9 @@ class SettingsActivity : BaseSettingsActivity() {
             }
 
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress==50){
+                if (progress == 50) {
                     vibraFuerte()
-                }
-                else{
+                } else {
                     vibra(2)
                 }
                 luminosidad = progress / 100f
@@ -1298,26 +1329,26 @@ class SettingsActivity : BaseSettingsActivity() {
             var colorComponents = FloatArray(3)
             ColorUtils.colorToHSL(lastColors.get(0), colorComponents)
             cpColor.progress = colorComponents.get(0).toInt()
-            cpSaturacion.progress = Math.round(colorComponents.get(1)*100).toInt()
-            cpLuminosidad.progress = Math.round(colorComponents.get(2)*100).toInt()
+            cpSaturacion.progress = Math.round(colorComponents.get(1) * 100).toInt()
+            cpLuminosidad.progress = Math.round(colorComponents.get(2) * 100).toInt()
         }
         lastColor2.setOnClickListener {
             var colorComponents = FloatArray(3)
             ColorUtils.colorToHSL(lastColors.get(1), colorComponents)
             cpColor.progress = colorComponents.get(0).toInt()
-            cpSaturacion.progress = Math.round(colorComponents.get(1)*100).toInt()
-            cpLuminosidad.progress = Math.round(colorComponents.get(2)*100).toInt()
+            cpSaturacion.progress = Math.round(colorComponents.get(1) * 100).toInt()
+            cpLuminosidad.progress = Math.round(colorComponents.get(2) * 100).toInt()
         }
         lastColor3.setOnClickListener {
             var colorComponents = FloatArray(3)
             ColorUtils.colorToHSL(lastColors.get(2), colorComponents)
             cpColor.progress = colorComponents.get(0).toInt()
-            cpSaturacion.progress = Math.round(colorComponents.get(1)*100).toInt()
-            cpLuminosidad.progress = Math.round(colorComponents.get(2)*100).toInt()
+            cpSaturacion.progress = Math.round(colorComponents.get(1) * 100).toInt()
+            cpLuminosidad.progress = Math.round(colorComponents.get(2) * 100).toInt()
         }
     }
 
-    fun vibra(tiempo:Long){
+    fun vibra(tiempo: Long){
         val v = getSystemService(VIBRATOR_SERVICE) as Vibrator
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK))

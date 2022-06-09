@@ -82,7 +82,7 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         hOffset = height
 
-        var widget:WidgetDrawer
+        lateinit var widget:WidgetDrawer
         if (theme.widgetSelected>0) {
             when(theme.widgetSelected){
                 1 -> {
@@ -177,24 +177,16 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
 
 
 
-            if (theme.widgetSelected>0){
-
-                val widgetX =  theme.widgetX
-                val widgetY =  theme.widgetY
-//                if (!widget.isInitialized()){
-//                    widget.init(context, widgetX, widgetY, preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
-//                }
-//                if (isWallpaper && preferences.getBoolean("changedWidgetWallpaper", false)){
-//                    widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
-//                    preferences.edit().putBoolean("changedWidgetWallpaper", false).apply()
-//                }
-//                if (!isWallpaper && preferences.getBoolean("changedWidget", false)){
-//                    widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
-//                    preferences.edit().putBoolean("changedWidget", false).apply()
-//                }
+//            if (theme.widgetSelected>0){
 //
-//                widget.draw(canvas, isWallpaper, widgetX, widgetY)
-            }
+//                val widgetX =  theme.widgetX
+//                val widgetY =  theme.widgetY
+//
+//                    widget.init(context, widgetX!!, widgetY!!, theme.widgetXsize!!, theme.widgetXsize!!)
+//
+//
+//                widget.draw(canvas, false, widgetX!!, widgetY!!)
+//            }
 
 
         }
