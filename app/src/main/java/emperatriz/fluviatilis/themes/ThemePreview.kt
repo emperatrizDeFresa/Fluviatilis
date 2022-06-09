@@ -1,8 +1,10 @@
 package emperatriz.fluviatilis.themes
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.view.View
 import emperatriz.fluviatilis.liveWallpaper.R
 import emperatriz.fluviatilis.model.WallpaperModel
@@ -18,7 +20,13 @@ import emperatriz.fluviatilis.widgets.spin.SpinDrawer
  */
 class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
-    constructor(context: Context, attrs: AttributeSet? = null, theme: Theme, model: WallpaperModel) : this(context, attrs, 0) {
+    constructor(context: Context, attrs: AttributeSet? = null, theme: Theme, model: WallpaperModel, llHeight:Int=0, llWidth:Int=0) : this(context, attrs, 0) {
+
+        val dm = DisplayMetrics()
+        (context as Activity).windowManager.defaultDisplay.getRealMetrics(dm)
+        val hProportion = width / (1f*dm.widthPixels)
+        val vProportion = llHeight / (1f*dm.heightPixels)
+
         this.theme = theme
         this.model = model
         pypotsWidget = PypotsDrawer()

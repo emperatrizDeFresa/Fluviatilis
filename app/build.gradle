@@ -52,7 +52,7 @@ dependencies {
 
     implementation('org.shredzone.commons:commons-suncalc:2.0')
 
-
+    implementation 'com.google.code.gson:gson:2.9.0'
 
 }
 
