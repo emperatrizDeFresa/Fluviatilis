@@ -243,10 +243,10 @@ class WallpaperDrawer : WallpaperRenderer {
             drawFirst(canvas, y.toFloat(), true)
             model.fluvs.forEach{
                 if (i++%2==0){
-                    drawFluv(canvas, Rect(width / 2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true, i == 1, i == model.fluvNumber)
+                    drawFluv(canvas, Rect((width / 2)-2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true, i == 1, i == model.fluvNumber)
                 }
                 else{
-                    drawFluv(canvas, Rect((width / 2 - it.size).toInt(), y, width / 2, y + model.fluvHeight), false, i == 1, i == model.fluvNumber)
+                    drawFluv(canvas, Rect((width / 2 - it.size).toInt(), y, (width / 2)+2, y + model.fluvHeight), false, i == 1, i == model.fluvNumber)
                 }
 
                 y += model.fluvHeight
@@ -335,10 +335,10 @@ class WallpaperDrawer : WallpaperRenderer {
 
 
         if (!left){
-            canvas.drawArc((rect.left - diameter.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + model.fluvWeight.toFloat() / 2).toFloat(), (rect.left + diameter.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + diameter - model.fluvWeight.toFloat() / 2).toFloat(), 90F, 180F, false, paintArc)
+            canvas.drawArc((rect.left - diameter.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + model.fluvWeight.toFloat() / 2).toFloat(), (rect.left + diameter.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + diameter - model.fluvWeight.toFloat() / 2).toFloat(), 89F, 182F, false, paintArc)
         }
         else{
-            canvas.drawArc((rect.right - diameter.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + model.fluvWeight.toFloat() / 2).toFloat(), (rect.right + diameter.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + diameter - model.fluvWeight.toFloat() / 2).toFloat(), -90F, 180F, false, paintArc)
+            canvas.drawArc((rect.right - diameter.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + model.fluvWeight.toFloat() / 2).toFloat(), (rect.right + diameter.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + diameter - model.fluvWeight.toFloat() / 2).toFloat(), -91F, 182F, false, paintArc)
         }
 
 

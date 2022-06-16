@@ -60,7 +60,7 @@ class ThemeManager {
                 }
             }
 
-            val theme = Theme(model.fluvHeight, model.fluvNumber, model.fluvWeight, 0, model.wideness, Math.round(preferences.getInt("heightness", 15) * 1f), preferences.getInt("dimAlpha", 125), Math.round(preferences.getInt("dimHeight", 100) * vProportion),
+            val theme = Theme(model.fluvHeight, model.fluvNumber, model.fluvWeight, 0, model.wideness, Math.round(preferences.getInt("heightness", 15) * 1f), preferences.getInt("dimAlpha", 125), Math.round(preferences.getInt("dimHeight", 100) * 1f),
                     preferences.getInt("rotation", 0), Math.round(preferences.getInt("horizontalOffset", 0) * hProportion), Math.round(preferences.getInt("verticalOffset", 0) * vProportion), preferences.getInt("color", Color.BLACK),
                     preferences.getInt("colorLeft", Color.rgb(50, 50, 50)), preferences.getInt("colorRight", Color.rgb(100, 100, 100)), widgetSelected,
                     Math.round(preferences.getInt("widgetX", 0)* vProportion), Math.round(preferences.getInt("widgetY", 0)* vProportion), Math.round(preferences.getInt("widgetXsize", 454)* vProportion),

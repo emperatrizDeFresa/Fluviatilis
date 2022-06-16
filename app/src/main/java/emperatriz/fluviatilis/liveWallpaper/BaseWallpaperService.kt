@@ -65,7 +65,7 @@ abstract class BaseWallpaperService : WallpaperService() {
             draw()
         }
 
-        private val MAX_CLICK_DURATION = 600
+        private val MAX_CLICK_DURATION = 200
         private var startClickTime: Long = 0
         override fun onTouchEvent(event: MotionEvent) {
             when (event.action) {

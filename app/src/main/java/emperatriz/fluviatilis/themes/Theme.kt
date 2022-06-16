@@ -8,7 +8,7 @@ data class Theme (
         val wideness:Int,
         val heightness:Int,
         val dimAlpha:Int,
-        val dimHeight:Int,
+        var dimHeight:Int,
         val rotation:Int,
         val horizontalOffset:Int,
         val verticalOffset:Int,

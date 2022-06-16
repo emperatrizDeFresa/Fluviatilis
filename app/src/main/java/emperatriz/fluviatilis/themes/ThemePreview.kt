@@ -35,6 +35,8 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
         this.gradientTop = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradient)
         this.gradientBottom = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradient2)
 
+        theme.dimHeight = Math.round(theme.dimHeight*vProportion)
+
         model.initFluvs()
     }
     lateinit var gradientTop: Bitmap
@@ -134,7 +136,7 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         if (model.fluvWeight!=0){
             paintArc.style = Paint.Style.STROKE
-            paintArc.strokeWidth = model.fluvHeight.toFloat()
+            paintArc.strokeWidth = model.fluvWeight.toFloat()
 
             canvas.drawRect((-height - hOffset).toFloat(), -hOffset * 1f, width / 2f, (height + hOffset * 1f).toFloat(), paintLeft)
             canvas.drawRect((width / 2).toFloat(), -hOffset * 1f, (height + hOffset).toFloat(), (height + hOffset * 1f).toFloat(), paintRight)
@@ -161,10 +163,10 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
             drawFirst(canvas, y.toFloat(), true)
             model.fluvs.forEach{
                 if (i++%2==0){
-                    drawFluv(canvas, Rect(width / 2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true, i == 1, i == model.fluvNumber)
+                    drawFluv(canvas, Rect((width / 2)-1, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true, i == 1, i == model.fluvNumber)
                 }
                 else{
-                    drawFluv(canvas, Rect((width / 2 - it.size).toInt(), y, width / 2, y + model.fluvHeight), false, i == 1, i == model.fluvNumber)
+                    drawFluv(canvas, Rect((width / 2 - it.size).toInt(), y, (width / 2)+1, y + model.fluvHeight), false, i == 1, i == model.fluvNumber)
                 }
 
                 y += model.fluvHeight
@@ -256,7 +258,7 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
 
     fun drawFluv(canvas: Canvas, rect: Rect, left: Boolean, first: Boolean, last: Boolean){
         val diameter:Float = (model.fluvHeight+model.fluvWeight).toFloat()
-
+        val c = 0f
 
         if (first){
             if (left){
@@ -267,7 +269,7 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
         }
         else{
-            canvas.drawRect(rect.left.toFloat(), rect.top.toFloat(), rect.right.toFloat(), (rect.top + model.fluvWeight).toFloat(), paint)
+            canvas.drawRect(rect.left.toFloat()-c, rect.top.toFloat(), rect.right.toFloat()+c, (rect.top + model.fluvWeight).toFloat(), paint)
         }
         if (last){
             if (left){
@@ -278,15 +280,15 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
         }
         else{
-            canvas.drawRect(rect.left.toFloat(), rect.bottom.toFloat(), rect.right.toFloat(), (rect.bottom + model.fluvWeight).toFloat(), paint)
+            canvas.drawRect(rect.left.toFloat()-c, rect.bottom.toFloat(), rect.right.toFloat()+c, (rect.bottom + model.fluvWeight).toFloat(), paint)
         }
 
 
         if (!left){
-            canvas.drawArc((rect.left - diameter.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + model.fluvWeight.toFloat() / 2).toFloat(), (rect.left + diameter.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + diameter - model.fluvWeight.toFloat() / 2).toFloat(), 90F, 180F, false, paintArc)
+            canvas.drawArc((rect.left - diameter.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + model.fluvWeight.toFloat() / 2).toFloat(), (rect.left + diameter.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + diameter - model.fluvWeight.toFloat() / 2).toFloat(), 89F, 182F, false, paintArc)
         }
         else{
-            canvas.drawArc((rect.right - diameter.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + model.fluvWeight.toFloat() / 2).toFloat(), (rect.right + diameter.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + diameter - model.fluvWeight.toFloat() / 2).toFloat(), -90F, 180F, false, paintArc)
+            canvas.drawArc((rect.right - diameter.toFloat() / 2 + model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + model.fluvWeight.toFloat() / 2).toFloat(), (rect.right + diameter.toFloat() / 2 - model.fluvWeight.toFloat() / 2).toFloat(), (rect.top + diameter - model.fluvWeight.toFloat() / 2).toFloat(), -91F, 182F, false, paintArc)
         }
 
 

@@ -1052,7 +1052,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         (th as LinearLayout).removeAllViews()
                         val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
                                 0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model))
+                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
                     }
 
                     R.id.themeLoad -> {
@@ -1081,7 +1081,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         (th as LinearLayout).removeAllViews()
                         val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
                                 0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model))
+                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
                     }
 
                     R.id.themeLoad -> {
@@ -1110,7 +1110,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         (th as LinearLayout).removeAllViews()
                         val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
                                 0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model))
+                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
                     }
 
                     R.id.themeLoad -> {
@@ -1140,7 +1140,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         (th as LinearLayout).removeAllViews()
                         val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
                                 0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model))
+                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
                     }
 
                     R.id.themeLoad -> {
@@ -1169,7 +1169,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         (th as LinearLayout).removeAllViews()
                         val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
                                 0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model))
+                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
                     }
 
                     R.id.themeLoad -> {
@@ -1198,7 +1198,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         (th as LinearLayout).removeAllViews()
                         val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
                                 0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model))
+                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
                     }
 
                     R.id.themeLoad -> {
@@ -1227,7 +1227,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         (th as LinearLayout).removeAllViews()
                         val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
                                 0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model))
+                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
                     }
 
                     R.id.themeLoad -> {
@@ -1256,7 +1256,7 @@ class SettingsActivity : BaseSettingsActivity() {
                         (th as LinearLayout).removeAllViews()
                         val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
                                 0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model))
+                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
                     }
 
                     R.id.themeLoad -> {
@@ -1291,21 +1291,21 @@ class SettingsActivity : BaseSettingsActivity() {
         val theme1 = getTheme(this, position++, llHeight, llWidth)
         theme1?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL1.addView(preview)
         }
 
         val theme2 = getTheme(this, position++, llHeight, llWidth)
         theme2?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL2.addView(preview)
         }
 
         val theme3 = getTheme(this, position++, llHeight, llWidth)
         theme3?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL3.addView(preview)
         }
 
@@ -1319,35 +1319,35 @@ class SettingsActivity : BaseSettingsActivity() {
         val theme5 = getTheme(this, position++, llHeight, llWidth)
         theme5?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL5.addView(preview)
         }
 
         val theme6 = getTheme(this, position++, llHeight, llWidth)
         theme6?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL6.addView(preview)
         }
 
         val theme7 = getTheme(this, position++, llHeight, llWidth)
         theme7?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL7.addView(preview)
         }
 
         val theme8 = getTheme(this, position++, llHeight, llWidth)
         theme8?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL8.addView(preview)
         }
 
         val theme9 = getTheme(this, position++, llHeight, llWidth)
         theme9?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL9.addView(preview)
         }
 
