@@ -13,7 +13,7 @@ data class WallpaperModel(var fluvHeight:Int,
                           var fluvWeight: Int,
                           var fps:Int,
                           val isWallpaper:Boolean,
-                          val height:Int,
+                          var height:Int,
                           val width:Int,
                           var speed:Int,
                           var wideness:Int){

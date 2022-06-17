@@ -28,6 +28,7 @@ import emperatriz.fluviatilis.liveWallpaper.WallpaperService
 import emperatriz.fluviatilis.model.WallpaperModel
 import emperatriz.fluviatilis.themes.ThemeManager
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getCurrentTheme
+import emperatriz.fluviatilis.themes.ThemeManager.companion.getModelToLoad
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getTheme
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getThemeToLoad
 import emperatriz.fluviatilis.themes.ThemeManager.companion.loadTheme
@@ -1023,19 +1024,27 @@ class SettingsActivity : BaseSettingsActivity() {
 
                     when (it.itemId){
                         R.id.themeSave -> {
-                            val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                            saveTheme(this@SettingsActivity,position, currentTheme)
+                            val currentTheme = getCurrentTheme(this@SettingsActivity,(settings_live_wallpaper.renderer as WallpaperDrawer).model,llHeight,llWidth)
+                            saveTheme(this@SettingsActivity,position, currentTheme, (settings_live_wallpaper.renderer as WallpaperDrawer).model)
                             (th as LinearLayout).removeAllViews()
-                            val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                    currentTheme.speed, currentTheme.wideness)
-                            (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth,))
+                            (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, (settings_live_wallpaper.renderer as WallpaperDrawer).model, llHeight, llWidth))
                         }
 
                         R.id.themeLoad -> {
                             val themeToLoad = getThemeToLoad(this@SettingsActivity, position, llHeight, llWidth)
                             themeToLoad?.let { ttl ->
                                 loadTheme(this@SettingsActivity, ttl)
-                                wideness.min = ttl.fluvHeight*4
+                                (settings_live_wallpaper.renderer as WallpaperDrawer).model = getModelToLoad(this@SettingsActivity, position)!!
+                                (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
+                                wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight*4
+                                closeThemes{}
+                            }
+                            val themeToLoad2 = getThemeToLoad(this@SettingsActivity, position, llHeight, llWidth)
+                            themeToLoad2?.let { ttl ->
+                                loadTheme(this@SettingsActivity, ttl)
+                                (settings_live_wallpaper.renderer as WallpaperDrawer).model = getModelToLoad(this@SettingsActivity, position)!!
+                                (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
+                                wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight*4
                                 closeThemes{}
                             }
                         }
@@ -1085,7 +1094,7 @@ class SettingsActivity : BaseSettingsActivity() {
         val theme4 = getTheme(this, position++, llHeight, llWidth)
         theme4?.let {
             val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model)
+            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
             themeLL4.addView(preview)
         }
 

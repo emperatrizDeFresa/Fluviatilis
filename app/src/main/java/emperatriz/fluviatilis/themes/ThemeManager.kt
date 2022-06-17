@@ -14,24 +14,24 @@ class ThemeManager {
 
     object companion{
 
-        fun getCurrentTheme(context: Context, height: Int, width: Int): Theme{
+        fun getCurrentTheme(context: Context, model: WallpaperModel, height: Int, width: Int): Theme{
             val preferences = context.getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
             val dm = DisplayMetrics()
             (context as Activity).windowManager.defaultDisplay.getRealMetrics(dm)
             val hProportion = width / (1f*dm.widthPixels)
             val vProportion = height / (1f*dm.heightPixels)
             var margin = Math.round(preferences.getInt("fluvWeight", 12) * 2 * hProportion)
-            val model = WallpaperModel(Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt(),
-                    margin,
-                    (width / 2) - margin,
-                    Math.round(preferences.getInt("fluvNumber", 16) * 1f),
-                    Math.round(preferences.getInt("fluvWeight", 12) * 1f),
-                    60,
-                    false,
-                    height,
-                    width,
-                    preferences.getInt("speed", 2),
-                    Math.round(preferences.getInt("wideness", 380) * 1f))
+//            val model = WallpaperModel(Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt(),
+//                    margin,
+//                    (width / 2) - margin,
+//                    Math.round(preferences.getInt("fluvNumber", 16) * 1f),
+//                    Math.round(preferences.getInt("fluvWeight", 12) * 1f),
+//                    60,
+//                    false,
+//                    height,
+//                    width,
+//                    preferences.getInt("speed", 2),
+//                    Math.round(preferences.getInt("wideness", 380) * 1f))
 
 
             var widgetSelected=0
@@ -60,8 +60,8 @@ class ThemeManager {
                 }
             }
 
-            val theme = Theme(model.fluvHeight, model.fluvNumber, model.fluvWeight, model.speed, Math.round(model.wideness*hProportion), Math.round(preferences.getInt("heightness", 15) * 1f), preferences.getInt("dimAlpha", 125), Math.round(preferences.getInt("dimHeight", 100) * 1f),
-                    preferences.getInt("rotation", 0), Math.round(preferences.getInt("horizontalOffset", 0) * hProportion), Math.round(preferences.getInt("verticalOffset", 0) * vProportion), preferences.getInt("color", Color.BLACK),
+            val theme = Theme(model.fluvHeight, model.fluvNumber, model.fluvWeight, model.speed, Math.round(model.wideness*1f), Math.round(preferences.getInt("heightness", 15) * 1f), preferences.getInt("dimAlpha", 125), Math.round(preferences.getInt("dimHeight", 100) * 1f),
+                    preferences.getInt("rotation", 0), Math.round(preferences.getInt("horizontalOffset", 0) * 1f), Math.round(preferences.getInt("verticalOffset", 0) * 1f), preferences.getInt("color", Color.BLACK),
                     preferences.getInt("colorLeft", Color.rgb(50, 50, 50)), preferences.getInt("colorRight", Color.rgb(100, 100, 100)), widgetSelected,
                     Math.round(preferences.getInt("widgetX", 0)* vProportion), Math.round(preferences.getInt("widgetY", 0)* vProportion), Math.round(preferences.getInt("widgetXsize", 454)* vProportion),
                     style, preferences.getBoolean(SysPypots.SETTINGS_DISCRETO, false),preferences.getBoolean(SysPypots.SETTINGS_HALO, false), color1, color2, color3, color4)
@@ -94,16 +94,29 @@ class ThemeManager {
                 val vProportion = height / (1f*dm.heightPixels)
                 var themeString = preferences.getString("theme$position","")
                 val ret =  Gson().fromJson<Theme>(themeString,Theme::class.java)
-                ret.wideness = Math.round(ret.wideness/hProportion)
+                //ret.wideness = Math.round(ret.wideness*hProportion)
                 return ret
             }catch (ex:Exception){
                 return null
             }
         }
 
-        fun saveTheme(context: Context, position: Int, theme: Theme){
+        fun getModelToLoad(context: Context, position: Int): WallpaperModel?{
+            try{
+                val preferences = context.getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
+                var modelString = preferences.getString("model$position","")
+                val ret =  Gson().fromJson<WallpaperModel>(modelString,WallpaperModel::class.java)
+                //ret.wideness = Math.round(ret.wideness*hProportion)
+                return ret
+            }catch (ex:Exception){
+                return null
+            }
+        }
+
+        fun saveTheme(context: Context, position: Int, theme: Theme, model:WallpaperModel){
             val preferences = context.getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
             preferences.edit().putString("theme$position",Gson().toJson(theme)).apply()
+            preferences.edit().putString("model$position",Gson().toJson(model)).apply()
         }
 
         fun loadTheme(context: Context,  theme: Theme){
