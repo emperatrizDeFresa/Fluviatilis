@@ -24,7 +24,7 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
 
         val dm = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getRealMetrics(dm)
-        val hProportion = width / (1f*dm.widthPixels)
+        val hProportion = llWidth / (1f*dm.widthPixels)
         val vProportion = llHeight / (1f*dm.heightPixels)
 
         this.theme = theme
@@ -36,6 +36,9 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
         this.gradientBottom = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradient2)
 
         theme.dimHeight = Math.round(theme.dimHeight*vProportion)
+        theme.wideness = Math.round(theme.wideness*hProportion)
+        theme.heightness = Math.round(theme.heightness*vProportion)
+        theme.fluvWeight = Math.round(theme.fluvWeight*vProportion)
 
         model.initFluvs()
     }

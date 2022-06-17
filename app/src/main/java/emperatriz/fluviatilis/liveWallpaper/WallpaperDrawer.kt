@@ -4,11 +4,13 @@ import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.*
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import emperatriz.fluviatilis.model.WallpaperModel
+import emperatriz.fluviatilis.themes.Theme
 import emperatriz.fluviatilis.widgets.WidgetDrawer
 import emperatriz.fluviatilis.widgets.custom.CustomDrawer
 import emperatriz.fluviatilis.widgets.pypots.PypotsDrawer
@@ -145,6 +147,10 @@ class WallpaperDrawer : WallpaperRenderer {
         paintRight2.strokeWidth = 0F
         paintRight2.color=colorRight
         model.initFluvs()
+    }
+
+    fun refresh(theme: Theme){
+
     }
 
     var lastUpdated:Boolean=false

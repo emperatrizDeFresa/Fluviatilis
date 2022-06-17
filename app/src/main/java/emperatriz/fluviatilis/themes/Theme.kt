@@ -3,10 +3,10 @@ package emperatriz.fluviatilis.themes
 data class Theme (
         val fluvHeight:Int,
         val fluvNumber: Int,
-        val fluvWeight: Int,
+        var fluvWeight: Int,
         val speed:Int,
-        val wideness:Int,
-        val heightness:Int,
+        var wideness:Int,
+        var heightness:Int,
         val dimAlpha:Int,
         var dimHeight:Int,
         val rotation:Int,

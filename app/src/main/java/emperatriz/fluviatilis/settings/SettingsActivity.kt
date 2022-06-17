@@ -29,6 +29,7 @@ import emperatriz.fluviatilis.model.WallpaperModel
 import emperatriz.fluviatilis.themes.ThemeManager
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getCurrentTheme
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getTheme
+import emperatriz.fluviatilis.themes.ThemeManager.companion.getThemeToLoad
 import emperatriz.fluviatilis.themes.ThemeManager.companion.loadTheme
 import emperatriz.fluviatilis.themes.ThemeManager.companion.saveTheme
 import emperatriz.fluviatilis.themes.ThemePreview
@@ -108,17 +109,20 @@ class SettingsActivity : BaseSettingsActivity() {
         settingsPanel.visibility = View.GONE
         widgetsPanel.visibility = View.GONE
         colorPicker.visibility = GONE
-        themesPanel.visibility = VISIBLE
+        themesPanel.visibility = INVISIBLE
 
-        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
-        anim.duration = 300
-        anim.start()
-        anim.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                themesPanel.setVisibility(View.INVISIBLE)
-                lambda()
-            }
-        })
+//        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
+//        anim.duration = 300
+//        anim.start()
+//        anim.addListener(object : AnimatorListenerAdapter() {
+//            override fun onAnimationEnd(animation: Animator) {
+//                themesPanel.setVisibility(View.INVISIBLE)
+//                lambda()
+//            }
+//        })
+
+        themesPanel.alpha = 0f
+        lambda()
         themesVisible=false
         settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
@@ -1009,268 +1013,37 @@ class SettingsActivity : BaseSettingsActivity() {
 
         var position = 1
 
+        val themeButtons = listOf<LinearLayout>(themeLL1,themeLL2,themeLL3,themeLL4,themeLL5,themeLL6,themeLL7,themeLL8,themeLL9)
 
-        themeLL1.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
+        for (position in 1..9){
+            themeButtons[position-1].setOnClickListener {th ->
+                val popupMenu = PopupMenu(this, th)
+                popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener{
 
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                currentTheme.speed, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth,))
-                    }
+                    when (it.itemId){
+                        R.id.themeSave -> {
+                            val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
+                            saveTheme(this@SettingsActivity,position, currentTheme)
+                            (th as LinearLayout).removeAllViews()
+                            val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
+                                    currentTheme.speed, currentTheme.wideness)
+                            (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth,))
+                        }
 
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
+                        R.id.themeLoad -> {
+                            val themeToLoad = getThemeToLoad(this@SettingsActivity, position, llHeight, llWidth)
+                            themeToLoad?.let { ttl ->
+                                loadTheme(this@SettingsActivity, ttl)
+                                wideness.min = ttl.fluvHeight*4
+                                closeThemes{}
+                            }
                         }
                     }
+                    false
                 }
-                true
+                popupMenu.show()
             }
-            popupMenu.show()
-        }
-
-
-        themeLL2.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
-
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
-                    }
-
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-                        }
-                    }
-                }
-                true
-            }
-            popupMenu.show()
-        }
-
-        themeLL3.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
-
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
-                    }
-
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-                        }
-                    }
-                }
-                true
-            }
-            popupMenu.show()
-        }
-
-        themeLL4.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
-
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
-                    }
-
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-                        }
-                    }
-                }
-                true
-            }
-            popupMenu.show()
-        }
-
-
-        themeLL5.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
-
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
-                    }
-
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-                        }
-                    }
-                }
-                true
-            }
-            popupMenu.show()
-        }
-
-        themeLL6.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
-
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
-                    }
-
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-                        }
-                    }
-                }
-                true
-            }
-            popupMenu.show()
-        }
-
-        themeLL7.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
-
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
-                    }
-
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-                        }
-                    }
-                }
-                true
-            }
-            popupMenu.show()
-        }
-
-        themeLL8.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
-
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
-                    }
-
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-                        }
-                    }
-                }
-                true
-            }
-            popupMenu.show()
-        }
-
-        themeLL9.setOnClickListener {th ->
-            val popupMenu = PopupMenu(this, th)
-            popupMenu.menuInflater.inflate(R.menu.theme_popup, popupMenu.menu)
-            popupMenu.setOnMenuItemClickListener{
-
-                when (it.itemId){
-                    R.id.themeSave -> {
-                        val currentTheme = getCurrentTheme(this@SettingsActivity,llHeight,llWidth)
-                        saveTheme(this@SettingsActivity,position, currentTheme)
-                        (th as LinearLayout).removeAllViews()
-                        val model = WallpaperModel(currentTheme.fluvHeight, 0, 100, currentTheme.fluvNumber, currentTheme.fluvWeight, 0, false, llHeight, llWidth,
-                                0, currentTheme.wideness)
-                        (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, model, llHeight, llWidth))
-                    }
-
-                    R.id.themeLoad -> {
-                        val themeToLoad = getTheme(this@SettingsActivity, position++, llHeight, llWidth)
-                        themeToLoad?.let { ttl ->
-                            loadTheme(this@SettingsActivity, ttl)
-                            preferences.edit().putBoolean("changed", true).apply()
-                            settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-                        }
-                    }
-                }
-                true
-            }
-            popupMenu.show()
         }
     }
 
