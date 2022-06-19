@@ -35,19 +35,18 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
         this.gradientTop = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradient)
         this.gradientBottom = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradient2)
 
-        model.wideness = Math.round(theme.wideness*hProportion)
+        model.wideness = Math.round(theme.wideness*vProportion)
         model.fluvWeight = Math.round(theme.fluvWeight*vProportion)
-        model.fluvHeight = Math.round(theme.fluvHeight*vProportion)
+        model.fluvNumber = theme.fluvNumber
+        model.fluvHeight = Math.round(llHeight * (theme.heightness / 100f)) / model.fluvNumber//Math.round(theme.fluvHeight*vProportion)
 
         theme.dimHeight = Math.round(theme.dimHeight*vProportion)
         theme.wideness = Math.round(theme.wideness*hProportion)
         theme.heightness = Math.round(theme.heightness*vProportion)
         theme.fluvWeight = Math.round(theme.fluvWeight*vProportion)
         theme.fluvHeight = Math.round(theme.fluvHeight*vProportion)
-        theme.horizontalOffset = Math.round(theme.horizontalOffset*hProportion)
+        theme.horizontalOffset = Math.round(theme.horizontalOffset*vProportion)
         theme.verticalOffset = Math.round(theme.verticalOffset*vProportion)
-
-
 
         model.initFluvs()
     }

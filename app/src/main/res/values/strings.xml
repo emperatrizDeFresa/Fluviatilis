@@ -34,4 +34,5 @@
     <string name="style">Style</string>
     <string name="close">Close</string>
     <string name="lastColors">Last used colors</string>
+    <string name="custominfo">Show more info</string>
 </resources>

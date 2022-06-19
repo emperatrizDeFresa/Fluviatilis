@@ -28,6 +28,7 @@ import emperatriz.fluviatilis.liveWallpaper.WallpaperService
 import emperatriz.fluviatilis.model.WallpaperModel
 import emperatriz.fluviatilis.themes.ThemeManager
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getCurrentTheme
+import emperatriz.fluviatilis.themes.ThemeManager.companion.getModel
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getModelToLoad
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getTheme
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getThemeToLoad
@@ -52,6 +53,8 @@ class SettingsActivity : BaseSettingsActivity() {
 
     override val settingsActivityComponent by lazy { ComponentName(this, "$packageName.LauncherSettingsActivity") }
     override val wallpaperServiceComponent by lazy { ComponentName(this, WallpaperService::class.java) }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -747,6 +750,17 @@ class SettingsActivity : BaseSettingsActivity() {
             }
         })
 
+        infoLL.setOnClickListener{
+            info.performClick()
+        }
+
+        (info as CheckBox).isChecked = preferences.getBoolean("customInfo", false)
+        info.setOnClickListener{
+            preferences.edit().putBoolean("customInfo", (it as CheckBox).isChecked).apply()
+            preferences.edit().putBoolean("changedWidget", true).apply()
+            preferences.edit().putBoolean("changedWidgetWallpaper", true).apply()
+        }
+
         colorSpin.background.setColorFilter(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK), PorterDuff.Mode.SRC_IN)
         colorSpin.setColorFilter(if (isBrightColor(preferences.getInt(SpinDrawUtils.ACCENT_COLOR, Color.BLACK))) Color.BLACK else Color.WHITE)
         colorSpin.setOnClickListener { setColorFor(preferences, SpinDrawUtils.ACCENT_COLOR, it!! as ImageButton) }
@@ -852,6 +866,10 @@ class SettingsActivity : BaseSettingsActivity() {
         customSegundero.setColorFilter(if (isBrightColor(preferences.getInt("colorSegundo", Color.RED))) Color.BLACK else Color.WHITE)
         customSegundero.setOnClickListener { setColorFor(preferences, "colorSegundo", it!! as ImageButton) }
 
+        customInfo.background.setColorFilter(preferences.getInt("colorInfo", Color.LTGRAY), PorterDuff.Mode.SRC_IN)
+        customInfo.setColorFilter(if (isBrightColor(preferences.getInt("colorInfo", Color.LTGRAY))) Color.BLACK else Color.WHITE)
+        customInfo.setOnClickListener { setColorFor(preferences, "colorInfo", it!! as ImageButton) }
+
         initWidgetSelector()
 
         initThemes()
@@ -882,7 +900,8 @@ class SettingsActivity : BaseSettingsActivity() {
     private fun initWidgetSelector() {
 
         val preferences = getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
-
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(dm)
 //        pypots.toGrayscale()
 //        spin.toGrayscale()
 //        custom.toGrayscale()
@@ -1011,11 +1030,7 @@ class SettingsActivity : BaseSettingsActivity() {
             preferences.edit().putString("selectedWidget", "custom").apply()
             preferences.edit().putBoolean("changedWidget", true).apply()
         }
-
-        var position = 1
-
         val themeButtons = listOf<LinearLayout>(themeLL1,themeLL2,themeLL3,themeLL4,themeLL5,themeLL6,themeLL7,themeLL8,themeLL9)
-
         for (position in 1..9){
             themeButtons[position-1].setOnClickListener {th ->
                 val popupMenu = PopupMenu(this, th)
@@ -1027,7 +1042,7 @@ class SettingsActivity : BaseSettingsActivity() {
                             val currentTheme = getCurrentTheme(this@SettingsActivity,(settings_live_wallpaper.renderer as WallpaperDrawer).model,llHeight,llWidth)
                             saveTheme(this@SettingsActivity,position, currentTheme, (settings_live_wallpaper.renderer as WallpaperDrawer).model)
                             (th as LinearLayout).removeAllViews()
-                            (th as LinearLayout).addView(ThemePreview(this@SettingsActivity, null, currentTheme, (settings_live_wallpaper.renderer as WallpaperDrawer).model, llHeight, llWidth))
+                            th.addView(ThemePreview(this@SettingsActivity, null, currentTheme,(settings_live_wallpaper.renderer as WallpaperDrawer).model.copy(), llHeight, llWidth))
                         }
 
                         R.id.themeLoad -> {
@@ -1036,15 +1051,35 @@ class SettingsActivity : BaseSettingsActivity() {
                                 loadTheme(this@SettingsActivity, ttl)
                                 (settings_live_wallpaper.renderer as WallpaperDrawer).model = getModelToLoad(this@SettingsActivity, position)!!
                                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
-                                wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight*4
-                                closeThemes{}
+//                                wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight*4
+//                                closeThemes{}
                             }
                             val themeToLoad2 = getThemeToLoad(this@SettingsActivity, position, llHeight, llWidth)
                             themeToLoad2?.let { ttl ->
                                 loadTheme(this@SettingsActivity, ttl)
                                 (settings_live_wallpaper.renderer as WallpaperDrawer).model = getModelToLoad(this@SettingsActivity, position)!!
                                 (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
+
+                                separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
+                                separatorWidth.progress = ttl.fluvWeight
+                                fluvNumber.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvNumber()
+                                fluvNumber.progress = ttl.fluvNumber
+                                speed.progress = ttl.speed
+                                heightness.progress = ttl.heightness
                                 wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight*4
+                                wideness.progress = ttl.wideness
+                                dimAlpha.progress = ttl.dimAlpha
+                                dimHeight.progress = ttl.dimHeight
+                                rotation.progress = ttl.rotation
+                                horizontalOffset.progress = preferences.getInt("horizontalOffset", 0)+dm.widthPixels / 2
+                                verticalOffset.progress = preferences.getInt("verticalOffset", 0)+ dm.heightPixels / 2
+                                colorMiddle.background.setColorFilter(ttl.color, PorterDuff.Mode.SRC_IN)
+                                colorMiddle.setColorFilter(if (isBrightColor(ttl.color)) Color.BLACK else Color.WHITE)
+                                colorLeft.background.setColorFilter(ttl.colorLeft, PorterDuff.Mode.SRC_IN)
+                                colorLeft.setColorFilter(if (isBrightColor(ttl.colorLeft)) Color.BLACK else Color.WHITE)
+                                colorRight.background.setColorFilter(ttl.colorRight, PorterDuff.Mode.SRC_IN)
+                                colorRight.setColorFilter(if (isBrightColor(ttl.colorRight)) Color.BLACK else Color.WHITE)
+
                                 closeThemes{}
                             }
                         }
@@ -1069,71 +1104,16 @@ class SettingsActivity : BaseSettingsActivity() {
         llWidth = (dm.widthPixels-56.dp()-20.dp())/3
         llHeight = (rectangle.bottom-186.dp()-20.dp())/3
 
-        var position = 1
-        val theme1 = getTheme(this, position++, llHeight, llWidth)
-        theme1?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL1.addView(preview)
+        val themeButtons = listOf<LinearLayout>(themeLL1,themeLL2,themeLL3,themeLL4,themeLL5,themeLL6,themeLL7,themeLL8,themeLL9)
+        for (position in 1..9) {
+            getTheme(this, position, llHeight, llWidth)?.let {
+                val model = getModel(this@SettingsActivity, position)
+                model?.let { m->
+                    val preview = ThemePreview(this, null, it, m, llHeight, llWidth)
+                    themeButtons.get(position-1).addView(preview)
+                }
+            }
         }
-
-        val theme2 = getTheme(this, position++, llHeight, llWidth)
-        theme2?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL2.addView(preview)
-        }
-
-        val theme3 = getTheme(this, position++, llHeight, llWidth)
-        theme3?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL3.addView(preview)
-        }
-
-        val theme4 = getTheme(this, position++, llHeight, llWidth)
-        theme4?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL4.addView(preview)
-        }
-
-        val theme5 = getTheme(this, position++, llHeight, llWidth)
-        theme5?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL5.addView(preview)
-        }
-
-        val theme6 = getTheme(this, position++, llHeight, llWidth)
-        theme6?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL6.addView(preview)
-        }
-
-        val theme7 = getTheme(this, position++, llHeight, llWidth)
-        theme7?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL7.addView(preview)
-        }
-
-        val theme8 = getTheme(this, position++, llHeight, llWidth)
-        theme8?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL8.addView(preview)
-        }
-
-        val theme9 = getTheme(this, position++, llHeight, llWidth)
-        theme9?.let {
-            val model = WallpaperModel(it.fluvHeight, 0, 100, it.fluvNumber, it.fluvWeight, 0, false, llHeight, llWidth, 0, it.wideness)
-            val preview = ThemePreview(this, null, it, model, llHeight, llWidth)
-            themeLL9.addView(preview)
-        }
-
-
     }
 
     private fun Int.dp(): Int {

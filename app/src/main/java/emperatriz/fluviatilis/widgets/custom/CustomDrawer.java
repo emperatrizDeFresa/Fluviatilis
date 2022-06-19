@@ -2,6 +2,8 @@ package emperatriz.fluviatilis.widgets.custom;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -9,26 +11,34 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 
 import org.jetbrains.annotations.NotNull;
+import org.shredzone.commons.suncalc.SunTimes;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import emperatriz.fluviatilis.liveWallpaper.R;
 import emperatriz.fluviatilis.widgets.WidgetDrawer;
 import emperatriz.fluviatilis.widgets.pypots.SysPypots;
-import emperatriz.fluviatilis.widgets.spin.SpinDrawUtils;
+
 
 public class CustomDrawer implements WidgetDrawer {
 
     SharedPreferences preferences;
 
-    Paint paint, paint2;
+
+    public Bitmap by;
+
+    Paint paint, paint2, p2;
     int x;
     int y;
     int width;
     int height;
     Context ctx;
+    Typeface font2;
 
     @Override
     public void init(@NotNull Context context, int x, int y, int width, int height) {
@@ -38,27 +48,41 @@ public class CustomDrawer implements WidgetDrawer {
         this.y=520;
         this.ctx=ctx;
 
+        CustomDrawUtils.offsetX=x-width/2;
+        CustomDrawUtils.offsetY=y-width/2;
+        CustomDrawUtils.height=height;
+        CustomDrawUtils.width =width;
+        CustomDrawUtils.p20=Math.round(width/20);
 
         preferences = context.getSharedPreferences("fluviatilis", Context.MODE_PRIVATE);
 
+        font2 = Typeface.createFromAsset(context.getAssets(), "fonts/Square.ttf");
+        p2 = new Paint();
+        p2.setTypeface(font2);
 
         paint = new Paint();
         paint.setAntiAlias(true);
 
         paint2 = new Paint();
         paint2.setAntiAlias(true);
+
+        by = BitmapFactory.decodeResource(context.getResources(), R.drawable.nonot2);
+        by = Bitmap.createScaledBitmap(by, SysPypots.size(114, CustomDrawUtils.width),SysPypots.size(27, CustomDrawUtils.width), true);
     }
 
     @Override
     public void resize(int width, int height) {
         this.height = height;
         this.width = width;
+
+        by = Bitmap.createScaledBitmap(by,SysPypots.size(114, CustomDrawUtils.width),SysPypots.size(27, CustomDrawUtils.width), true);
     }
 
     @Override
     public void refresh(int width, int height) {
         this.height = height;
         this.width = width;
+        by = Bitmap.createScaledBitmap(by,SysPypots.size(114, CustomDrawUtils.width),SysPypots.size(27, CustomDrawUtils.width), true);
     }
 
 
@@ -66,10 +90,17 @@ public class CustomDrawer implements WidgetDrawer {
     @Override
     public void draw(@NotNull Canvas canvas, boolean isWallpaper, int x, int y) {
 
+        CustomDrawUtils.offsetX=x-width/2;
+        CustomDrawUtils.offsetY=y-width/2;
+        CustomDrawUtils.canvas=canvas;
+
         int colorEsfera = preferences.getInt("colorEsfera",0xffffffff);
         int colorAgujas = preferences.getInt("colorAgujas",0xff000000);
         int colorSegundo = preferences.getInt("colorSegundo",0xffff0000);
         int colorBorde = preferences.getInt("colorBorde",0xff555555);
+        int colorInfo = preferences.getInt("colorInfo",0xffaaaaaa);
+
+        boolean info = preferences.getBoolean("customInfo",false);
 
         float longitudHora = 0.55f;
         float longitudMinuto = 0.77f;
@@ -104,6 +135,40 @@ public class CustomDrawer implements WidgetDrawer {
         paint2.setStrokeWidth(margenBorde*4);
         for (int i=0;i<=11;i++){
             canvas.drawArc(r1, i*30-0.8f, 1.6f, false, paint2);
+        }
+
+
+        if (info){
+            double lat = 42.3d;
+            double lon = -8.41d;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat month = new SimpleDateFormat("MMMM");
+            SimpleDateFormat day = new SimpleDateFormat("dd");
+            Calendar now = Calendar.getInstance();
+
+            try{
+                lat = preferences.getLong("latitude", (long) 42.3);
+                lon = preferences.getLong("longitude", (long) -8.41);
+            }catch (Exception ex){
+
+            }
+
+            SunTimes times = SunTimes.compute().today().at(lat, lon).execute();
+
+
+
+
+            int monthPerc = Math.round(now.get(Calendar.DAY_OF_MONTH)*100f/ LocalDate.now().lengthOfMonth());
+            int yearPerc = Math.round(LocalDate.now().getDayOfYear()*100f/ LocalDate.now().lengthOfYear());
+
+            CustomDrawUtils.drawDayTimes(colorInfo, sdf.format(times.getRise()),sdf.format(times.getNoon()), sdf.format(times.getSet()), sdf.format(times.getNadir()),now, p2, false);
+            CustomDrawUtils.drawLeftComplication(colorInfo, yearPerc,now.get(Calendar.YEAR)+"",""+yearPerc, p2, false);
+            CustomDrawUtils.drawRightComplication(colorInfo, monthPerc, month.format(now.getTime()).substring(0,3), day.format(now.getTime()), p2, false);
+
+            CustomDrawUtils.drawDate(colorInfo, now,  font2);
+            CustomDrawUtils.drawNoNotifications(colorInfo,by,p2);
+
         }
 
         Calendar c = Calendar.getInstance();

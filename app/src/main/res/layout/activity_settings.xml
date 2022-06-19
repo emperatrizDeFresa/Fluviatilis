@@ -778,14 +778,39 @@
                         android:progressDrawable="@drawable/custom_seekbar"
                         android:thumb="@drawable/thumb_seekbar"
                         android:thumbOffset="-0dp" />
+                    <LinearLayout
+                        android:id="@+id/infoLL"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
 
+                        <CheckBox
+                            android:id="@+id/info"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/checkbox_selector"
+                            android:button="@null"
+                            android:text="" />
+
+                        <TextView
+                            android:id="@+id/textViewwr5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingLeft="15dp"
+                            android:text="@string/custominfo"
+                            android:textColor="#000"
+                            android:textSize="12dp" />
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <ImageButton
                             android:id="@+id/customAgujas"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="70dp"
                             android:layout_weight="0.5"
                             android:layout_marginTop="20dp"
                             android:layout_marginRight="8dp"
@@ -796,24 +821,22 @@
                         <ImageButton
                             android:id="@+id/customDial"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="70dp"
                             android:layout_weight="0.5"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
                             android:background="@drawable/color_middle"
                             android:padding="9dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/customdial" />
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
                         <ImageButton
                             android:id="@+id/customSegundero"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="70dp"
                             android:layout_weight="0.5"
                             android:layout_marginTop="20dp"
+                            android:layout_marginLeft="8dp"
                             android:layout_marginRight="8dp"
                             android:background="@drawable/color_middle"
                             android:padding="9dp"
@@ -822,7 +845,7 @@
                         <ImageButton
                             android:id="@+id/customMarcadores"
                             android:layout_width="0dp"
-                            android:layout_height="60dp"
+                            android:layout_height="70dp"
                             android:layout_weight="0.5"
                             android:layout_marginTop="20dp"
                             android:layout_marginLeft="8dp"
@@ -830,6 +853,17 @@
                             android:padding="9dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/custommarcadores" />
+                        <ImageButton
+                            android:id="@+id/customInfo"
+                            android:layout_width="0dp"
+                            android:layout_height="70dp"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/color_middle"
+                            android:padding="9dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/custominfo" />
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>
