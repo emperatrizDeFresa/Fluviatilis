@@ -496,7 +496,7 @@ class SettingsActivity : BaseSettingsActivity() {
             widgetClock.visibility = VISIBLE
         }
         else{
-            widgetClock.visibility = INVISIBLE
+            widgetClock.visibility = GONE
         }
 
         showWidgetLL.setOnClickListener{
@@ -510,7 +510,7 @@ class SettingsActivity : BaseSettingsActivity() {
                 widgetClock.visibility = VISIBLE
             }
             else{
-                widgetClock.visibility = INVISIBLE
+                widgetClock.visibility = GONE
             }
         }
 
