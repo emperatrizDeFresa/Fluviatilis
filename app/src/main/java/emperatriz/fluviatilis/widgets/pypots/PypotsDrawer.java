@@ -246,7 +246,7 @@ public class PypotsDrawer implements WidgetDrawer {
             PypotsDrawUtils.drawSeconds2(0xffffffff, now.get(Calendar.SECOND), now.get(Calendar.MILLISECOND));
         }
 
-        if (SysPypots.getBoolean(SysPypots.SETTINGS_HALO,true, context)) {
+        if (SysPypots.getBoolean(SysPypots.SETTINGS_HALO,false, context)) {
             PypotsDrawUtils.drawHalo(halo);
         }
 

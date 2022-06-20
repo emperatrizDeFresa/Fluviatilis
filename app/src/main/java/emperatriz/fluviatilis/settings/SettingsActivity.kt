@@ -59,131 +59,6 @@ class SettingsActivity : BaseSettingsActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
-    }
-
-
-    private fun closeWidgets(lambda: () -> Unit){
-        settingsPanel.visibility = View.GONE
-        widgetsPanel.visibility = View.VISIBLE
-        colorPicker.visibility = GONE
-        themesPanel.visibility = GONE
-        val anim = ObjectAnimator.ofFloat(widgetsPanel, "alpha", 0f)
-        anim.duration = 300
-        anim.start()
-        anim.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                widgetsPanel.setVisibility(View.INVISIBLE)
-                lambda()
-            }
-        })
-        widgetsVisible=false
-        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
-    }
-
-    private fun closeSettings(lambda: () -> Unit){
-        settingsPanel.visibility = View.VISIBLE
-        widgetsPanel.visibility = View.GONE
-        colorPicker.visibility = GONE
-        themesPanel.visibility = GONE
-        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
-        anim.duration = 300
-        anim.start()
-        anim.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                settingsPanel.setVisibility(View.INVISIBLE)
-                lambda()
-            }
-        })
-        settingsVisible=false
-        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
-    }
-
-    private fun closeColorPicker(lambda: () -> Unit){
-        settingsPanel.visibility = View.GONE
-        widgetsPanel.visibility = View.GONE
-        colorPicker.visibility = INVISIBLE
-        themesPanel.visibility = GONE
-
-        colorPickerVisible=false
-        lambda()
-        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
-    }
-
-    private fun closeThemes(lambda: () -> Unit){
-        settingsPanel.visibility = View.GONE
-        widgetsPanel.visibility = View.GONE
-        colorPicker.visibility = GONE
-        themesPanel.visibility = INVISIBLE
-
-//        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
-//        anim.duration = 300
-//        anim.start()
-//        anim.addListener(object : AnimatorListenerAdapter() {
-//            override fun onAnimationEnd(animation: Animator) {
-//                themesPanel.setVisibility(View.INVISIBLE)
-//                lambda()
-//            }
-//        })
-
-        themesPanel.alpha = 0f
-        lambda()
-        themesVisible=false
-        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
-    }
-
-    private fun openWidgets(){
-        settingsPanel.visibility = View.GONE
-        widgetsPanel.visibility = View.VISIBLE
-        colorPicker.visibility = GONE
-        themesPanel.visibility = GONE
-        val anim = ObjectAnimator.ofFloat(widgetsPanel, "alpha", 1f)
-        anim.duration = 300
-        anim.start()
-        widgetsVisible=true
-        val shape = ShapeDrawable(RectShape())
-        initWidgetSelector()
-        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
-    }
-
-    private fun openSettings(){
-        settingsPanel.visibility = View.VISIBLE
-        widgetsPanel.visibility = View.GONE
-        colorPicker.visibility = GONE
-        themesPanel.visibility = GONE
-        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 1f)
-        anim.duration = 300
-        anim.start()
-        settingsVisible=true
-        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
-    }
-
-    private fun openColorPicker(){
-        settingsPanel.visibility = View.GONE
-        widgetsPanel.visibility = View.GONE
-        colorPicker.visibility = VISIBLE
-        themesPanel.visibility = GONE
-        val anim = ObjectAnimator.ofFloat(colorPicker, "alpha", 1f)
-        anim.duration = 300
-        anim.start()
-        colorPickerVisible=true
-        setLastColors()
-        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
-    }
-
-    private fun openThemes(){
-        settingsPanel.visibility = View.GONE
-        widgetsPanel.visibility = View.GONE
-        colorPicker.visibility = GONE
-        themesPanel.visibility = VISIBLE
-        val anim = ObjectAnimator.ofFloat(themesPanel, "alpha", 1f)
-        anim.duration = 300
-        anim.start()
-        themesVisible=true
-        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         val preferences = getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
 
@@ -477,7 +352,7 @@ class SettingsActivity : BaseSettingsActivity() {
         colorMiddle.setColorFilter(if (isBrightColor(preferences.getInt("color", Color.BLACK))) Color.BLACK else Color.WHITE)
         colorMiddle.setOnClickListener {
             setColorFor(preferences, "color", it!! as ImageButton)
-            }
+        }
 
         colorLeft.background.setColorFilter(preferences.getInt("colorLeft", Color.rgb(50, 50, 50)), PorterDuff.Mode.SRC_IN)
         colorLeft.setColorFilter(if (isBrightColor(preferences.getInt("colorLeft", Color.rgb(50, 50, 50)))) Color.BLACK else Color.WHITE)
@@ -873,6 +748,131 @@ class SettingsActivity : BaseSettingsActivity() {
         initWidgetSelector()
 
         initThemes()
+    }
+
+
+    private fun closeWidgets(lambda: () -> Unit){
+        settingsPanel.visibility = View.GONE
+        widgetsPanel.visibility = View.VISIBLE
+        colorPicker.visibility = GONE
+        themesPanel.visibility = GONE
+        val anim = ObjectAnimator.ofFloat(widgetsPanel, "alpha", 0f)
+        anim.duration = 300
+        anim.start()
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                widgetsPanel.setVisibility(View.INVISIBLE)
+                lambda()
+            }
+        })
+        widgetsVisible=false
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
+    }
+
+    private fun closeSettings(lambda: () -> Unit){
+        settingsPanel.visibility = View.VISIBLE
+        widgetsPanel.visibility = View.GONE
+        colorPicker.visibility = GONE
+        themesPanel.visibility = GONE
+        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
+        anim.duration = 300
+        anim.start()
+        anim.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator) {
+                settingsPanel.setVisibility(View.INVISIBLE)
+                lambda()
+            }
+        })
+        settingsVisible=false
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
+    }
+
+    private fun closeColorPicker(lambda: () -> Unit){
+        settingsPanel.visibility = View.GONE
+        widgetsPanel.visibility = View.GONE
+        colorPicker.visibility = INVISIBLE
+        themesPanel.visibility = GONE
+
+        colorPickerVisible=false
+        lambda()
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
+    }
+
+    private fun closeThemes(lambda: () -> Unit){
+        settingsPanel.visibility = View.GONE
+        widgetsPanel.visibility = View.GONE
+        colorPicker.visibility = GONE
+        themesPanel.visibility = INVISIBLE
+
+//        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 0f)
+//        anim.duration = 300
+//        anim.start()
+//        anim.addListener(object : AnimatorListenerAdapter() {
+//            override fun onAnimationEnd(animation: Animator) {
+//                themesPanel.setVisibility(View.INVISIBLE)
+//                lambda()
+//            }
+//        })
+
+        themesPanel.alpha = 0f
+        lambda()
+        themesVisible=false
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
+    }
+
+    private fun openWidgets(){
+        settingsPanel.visibility = View.GONE
+        widgetsPanel.visibility = View.VISIBLE
+        colorPicker.visibility = GONE
+        themesPanel.visibility = GONE
+        val anim = ObjectAnimator.ofFloat(widgetsPanel, "alpha", 1f)
+        anim.duration = 300
+        anim.start()
+        widgetsVisible=true
+        val shape = ShapeDrawable(RectShape())
+        initWidgetSelector()
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
+    }
+
+    private fun openSettings(){
+        settingsPanel.visibility = View.VISIBLE
+        widgetsPanel.visibility = View.GONE
+        colorPicker.visibility = GONE
+        themesPanel.visibility = GONE
+        val anim = ObjectAnimator.ofFloat(settingsPanel, "alpha", 1f)
+        anim.duration = 300
+        anim.start()
+        settingsVisible=true
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
+    }
+
+    private fun openColorPicker(){
+        settingsPanel.visibility = View.GONE
+        widgetsPanel.visibility = View.GONE
+        colorPicker.visibility = VISIBLE
+        themesPanel.visibility = GONE
+        val anim = ObjectAnimator.ofFloat(colorPicker, "alpha", 1f)
+        anim.duration = 300
+        anim.start()
+        colorPickerVisible=true
+        setLastColors()
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
+    }
+
+    private fun openThemes(){
+        settingsPanel.visibility = View.GONE
+        widgetsPanel.visibility = View.GONE
+        colorPicker.visibility = GONE
+        themesPanel.visibility = VISIBLE
+        val anim = ObjectAnimator.ofFloat(themesPanel, "alpha", 1f)
+        anim.duration = 300
+        anim.start()
+        themesVisible=true
+        settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
 

@@ -20,7 +20,8 @@ import emperatriz.fluviatilis.widgets.spin.SpinDrawer
  */
 class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
-    constructor(context: Context, attrs: AttributeSet? = null, theme: Theme, model: WallpaperModel, llHeight:Int=0, llWidth:Int=0) : this(context, attrs, 0) {
+
+    constructor(context: Context, attrs: AttributeSet? = null, theme: Theme, _model: WallpaperModel, llHeight:Int=0, llWidth:Int=0) : this(context, attrs, 0) {
 
         val dm = DisplayMetrics()
         (context as Activity).windowManager.defaultDisplay.getRealMetrics(dm)
@@ -28,12 +29,18 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
         val vProportion = llHeight / (1f*dm.heightPixels)
 
         this.theme = theme
-        this.model = model
+
         pypotsWidget = PypotsDrawer()
         spinWidget = SpinDrawer()
         customWidget = CustomDrawer()
         this.gradientTop = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradient)
         this.gradientBottom = BitmapFactory.decodeResource(context.getResources(), R.drawable.gradient2)
+
+        if (theme.fluvNumber==0){
+            theme.fluvNumber=14
+        }
+
+        model = WallpaperModel(_model.fluvHeight, _model.min, _model.max, _model.fluvNumber, _model.fluvWeight, _model.fps, _model.isWallpaper, _model.height, _model.width, _model.speed, _model.wideness)
 
         model.wideness = Math.round(theme.wideness*vProportion)
         model.fluvWeight = Math.round(theme.fluvWeight*vProportion)

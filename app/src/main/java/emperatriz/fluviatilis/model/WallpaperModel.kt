@@ -19,10 +19,13 @@ data class WallpaperModel(var fluvHeight:Int,
                           var wideness:Int){
 
     val fluvHeightDef=80
-    val fluvs: MutableList<Fluv> = mutableListOf<Fluv>()
+    var fluvs: MutableList<Fluv> = mutableListOf<Fluv>()
 
     fun initFluvs(){
-        fluvs.clear()
+        if (fluvs==null){
+            fluvs = mutableListOf<Fluv>()
+        }
+        fluvs?.let{it.clear()}
         for (x in 1..fluvNumber){
             try{
                 var maxWidth = wideness//Math.min(wideness,max)
@@ -32,16 +35,16 @@ data class WallpaperModel(var fluvHeight:Int,
                 val min_ = (min..maxWidth).random()
                 val max_ = (min..maxWidth).random()
                 if (min_> max_){
-                    fluvs += Fluv((max_..min_).random().toFloat(),(-1..1).random().toFloat(),max_, min_)
+                    fluvs.add(Fluv((max_..min_).random().toFloat(),(-1..1).random().toFloat(),max_, min_))
                 }
                 else{
-                    fluvs += Fluv((min_..max_).random().toFloat(),(-1..1).random().toFloat(),min_,max_)
+                    fluvs.add(Fluv((min_..max_).random().toFloat(),(-1..1).random().toFloat(),min_,max_))
                 }
 
 
             }
             catch (e: Exception) {
-                fluvs += Fluv(1F,speed.toFloat(),fluvHeight,380)
+                fluvs.add(Fluv(1F,speed.toFloat(),fluvHeight,380))
             }
         }
         fluvs.forEach{
