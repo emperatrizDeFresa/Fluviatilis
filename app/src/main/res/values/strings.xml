@@ -17,6 +17,7 @@
 
     <string name="wide">Center line width</string>
     <string name="wrinkles">Number of folds</string>
+    <string name="bars">Number of bars</string>
     <string name="speed">Speed</string>
     <string name="amphor">Horizontal amplitude</string>
     <string name="ampver">Vertical amplitude</string>

@@ -31,7 +31,7 @@ abstract class BaseWallpaperService : WallpaperService() {
         private val drawRunner = Runnable { draw() }
 
         private var visible = true
-        private val wallpaperRenderer: WallpaperRenderer = createWallpaperRenderer()
+        private var wallpaperRenderer: WallpaperRenderer = createWallpaperRenderer()
 
         init {
             handler.removeCallbacks(drawRunner)
@@ -100,6 +100,7 @@ abstract class BaseWallpaperService : WallpaperService() {
             try {
                 canvas = holder.lockCanvas() //NOTE: This method can take up to 8ms to run
                 if (canvas != null) {
+                    //wallpaperRenderer = if (applicationContext.getSharedPreferences("fluviatilis", Context.MODE_PRIVATE).getInt("mode",1)==1) FluviatilisDrawer(applicationContext, true) else BarsDrawer(applicationContext, true)
                     wallpaperRenderer.draw(canvas)
                 }
             } finally {

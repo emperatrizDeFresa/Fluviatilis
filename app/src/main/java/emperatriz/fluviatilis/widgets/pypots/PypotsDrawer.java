@@ -41,6 +41,7 @@ public class PypotsDrawer implements WidgetDrawer {
     public Bitmap n23_;
     public Bitmap n25_;
     public Bitmap n29_;
+    public Bitmap n52_;
     public Bitmap n53_;
     public Bitmap n57_;
     public Bitmap by;
@@ -93,6 +94,7 @@ public class PypotsDrawer implements WidgetDrawer {
         n23_ = BitmapFactory.decodeResource(context.getResources(), R.drawable.n23);
         n25_ = BitmapFactory.decodeResource(context.getResources(), R.drawable.n25);
         n29_ = BitmapFactory.decodeResource(context.getResources(), R.drawable.n29);
+        n52_ = BitmapFactory.decodeResource(context.getResources(), R.drawable.n52);
         n53_ = BitmapFactory.decodeResource(context.getResources(), R.drawable.n53);
         n57_ = BitmapFactory.decodeResource(context.getResources(), R.drawable.n57);
 
@@ -130,6 +132,7 @@ public class PypotsDrawer implements WidgetDrawer {
         n23_ = Bitmap.createScaledBitmap(n23_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n25_ = Bitmap.createScaledBitmap(n25_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n29_ = Bitmap.createScaledBitmap(n29_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
+        n52_ = Bitmap.createScaledBitmap(n52_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n53_ = Bitmap.createScaledBitmap(n53_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n57_ = Bitmap.createScaledBitmap(n57_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
 
@@ -166,6 +169,7 @@ public class PypotsDrawer implements WidgetDrawer {
         n23_ = Bitmap.createScaledBitmap(n23_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n25_ = Bitmap.createScaledBitmap(n25_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n29_ = Bitmap.createScaledBitmap(n29_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
+        n52_ = Bitmap.createScaledBitmap(n52_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n53_ = Bitmap.createScaledBitmap(n53_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n57_ = Bitmap.createScaledBitmap(n57_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
 
@@ -201,6 +205,7 @@ public class PypotsDrawer implements WidgetDrawer {
         n23_ = Bitmap.createScaledBitmap(n23_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n25_ = Bitmap.createScaledBitmap(n25_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n29_ = Bitmap.createScaledBitmap(n29_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
+        n52_ = Bitmap.createScaledBitmap(n52_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n53_ = Bitmap.createScaledBitmap(n53_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
         n57_ = Bitmap.createScaledBitmap(n57_,SysPypots.size(136, PypotsDrawUtils.width),SysPypots.size(62, PypotsDrawUtils.width), true);
 
@@ -225,7 +230,7 @@ public class PypotsDrawer implements WidgetDrawer {
         Calendar now = Calendar.getInstance();
 
 
-        PypotsDrawUtils.drawTime(sdf.format(now.getTime()),n0_,n1_,n2_,n3_,n4_,n5_,n6_,n7_,n8_,n9_,n11_,n13_,n15_,n19_,n21_,n23_,n25_,n29_,n53_,n57_,p2);
+        PypotsDrawUtils.drawTime(sdf.format(now.getTime()),n0_,n1_,n2_,n3_,n4_,n5_,n6_,n7_,n8_,n9_,n11_,n13_,n15_,n19_,n21_,n23_,n25_,n29_,n52_,n53_,n57_,p2);
 
 
 

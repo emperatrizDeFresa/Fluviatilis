@@ -1,7 +1,9 @@
 package emperatriz.fluviatilis.liveWallpaper
 
+import android.content.Context
+
 class WallpaperService : BaseWallpaperService() {
     override fun createWallpaperRenderer(): WallpaperRenderer {
-        return WallpaperDrawer(applicationContext, true) //TODO return your WallpaperRenderer implementation here
+        return WallpaperDrawer(applicationContext, true)
     }
 }

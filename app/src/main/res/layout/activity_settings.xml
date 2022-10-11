@@ -43,8 +43,52 @@
             android:background="@drawable/settings_panel"
             android:orientation="vertical"
             android:visibility="invisible">
+            <LinearLayout
+                android:id="@+id/settingsPanel0"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+
+                <HorizontalScrollView
+                    android:id="@+id/modeList"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginBottom="0dp"
+                    android:orientation="horizontal"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_horizontal"
+                        >
+
+                        <ImageView
+                            android:id="@+id/mode1"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:background="@drawable/transparent"
+                            android:src="@drawable/back1" />
+
+                        <ImageView
+                            android:id="@+id/mode2"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/transparent"
+                            android:src="@drawable/back2" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
             <ScrollView
+                android:id="@+id/scrollMode1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="bottom"
@@ -61,7 +105,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        android:layout_marginBottom="60dp"
+                        android:layout_marginBottom="20dp"
                         android:orientation="horizontal">
 
                         <ImageButton
@@ -69,7 +113,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.4"
-                            android:background="@drawable/color_left"
+                            android:background="@drawable/color_middle"
                             android:src="@drawable/ic_palette" />
 
                         <ImageButton
@@ -87,7 +131,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_weight="0.4"
-                            android:background="@drawable/color_right"
+                            android:background="@drawable/color_middle"
                             android:src="@drawable/ic_palette" />
                     </LinearLayout>
 
@@ -339,6 +383,201 @@
 
                         <TextView
                             android:id="@+id/textView99"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:paddingLeft="15dp"
+                            android:text="@string/showclock"
+                            android:textColor="#000"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </ScrollView>
+            <ScrollView
+                android:id="@+id/scrollMode2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/settingsPanel2_"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/colorLeft_"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.4"
+                            android:background="@drawable/color_middle"
+                            android:src="@drawable/ic_palette" />
+
+                        <ImageButton
+                            android:id="@+id/colorMiddle_"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="0.4"
+                            android:background="@drawable/color_middle"
+                            android:src="@drawable/ic_palette" />
+
+                        <ImageButton
+                            android:id="@+id/colorRight_"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.4"
+                            android:background="@drawable/color_middle"
+                            android:src="@drawable/ic_palette" />
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/textView2_"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/bars"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+                    <SeekBar
+                        android:id="@+id/fluvNumber_"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+
+                    <TextView
+                        android:id="@+id/textView3_"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/speed"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+                    <SeekBar
+                        android:id="@+id/speed_"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+
+
+                    <TextView
+                        android:id="@+id/textView9_"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/darkint"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+                    <SeekBar
+                        android:id="@+id/dimAlpha_"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+
+                    <TextView
+                        android:id="@+id/textView8_"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/darksize"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+                    <SeekBar
+                        android:id="@+id/dimHeight_"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+
+                    <TextView
+                        android:id="@+id/textView89_"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center"
+                        android:text="@string/rotation"
+                        android:textColor="#000"
+                        android:textSize="12dp" />
+
+
+                    <SeekBar
+                        android:id="@+id/rotation_"
+                        style="@style/Widget.AppCompat.SeekBar.Discrete"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="-15dp"
+                        android:layout_marginRight="-15dp"
+                        android:layout_marginBottom="15dp"
+                        android:progress="1"
+                        android:progressDrawable="@drawable/custom_seekbar"
+                        android:thumb="@drawable/thumb_seekbar"
+                        android:thumbOffset="-0dp" />
+
+
+                    <LinearLayout
+                        android:id="@+id/showWidgetLL_"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/showWidget_"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/checkbox_selector"
+                            android:button="@null"
+                            android:text="" />
+
+                        <TextView
+                            android:id="@+id/textView99_"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="left"

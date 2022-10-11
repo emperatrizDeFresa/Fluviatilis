@@ -22,9 +22,7 @@ import android.view.Window
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.graphics.ColorUtils
-import emperatriz.fluviatilis.liveWallpaper.R
-import emperatriz.fluviatilis.liveWallpaper.WallpaperDrawer
-import emperatriz.fluviatilis.liveWallpaper.WallpaperService
+import emperatriz.fluviatilis.liveWallpaper.*
 import emperatriz.fluviatilis.model.WallpaperModel
 import emperatriz.fluviatilis.themes.ThemeManager
 import emperatriz.fluviatilis.themes.ThemeManager.companion.getCurrentTheme
@@ -56,11 +54,19 @@ class SettingsActivity : BaseSettingsActivity() {
 
 
 
+    private fun getRendererModel(pref:SharedPreferences): WallpaperModel {
+            return (settings_live_wallpaper.renderer as WallpaperDrawer).model
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
+
 
         val preferences = getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
+
+        settings_live_wallpaper.renderer = WallpaperDrawer(applicationContext, false)
+
+
 
 
 
@@ -130,241 +136,375 @@ class SettingsActivity : BaseSettingsActivity() {
                 }
             }
         }
-
-        separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
-        separatorWidth.progress = preferences.getInt("fluvWeight", 12)
-        separatorWidth.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvWeight = Math.max(1, progress)
-                preferences.edit().putInt("fluvWeight", Math.max(1, progress)).apply()
-                preferences.edit().putBoolean("changed", true).apply()
-            }
-        })
-
-        fluvNumber.min = 12
-        fluvNumber.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvNumber()
-        fluvNumber.progress = preferences.getInt("fluvNumber", 16)
-        fluvNumber.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvNumber = Math.max(12, progress)
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight = Math.round(((settings_live_wallpaper.renderer as WallpaperDrawer).model.height * ((preferences.getInt("heightness", 15)).toFloat() / 100)) / Math.max(12, progress)).toInt()
-                wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight * 2
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
-                preferences.edit().putInt("fluvNumber", Math.max(12, progress)).apply()
-                preferences.edit().putBoolean("changed", true).apply()
-                separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
-            }
-        })
-
-        speed.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxSpeed()
-        speed.progress = preferences.getInt("speed", 2)
-        speed.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.speed = progress
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
-                preferences.edit().putInt("speed", progress).apply()
-                preferences.edit().putBoolean("changed", true).apply()
-            }
-        })
-
-        wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight*4
         val dm = DisplayMetrics()
-        windowManager.defaultDisplay.getRealMetrics(dm)
-        wideness.max =dm.heightPixels/2
-        wideness.progress = preferences.getInt("wideness", 380)
-        wideness.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
+            separatorWidth.max = getRendererModel(preferences).maxFluvWeight()
+            separatorWidth.progress = preferences.getInt("fluvWeight", 12)
+            separatorWidth.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
 
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.wideness = Math.max(1, progress)
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
-                preferences.edit().putInt("wideness", Math.max(1, progress)).apply()
-                preferences.edit().putBoolean("changed", true).apply()
-                preferences.edit().putBoolean("changedWallpaper", true).apply()
-            }
-        })
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
 
-        heightness.max = 100
-        heightness.progress = preferences.getInt("heightness", 15)
-        heightness.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    getRendererModel(preferences).fluvWeight = Math.max(1, progress)
+                    preferences.edit().putInt("fluvWeight", Math.max(1, progress)).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
+            fluvNumber.min = 12
+            fluvNumber.max = getRendererModel(preferences).maxFluvNumber()
+            fluvNumber.progress = preferences.getInt("fluvNumber", 16)
+            fluvNumber.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
 
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
-                preferences.edit().putInt("heightness", Math.max(1, progress)).apply()
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    getRendererModel(preferences).fluvNumber = Math.max(12, progress)
+                    getRendererModel(preferences).fluvHeight = Math.round((getRendererModel(preferences).height * ((preferences.getInt("heightness", 15)).toFloat() / 100)) / Math.max(12, progress)).toInt()
+                    wideness.min = getRendererModel(preferences).fluvHeight * 2
+                    getRendererModel(preferences).initFluvs()
+                    preferences.edit().putInt("fluvNumber", Math.max(12, progress)).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                    separatorWidth.max = getRendererModel(preferences).maxFluvWeight()
+                }
+            })
+
+            speed.max = getRendererModel(preferences).maxSpeed()
+            speed.progress = preferences.getInt("speed", 2)
+            speed.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    getRendererModel(preferences).speed = progress
+                    getRendererModel(preferences).initFluvs()
+                    preferences.edit().putInt("speed", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+
+            wideness.min = getRendererModel(preferences).fluvHeight*4
+
+            windowManager.defaultDisplay.getRealMetrics(dm)
+            wideness.max =dm.heightPixels/2
+            wideness.progress = preferences.getInt("wideness", 380)
+            wideness.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    getRendererModel(preferences).wideness = Math.max(1, progress)
+                    getRendererModel(preferences).initFluvs()
+                    preferences.edit().putInt("wideness", Math.max(1, progress)).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                    preferences.edit().putBoolean("changedWallpaper", true).apply()
+                }
+            })
+
+            heightness.max = 100
+            heightness.progress = preferences.getInt("heightness", 15)
+            heightness.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    preferences.edit().putInt("heightness", Math.max(1, progress)).apply()
 //                fluvNumber.progress = Math.min(Math.max(12, Math.round((dm.heightPixels * ((progress).toFloat() / 100)) / (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight)),
 //                        (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvNumber())
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight = Math.round(((settings_live_wallpaper.renderer as WallpaperDrawer).model.height * ((Math.max(1, progress)).toFloat() / 100)) / fluvNumber.progress).toInt()
-                wideness.min = (settings_live_wallpaper.renderer as WallpaperDrawer).model.fluvHeight * 2
-                (settings_live_wallpaper.renderer as WallpaperDrawer).model.initFluvs()
+                    getRendererModel(preferences).fluvHeight = Math.round((getRendererModel(preferences).height * ((Math.max(1, progress)).toFloat() / 100)) / fluvNumber.progress).toInt()
+                    wideness.min = getRendererModel(preferences).fluvHeight * 2
+                    getRendererModel(preferences).initFluvs()
 
-                separatorWidth.max = (settings_live_wallpaper.renderer as WallpaperDrawer).model.maxFluvWeight()
-                preferences.edit().putBoolean("changed", true).apply()
-                preferences.edit().putBoolean("changedWallpaper", true).apply()
+                    separatorWidth.max = getRendererModel(preferences).maxFluvWeight()
+                    preferences.edit().putBoolean("changed", true).apply()
+                    preferences.edit().putBoolean("changedWallpaper", true).apply()
 
-            }
-        })
-
-        dimAlpha.max = 255
-        dimAlpha.progress = preferences.getInt("dimAlpha", 125)
-        dimAlpha.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
-                preferences.edit().putInt("dimAlpha", progress).apply()
-                preferences.edit().putBoolean("changed", true).apply()
-            }
-        })
-
-        dimHeight.max = 500
-        dimHeight.progress = preferences.getInt("dimHeight", 100)
-        dimHeight.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                vibra(2)
-                preferences.edit().putInt("dimHeight", progress).apply()
-                preferences.edit().putBoolean("changed", true).apply()
-            }
-        })
-        rotation.max = 180
-        rotation.progress = preferences.getInt("rotation", 0)
-        rotation.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (progress % 45 == 0) {
-                    vibraFuerte()
-                } else {
-                    vibra(2)
                 }
-                preferences.edit().putInt("rotation", progress).apply()
-                preferences.edit().putBoolean("changed", true).apply()
-            }
-        })
+            })
 
-        horizontalOffset.max = dm.widthPixels
-        horizontalOffset.progress = preferences.getInt("horizontalOffset", 0)+dm.widthPixels / 2
-        horizontalOffset.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress_: Int, fromUser: Boolean) {
-                val progress = progress_ - dm.widthPixels / 2
-                if (progress == 0) {
-                    vibraFuerte()
-                } else {
-                    vibra(2)
+            dimAlpha.max = 255
+            dimAlpha.progress = preferences.getInt("dimAlpha", 125)
+            dimAlpha.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
                 }
-                preferences.edit().putInt("horizontalOffset", progress).apply()
-                preferences.edit().putBoolean("changed", true).apply()
-            }
-        })
 
-        verticalOffset.max = dm.heightPixels
-        verticalOffset.progress = preferences.getInt("verticalOffset", 0)+ dm.heightPixels / 2
-        verticalOffset.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                showAll(settingsPanel, settingsPanel2)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                showOnlyMe(seekBar, settingsPanel, settingsPanel2)
-            }
-
-            override fun onProgressChanged(seekBar: SeekBar, progress_: Int, fromUser: Boolean) {
-                val progress = progress_ - dm.heightPixels / 2
-                if (progress == 0) {
-                    vibraFuerte()
-                } else {
-                    vibra(2)
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
                 }
-                preferences.edit().putInt("verticalOffset", progress).apply()
-                preferences.edit().putBoolean("changed", true).apply()
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    preferences.edit().putInt("dimAlpha", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+
+            dimHeight.max = 500
+            dimHeight.progress = preferences.getInt("dimHeight", 100)
+            dimHeight.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    preferences.edit().putInt("dimHeight", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+            rotation.max = 180
+            rotation.progress = preferences.getInt("rotation", 0)
+            rotation.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    if (progress % 45 == 0) {
+                        vibraFuerte()
+                    } else {
+                        vibra(2)
+                    }
+                    preferences.edit().putInt("rotation", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+
+            horizontalOffset.max = dm.widthPixels
+            horizontalOffset.progress = preferences.getInt("horizontalOffset", 0)+dm.widthPixels / 2
+            horizontalOffset.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress_: Int, fromUser: Boolean) {
+                    val progress = progress_ - dm.widthPixels / 2
+                    if (progress == 0) {
+                        vibraFuerte()
+                    } else {
+                        vibra(2)
+                    }
+                    preferences.edit().putInt("horizontalOffset", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+
+            verticalOffset.max = dm.heightPixels
+            verticalOffset.progress = preferences.getInt("verticalOffset", 0)+ dm.heightPixels / 2
+            verticalOffset.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress_: Int, fromUser: Boolean) {
+                    val progress = progress_ - dm.heightPixels / 2
+                    if (progress == 0) {
+                        vibraFuerte()
+                    } else {
+                        vibra(2)
+                    }
+                    preferences.edit().putInt("verticalOffset", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+
+
+            colorMiddle.background.setColorFilter(preferences.getInt("color", Color.BLACK), PorterDuff.Mode.SRC_IN)
+            colorMiddle.setColorFilter(if (isBrightColor(preferences.getInt("color", Color.BLACK))) Color.BLACK else Color.WHITE)
+            colorMiddle.setOnClickListener {
+                setColorFor(preferences, "color", it!! as ImageButton)
             }
-        })
+
+            colorLeft.background.setColorFilter(preferences.getInt("colorLeft", Color.rgb(50, 50, 50)), PorterDuff.Mode.SRC_IN)
+            colorLeft.setColorFilter(if (isBrightColor(preferences.getInt("colorLeft", Color.rgb(50, 50, 50)))) Color.BLACK else Color.WHITE)
+            colorLeft.setOnClickListener {
+                setColorFor(preferences, "colorLeft", it!! as ImageButton)
+            }
+
+            colorRight.background.setColorFilter(preferences.getInt("colorRight", Color.rgb(100, 100, 100)), PorterDuff.Mode.SRC_IN)
+            colorRight.setColorFilter(if (isBrightColor(preferences.getInt("colorRight", Color.rgb(100, 100, 100)))) Color.BLACK else Color.WHITE)
+            colorRight.setOnClickListener {
+                setColorFor(preferences, "colorRight", it!! as ImageButton)
+            }
 
 
-        colorMiddle.background.setColorFilter(preferences.getInt("color", Color.BLACK), PorterDuff.Mode.SRC_IN)
-        colorMiddle.setColorFilter(if (isBrightColor(preferences.getInt("color", Color.BLACK))) Color.BLACK else Color.WHITE)
-        colorMiddle.setOnClickListener {
-            setColorFor(preferences, "color", it!! as ImageButton)
-        }
 
-        colorLeft.background.setColorFilter(preferences.getInt("colorLeft", Color.rgb(50, 50, 50)), PorterDuff.Mode.SRC_IN)
-        colorLeft.setColorFilter(if (isBrightColor(preferences.getInt("colorLeft", Color.rgb(50, 50, 50)))) Color.BLACK else Color.WHITE)
-        colorLeft.setOnClickListener {
-            setColorFor(preferences, "colorLeft", it!! as ImageButton)
-        }
+            fluvNumber_.min = 4
+            fluvNumber_.max = getRendererModel(preferences).maxFluvNumber()
+            fluvNumber_.progress = preferences.getInt("fluvNumber_", 4)
+            fluvNumber_.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2_)
+                }
 
-        colorRight.background.setColorFilter(preferences.getInt("colorRight", Color.rgb(100, 100, 100)), PorterDuff.Mode.SRC_IN)
-        colorRight.setColorFilter(if (isBrightColor(preferences.getInt("colorRight", Color.rgb(100, 100, 100)))) Color.BLACK else Color.WHITE)
-        colorRight.setOnClickListener {
-            setColorFor(preferences, "colorRight", it!! as ImageButton)
-        }
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2_)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    getRendererModel(preferences).fluvNumber = Math.max(4, progress)
+                    getRendererModel(preferences).fluvHeight = Math.round(getRendererModel(preferences).height*1f / Math.max(4, progress)).toInt()
+                    getRendererModel(preferences).initBars(preferences.getInt("colorLeft_", Color.rgb(50, 50, 50)),
+                                                           preferences.getInt("color_", Color.rgb(50, 50, 50)),
+                                                           preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
+                    preferences.edit().putInt("fluvNumber_", Math.max(4, progress)).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                    separatorWidth.max = getRendererModel(preferences).maxFluvWeight()
+                }
+            })
+
+            speed_.max = 11
+            speed_.min = 1
+            speed_.progress = preferences.getInt("speed_", 2)
+            speed_.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2_)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2_)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    getRendererModel(preferences).speed = progress
+                    preferences.edit().putInt("speed_", progress).apply()
+                    getRendererModel(preferences).initBars(preferences.getInt("colorLeft_", Color.rgb(50, 50, 50)),
+                            preferences.getInt("color_", Color.rgb(50, 50, 50)),
+                            preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+
+
+
+            dimAlpha_.max = 255
+            dimAlpha_.progress = preferences.getInt("dimAlpha_", 125)
+            dimAlpha_.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2_)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2_)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    preferences.edit().putInt("dimAlpha_", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+
+            dimHeight_.max = 500
+            dimHeight_.progress = preferences.getInt("dimHeight_", 100)
+            dimHeight_.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2_)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2_)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    vibra(2)
+                    preferences.edit().putInt("dimHeight_", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+            rotation_.max = 180
+            rotation_.progress = preferences.getInt("rotation_", 0)
+            rotation_.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    showAll(settingsPanel, settingsPanel2_)
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+                    showOnlyMe(seekBar, settingsPanel, settingsPanel2_)
+                }
+
+                override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    if (progress % 45 == 0) {
+                        vibraFuerte()
+                    } else {
+                        vibra(2)
+                    }
+                    preferences.edit().putInt("rotation_", progress).apply()
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+            })
+
+
+
+
+
+            colorMiddle_.background.setColorFilter(preferences.getInt("color_", Color.BLACK), PorterDuff.Mode.SRC_IN)
+            colorMiddle_.setColorFilter(if (isBrightColor(preferences.getInt("color_", Color.BLACK))) Color.BLACK else Color.WHITE)
+            colorMiddle_.setOnClickListener {
+                setColorFor(preferences, "color_", it!! as ImageButton)
+            }
+
+            colorLeft_.background.setColorFilter(preferences.getInt("colorLeft_", Color.rgb(50, 50, 50)), PorterDuff.Mode.SRC_IN)
+            colorLeft_.setColorFilter(if (isBrightColor(preferences.getInt("colorLeft_", Color.rgb(50, 50, 50)))) Color.BLACK else Color.WHITE)
+            colorLeft_.setOnClickListener {
+                setColorFor(preferences, "colorLeft_", it!! as ImageButton)
+            }
+
+            colorRight_.background.setColorFilter(preferences.getInt("colorRight_", Color.rgb(100, 100, 100)), PorterDuff.Mode.SRC_IN)
+            colorRight_.setColorFilter(if (isBrightColor(preferences.getInt("colorRight_", Color.rgb(100, 100, 100)))) Color.BLACK else Color.WHITE)
+            colorRight_.setOnClickListener {
+                setColorFor(preferences, "colorRight_", it!! as ImageButton)
+            }
+
+
+
 
 
         if (preferences.getBoolean("showWidget", false)){
@@ -378,7 +518,17 @@ class SettingsActivity : BaseSettingsActivity() {
             showWidget.performClick()
         }
 
+        showWidgetLL_.setOnClickListener{
+            showWidget.performClick()
+        }
+
+        showWidget_.setOnClickListener{
+            showWidget.performClick()
+        }
+
         (showWidget as CheckBox).isChecked = preferences.getBoolean("showWidget", false)
+        (showWidget_ as CheckBox).isChecked = preferences.getBoolean("showWidget", false)
+
         showWidget.setOnClickListener{
             preferences.edit().putBoolean("showWidget", (it as CheckBox).isChecked).apply()
             if ((it as CheckBox).isChecked){
@@ -745,6 +895,9 @@ class SettingsActivity : BaseSettingsActivity() {
         customInfo.setColorFilter(if (isBrightColor(preferences.getInt("colorInfo", Color.LTGRAY))) Color.BLACK else Color.WHITE)
         customInfo.setOnClickListener { setColorFor(preferences, "colorInfo", it!! as ImageButton) }
 
+
+        initModeSelector()
+
         initWidgetSelector()
 
         initThemes()
@@ -843,6 +996,7 @@ class SettingsActivity : BaseSettingsActivity() {
         anim.duration = 300
         anim.start()
         settingsVisible=true
+        initModeSelector()
         settings_live_wallpaper.canDragWidget = !settingsVisible && !widgetsVisible && !colorPickerVisible && !themesVisible
     }
 
@@ -895,6 +1049,54 @@ class SettingsActivity : BaseSettingsActivity() {
         colorFilter = ColorMatrixColorFilter(matrix)
     }
 
+
+    private fun initModeSelector() {
+
+        val preferences = getSharedPreferences("fluviatilis", Context.MODE_PRIVATE)
+        val dm = DisplayMetrics()
+        windowManager.defaultDisplay.getRealMetrics(dm)
+//        pypots.toGrayscale()
+//        spin.toGrayscale()
+//        custom.toGrayscale()
+
+        when(preferences.getInt("mode", 1)){
+            1 -> {
+                mode1.toColor()
+                mode2.toGrayscale()
+                scrollMode1.visibility = VISIBLE
+                scrollMode2.visibility = GONE
+            }
+            2 -> {
+                mode1.toGrayscale()
+                mode2.toColor()
+                scrollMode1.visibility = GONE
+                scrollMode2.visibility = VISIBLE
+            }
+        }
+
+        mode1.setOnClickListener {
+            mode1.toColor()
+            mode2.toGrayscale()
+            scrollMode1.visibility = VISIBLE
+            scrollMode2.visibility = GONE
+            preferences.edit().putInt("mode", 1).apply()
+            preferences.edit().putBoolean("changedWidget", true).apply()
+            preferences.edit().putBoolean("changed", true).apply()
+            preferences.edit().putBoolean("changedWallpaper", true).apply()
+        }
+
+        mode2.setOnClickListener {
+            mode1.toGrayscale()
+            mode2.toColor()
+            scrollMode1.visibility = GONE
+            scrollMode2.visibility = VISIBLE
+            preferences.edit().putInt("mode", 2).apply()
+            preferences.edit().putBoolean("changedWidget", true).apply()
+            preferences.edit().putBoolean("changed", true).apply()
+            preferences.edit().putBoolean("changedWallpaper", true).apply()
+        }
+
+    }
 
 
     private fun initWidgetSelector() {
@@ -1136,6 +1338,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
     fun showOnlyMe(view: View?, panel1: LinearLayout, panel2: LinearLayout){
         panel1.background = getDrawable(R.drawable.transparent)
+        modeList.visibility = INVISIBLE
         for (i in 0 until panel2.childCount){
             val child = panel2.getChildAt(i)
             if (child!=null){
@@ -1148,6 +1351,7 @@ class SettingsActivity : BaseSettingsActivity() {
 
     fun showAll(panel1: LinearLayout, panel2: LinearLayout){
         panel1.background = getDrawable(R.drawable.settings_panel)
+        modeList.visibility = VISIBLE
         for (i in 0 until panel2.childCount){
             panel2.getChildAt(i)?.visibility=View.VISIBLE
         }
@@ -1220,6 +1424,12 @@ class SettingsActivity : BaseSettingsActivity() {
 
                 saturacion = progress / 100f
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
+                if (preferences.getInt("mode",1)!=1){
+                    getRendererModel(preferences).initBars(preferences.getInt("colorLeft_", Color.rgb(50, 50, 50)),
+                            preferences.getInt("color_", Color.rgb(50, 50, 50)),
+                            preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
 
                 val lumGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
                         0.0f, intArrayOf(Color.BLACK, getHSLColor(matiz, saturacion, 0.5f), Color.WHITE),
@@ -1255,6 +1465,14 @@ class SettingsActivity : BaseSettingsActivity() {
                 }
                 luminosidad = progress / 100f
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
+                if (preferences.getInt("mode",1)!=1){
+                    getRendererModel(preferences).initBars(preferences.getInt("colorLeft_", Color.rgb(50, 50, 50)),
+                            preferences.getInt("color_", Color.rgb(50, 50, 50)),
+                            preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
+
+
 
                 view?.let {
                     it.background.setColorFilter(getHSLColor(matiz, saturacion, luminosidad), PorterDuff.Mode.SRC_IN)
@@ -1279,6 +1497,12 @@ class SettingsActivity : BaseSettingsActivity() {
                 vibra(2)
                 matiz = progress.toFloat()
                 preferences.edit().putInt(preferencesKey, getHSLColor(matiz, saturacion, luminosidad)).apply()
+                if (preferences.getInt("mode",1)!=1){
+                    getRendererModel(preferences).initBars(preferences.getInt("colorLeft_", Color.rgb(50, 50, 50)),
+                            preferences.getInt("color_", Color.rgb(50, 50, 50)),
+                            preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
+                    preferences.edit().putBoolean("changed", true).apply()
+                }
 
                 val satGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
                         0.0f, intArrayOf(Color.GRAY, getHSLColor(matiz, 1f, 0.5f)),

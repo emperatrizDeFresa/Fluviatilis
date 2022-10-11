@@ -1022,9 +1022,9 @@ public class PypotsDrawUtils {
     }
 
     public static void drawTime(String now, Bitmap n0, Bitmap n1, Bitmap n2, Bitmap n3, Bitmap n4, Bitmap n5, Bitmap n6, Bitmap n7, Bitmap n8, Bitmap n9,
-                                Bitmap n11,Bitmap n13,Bitmap n15,Bitmap n19, Bitmap n21,Bitmap n23,Bitmap n25,Bitmap n29,Bitmap n53,Bitmap n57, Paint p2){
+                                Bitmap n11,Bitmap n13,Bitmap n15,Bitmap n19, Bitmap n21,Bitmap n23,Bitmap n25,Bitmap n29,Bitmap n52,Bitmap n53,Bitmap n57, Paint p2){
 
-        String sticky = "11,13,15,19,21,23,25,29,53,57";
+        String sticky = "11,13,15,19,21,23,25,29,52,53,57";
 
         String hh = now.split(":")[0];
         String mm = now.split(":")[1];
@@ -1053,6 +1053,8 @@ public class PypotsDrawUtils {
                 canvas.drawBitmap(n25, SysPypots.size(75f,width)+offsetX, SysPypots.size(196f,width)+offsetY, paint);
             } else if (hh.equals("29")){
                 canvas.drawBitmap(n29, SysPypots.size(75f,width)+offsetX, SysPypots.size(196f,width)+offsetY, paint);
+            } else if (hh.equals("52")){
+                canvas.drawBitmap(n52, SysPypots.size(75f,width)+offsetX, SysPypots.size(196f,width)+offsetY, paint);
             } else if (hh.equals("53")){
                 canvas.drawBitmap(n53, SysPypots.size(75f,width)+offsetX, SysPypots.size(196f,width)+offsetY, paint);
             } else if (hh.equals("57")){
@@ -1082,6 +1084,8 @@ public class PypotsDrawUtils {
                 canvas.drawBitmap(n25, SysPypots.size(243f,width)+offsetX, SysPypots.size(196f,width)+offsetY, paint);
             } else if (mm.equals("29")){
                 canvas.drawBitmap(n29, SysPypots.size(243f,width)+offsetX, SysPypots.size(196f,width)+offsetY, paint);
+            } else if (mm.equals("52")){
+                canvas.drawBitmap(n52, SysPypots.size(243f,width)+offsetX, SysPypots.size(196f,width)+offsetY, paint);
             } else if (mm.equals("53")){
                 canvas.drawBitmap(n53, SysPypots.size(243f,width)+offsetX, SysPypots.size(196f,width)+offsetY, paint);
             } else if (mm.equals("57")){

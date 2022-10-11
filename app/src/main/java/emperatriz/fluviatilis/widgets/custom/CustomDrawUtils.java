@@ -10,12 +10,9 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import emperatriz.fluviatilis.widgets.pypots.SysPypots;
 
 public class CustomDrawUtils {
     public static int height,width, p20;
@@ -45,9 +42,17 @@ public class CustomDrawUtils {
     public static void drawNoNotifications(int color, Bitmap by, Paint paint2){
         Paint paint = paint2;
         paint.setColorFilter(new LightingColorFilter(color, 1));
-        canvas.drawBitmap(by,(width / 2 - by.getWidth()/2)+offsetX, SysPypots.size(290, width)+offsetY, paint);
+        canvas.drawBitmap(by,(width / 2 - by.getWidth()/2)+offsetX, size(290, width)+offsetY, paint);
 
 
+    }
+
+    public static float size(float size, int totalSize){
+        return (size*totalSize)/454;
+    }
+
+    public static int size(int size, int totalSize){
+        return Math.round((size*totalSize)/454);
     }
 
     public static float dayProgress(String time1, String time2, Calendar now){
@@ -100,7 +105,7 @@ public class CustomDrawUtils {
     public static void drawDayTimes(int color, String rise, String noon, String set, String nadir, Calendar now, Paint paint2, boolean continuo){
         RectF r1 = new RectF();
 
-        paint.setStrokeWidth(SysPypots.size(20, width));
+        paint.setStrokeWidth(size(20, width));
         paint.setAntiAlias(true);
         if (isInAmbientMode){
             paint.setColor(0xff666666);
@@ -168,7 +173,7 @@ public class CustomDrawUtils {
         else{
             for (int i=0;i<=72;i++){
                 if (progDiscrete<i){
-                    paint.setStrokeWidth(SysPypots.size(15, width));
+                    paint.setStrokeWidth(size(15, width));
                     canvas.drawArc(r1, 198+i*2, 1, false, paint);
                 }
             }
@@ -181,7 +186,7 @@ public class CustomDrawUtils {
         else{
             for (int i=0;i<=72;i++){
                 if (progDiscrete>=i){
-                    paint.setStrokeWidth(SysPypots.size(20, width));
+                    paint.setStrokeWidth(size(20, width));
                     canvas.drawArc(r1, 198+i*2, 1, false, paint);
                 }
             }
@@ -198,12 +203,12 @@ public class CustomDrawUtils {
         paint2.setTextAlign(Paint.Align.LEFT);
         paint2.setAntiAlias(true);
         paint2.setTextSize(p20(0.93f));
-        //canvas.drawTextOnPath(time1, circle, SysPypots.size(506f, width), SysPypots.size(6, width), paint2);
-        canvas.drawTextOnPath(time1, circle, (float) (radius*Math.PI*1.12f), SysPypots.size(6, width), paint2);
+        //canvas.drawTextOnPath(time1, circle, size(506f, width), size(6, width), paint2);
+        canvas.drawTextOnPath(time1, circle, (float) (radius* Math.PI*1.12f), size(6, width), paint2);
         paint2.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawTextOnPath(time3, circle, (float) (radius*Math.PI*-0.12f), SysPypots.size(6, width), paint2);
+        canvas.drawTextOnPath(time3, circle, (float) (radius* Math.PI*-0.12f), size(6, width), paint2);
         paint2.setTextAlign(Paint.Align.CENTER);
-        canvas.drawTextOnPath(time2, circle, (float) (radius*Math.PI*0.5f), SysPypots.size(6, width), paint2);
+        canvas.drawTextOnPath(time2, circle, (float) (radius* Math.PI*0.5f), size(6, width), paint2);
 
     }
 
@@ -219,12 +224,12 @@ public class CustomDrawUtils {
         if (continuo){
             paint.setStrokeCap(Paint.Cap.ROUND);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(SysPypots.size(20, width));
+            paint.setStrokeWidth(size(20, width));
         }
         else{
             paint.setStrokeCap(Paint.Cap.BUTT);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(SysPypots.size(20, width));
+            paint.setStrokeWidth(size(20, width));
         }
         paint.setAntiAlias(true);
 
@@ -247,7 +252,7 @@ public class CustomDrawUtils {
             levelDiscrete = Math.round((level*36)/100);
             for (int i=0;i<=35;i++){
                 if (levelDiscrete<i){
-                    paint.setStrokeWidth(SysPypots.size(15, width));
+                    paint.setStrokeWidth(size(15, width));
                     canvas.drawArc(r1, 92+i*2, 1, false, paint);
                 }
             }
@@ -264,7 +269,7 @@ public class CustomDrawUtils {
             //canvas.drawArc(r1, 95, sweepAngle, false, paint);
             for (int i=0;i<=35;i++){
                 if (levelDiscrete>=i){
-                    paint.setStrokeWidth(SysPypots.size(20, width));
+                    paint.setStrokeWidth(size(20, width));
                     canvas.drawArc(r1, 92+i*2, 1, false, paint);
                 }
             }
@@ -283,12 +288,12 @@ public class CustomDrawUtils {
         paint2.setAntiAlias(true);
         paint2.setTextSize(p20(0.93f));
         paint2.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawTextOnPath(value, circle2, (float) (radius*Math.PI*-0.52f), SysPypots.size(9, width), paint2);
+        canvas.drawTextOnPath(value, circle2, (float) (radius* Math.PI*-0.52f), size(9, width), paint2);
         paint2.setTextAlign(Paint.Align.LEFT);
-        canvas.drawTextOnPath(title, circle2, (float) (radius*Math.PI*1.12f), SysPypots.size(9, width), paint2);
+        canvas.drawTextOnPath(title, circle2, (float) (radius* Math.PI*1.12f), size(9, width), paint2);
     }
 
-    public static void drawRightComplication(int color, int level, String title, String value,  Paint paint2, boolean continuo){
+    public static void drawRightComplication(int color, int level, String title, String value, Paint paint2, boolean continuo){
         RectF r1 = new RectF();
 
         if (isInAmbientMode){
@@ -300,12 +305,12 @@ public class CustomDrawUtils {
         if (continuo){
             paint.setStrokeCap(Paint.Cap.ROUND);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(SysPypots.size(20, width));
+            paint.setStrokeWidth(size(20, width));
         }
         else{
             paint.setStrokeCap(Paint.Cap.BUTT);
             paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeWidth(SysPypots.size(20, width));
+            paint.setStrokeWidth(size(20, width));
         }
         paint.setAntiAlias(true);
 
@@ -327,7 +332,7 @@ public class CustomDrawUtils {
             levelDiscrete = Math.round((level*36)/100);
             for (int i=0;i<=35;i++){
                 if (levelDiscrete<i){
-                    paint.setStrokeWidth(SysPypots.size(15, width));
+                    paint.setStrokeWidth(size(15, width));
                     canvas.drawArc(r1, 87-i*2, 1, false, paint);
                 }
             }
@@ -343,7 +348,7 @@ public class CustomDrawUtils {
             //canvas.drawArc(r1, 95, sweepAngle, false, paint);
             for (int i=0;i<=35;i++){
                 if (levelDiscrete>=i){
-                    paint.setStrokeWidth(SysPypots.size(20, width));
+                    paint.setStrokeWidth(size(20, width));
                     canvas.drawArc(r1, 87-i*2, 1, false, paint);
                 }
             }
@@ -360,10 +365,10 @@ public class CustomDrawUtils {
         paint2.setAntiAlias(true);
         paint2.setTextSize(p20(0.93f));
         paint2.setTextAlign(Paint.Align.LEFT);
-        canvas.drawTextOnPath(value, circle2, (float)(radius*Math.PI*1.52f), SysPypots.size(9, width), paint2);
+        canvas.drawTextOnPath(value, circle2, (float)(radius* Math.PI*1.52f), size(9, width), paint2);
         paint2.setTextAlign(Paint.Align.RIGHT);
 
-        canvas.drawTextOnPath(title, circle2, (float)(radius*Math.PI*-0.12f), SysPypots.size(9, width), paint2);
+        canvas.drawTextOnPath(title, circle2, (float)(radius* Math.PI*-0.12f), size(9, width), paint2);
     }
 
     public static void drawDate(int color, Calendar now, Typeface font2){
@@ -380,15 +385,15 @@ public class CustomDrawUtils {
         Paint p = new Paint();
         p.setAntiAlias(false);
         p.setColor(color);
-        p.setTextSize(SysPypots.size(41, width));
+        p.setTextSize(size(41, width));
         p.setTypeface(font2);
         float textWidth = p.measureText(dia.format(now.getTime()));
         p.setStyle(Paint.Style.FILL);
-        canvas.drawText(dia.format(now.getTime()),(width/2-textWidth/2)+offsetX, SysPypots.size(168, width)+offsetY,p);
+        canvas.drawText(dia.format(now.getTime()),(width/2-textWidth/2)+offsetX, size(168, width)+offsetY,p);
 //        p.setStyle(Paint.Style.STROKE);
 //        p.setColor(0xff000000);
 //        canvas.drawText(dia.format(now.getTime()),(width/2-textWidth/2)+offsetX,169+offsetY,p);
-        p.setTextSize(SysPypots.size(24, width));
+        p.setTextSize(size(24, width));
         p.setStyle(Paint.Style.FILL);
         //p.setColor(0xff999999);
         float textWidth2 = p.measureText(diaNombre.format(now.getTime()).replace(".",""));
@@ -396,12 +401,12 @@ public class CustomDrawUtils {
 
 
 
-        canvas.drawText(diaNombre.format(now.getTime()).replace(".",""),(width/2-Math.round(textWidth/2))-(textWidth2+1)-margin+offsetX+1, SysPypots.size(168, width)+offsetY,p);
-        canvas.drawText(mes3,(width/2+Math.round(textWidth/2))+margin+offsetX-1, SysPypots.size(168, width)+offsetY,p);
+        canvas.drawText(diaNombre.format(now.getTime()).replace(".",""),(width/2- Math.round(textWidth/2))-(textWidth2+1)-margin+offsetX+1, size(168, width)+offsetY,p);
+        canvas.drawText(mes3,(width/2+ Math.round(textWidth/2))+margin+offsetX-1, size(168, width)+offsetY,p);
 
 
-        float right = (width/2+Math.round(textWidth/2))+margin+offsetX-1;
-        float left = (width/2-Math.round(textWidth/2))-(1)-margin+offsetX+1;
+        float right = (width/2+ Math.round(textWidth/2))+margin+offsetX-1;
+        float left = (width/2- Math.round(textWidth/2))-(1)-margin+offsetX+1;
 
         if (width==454){
             Paint p4 = new Paint();
@@ -422,8 +427,8 @@ public class CustomDrawUtils {
         }
 //        else{
 //            paint.setAlpha(120);
-//            canvas.drawBitmap(shadowLeft, left-SysPypots.size(20f,width), SysPypots.size(145f,width)+offsetY, paint);
-//            canvas.drawBitmap(shadowRight, right, SysPypots.size(145f,width)+offsetY, paint);
+//            canvas.drawBitmap(shadowLeft, left-size(20f,width), size(145f,width)+offsetY, paint);
+//            canvas.drawBitmap(shadowRight, right, size(145f,width)+offsetY, paint);
 //            paint.setAlpha(255);
 //        }
 

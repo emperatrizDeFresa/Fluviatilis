@@ -1,11 +1,15 @@
 package emperatriz.fluviatilis.themes
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
 import emperatriz.fluviatilis.liveWallpaper.R
 import emperatriz.fluviatilis.model.WallpaperModel
 import emperatriz.fluviatilis.widgets.WidgetDrawer
@@ -13,6 +17,7 @@ import emperatriz.fluviatilis.widgets.custom.CustomDrawer
 import emperatriz.fluviatilis.widgets.pypots.PypotsDrawer
 import emperatriz.fluviatilis.widgets.spin.SpinDrawUtils
 import emperatriz.fluviatilis.widgets.spin.SpinDrawer
+import java.util.*
 
 
 /**
@@ -55,7 +60,13 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
         theme.horizontalOffset = Math.round(theme.horizontalOffset*vProportion)
         theme.verticalOffset = Math.round(theme.verticalOffset*vProportion)
 
-        model.initFluvs()
+        if (theme.mode==1){
+            model.initFluvs()
+        }
+        else{
+            model.initBars(theme.colorLeft, theme.color, theme.colorRight)
+        }
+
     }
     lateinit var gradientTop: Bitmap
     lateinit var gradientBottom: Bitmap
@@ -125,99 +136,143 @@ class ThemePreview @JvmOverloads constructor(context: Context, attrs: AttributeS
             }
         }
 
-        val verticalOffset = theme.verticalOffset
-        val horizontalOffset = theme.horizontalOffset
-        canvas.save()
-        canvas.translate(horizontalOffset.toFloat(), verticalOffset.toFloat())
+        if (theme.mode==1){
 
-        canvas.rotate(theme.rotation.toFloat(), (width / 2).toFloat(), ((height) / 2).toFloat())
+            val verticalOffset = theme.verticalOffset
+            val horizontalOffset = theme.horizontalOffset
+            canvas.save()
+            canvas.translate(horizontalOffset.toFloat(), verticalOffset.toFloat())
 
-        //model.fluvHeight = Math.round(((height) * (theme.heightness.toFloat() / 100f)) / theme.fluvNumber).toInt()
-        model.fluvNumber = theme.fluvNumber
-        model.speed = 0
-        model.fluvWeight = theme.fluvWeight
-        model.fps=60
-        model.wideness = theme.wideness
-        color = theme.color
-        paintArc.color = color
-        paintArc.isAntiAlias = true
-        colorRight = theme.colorRight
-        colorLeft = theme.colorLeft
-        paint.color = color
-        paintLeft.color=colorLeft
-        paintLeft2.color=colorLeft
-        paintRight2.color=colorRight
-        paintRight.color=colorRight
+            canvas.rotate(theme.rotation.toFloat(), (width / 2).toFloat(), ((height) / 2).toFloat())
+
+            //model.fluvHeight = Math.round(((height) * (theme.heightness.toFloat() / 100f)) / theme.fluvNumber).toInt()
+            model.fluvNumber = theme.fluvNumber
+            model.speed = 0
+            model.fluvWeight = theme.fluvWeight
+            model.fps=60
+            model.wideness = theme.wideness
+            color = theme.color
+            paintArc.color = color
+            paintArc.isAntiAlias = true
+            colorRight = theme.colorRight
+            colorLeft = theme.colorLeft
+            paint.color = color
+            paintLeft.color=colorLeft
+            paintLeft2.color=colorLeft
+            paintRight2.color=colorRight
+            paintRight.color=colorRight
 
 
-        canvas.drawColor(Color.BLACK)
+            canvas.drawColor(Color.BLACK)
 
-        if (model.fluvWeight!=0){
-            paintArc.style = Paint.Style.STROKE
-            paintArc.strokeWidth = model.fluvWeight.toFloat()
+            if (model.fluvWeight!=0){
+                paintArc.style = Paint.Style.STROKE
+                paintArc.strokeWidth = model.fluvWeight.toFloat()
 
-            canvas.drawRect((-height - hOffset).toFloat(), -hOffset * 1f, width / 2f, (height + hOffset * 1f).toFloat(), paintLeft)
-            canvas.drawRect((width / 2).toFloat(), -hOffset * 1f, (height + hOffset).toFloat(), (height + hOffset * 1f).toFloat(), paintRight)
+                canvas.drawRect((-height - hOffset).toFloat(), -hOffset * 1f, width / 2f, (height + hOffset * 1f).toFloat(), paintLeft)
+                canvas.drawRect((width / 2).toFloat(), -hOffset * 1f, (height + hOffset).toFloat(), (height + hOffset * 1f).toFloat(), paintRight)
 
-            paintLeft.strokeWidth = model.fluvHeight.toFloat()
-            paintRight.strokeWidth = model.fluvHeight.toFloat()
+                paintLeft.strokeWidth = model.fluvHeight.toFloat()
+                paintRight.strokeWidth = model.fluvHeight.toFloat()
 
-            var y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
-            var i = 0
-            drawFirstBackground(canvas, y.toFloat(), true)
-            model.fluvs.forEach{
-                if (i++%2==0){
-                    drawFluvBackground(canvas, Rect(width / 2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true)
+                var y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
+                var i = 0
+                drawFirstBackground(canvas, y.toFloat(), true)
+                model.fluvs.forEach{
+                    if (i++%2==0){
+                        drawFluvBackground(canvas, Rect(width / 2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true)
+                    }
+                    else{
+                        drawFluvBackground(canvas, Rect((width / 2 - it.size).toInt(), y, width / 2, y + model.fluvHeight), false)
+                    }
+
+                    y += model.fluvHeight
                 }
-                else{
-                    drawFluvBackground(canvas, Rect((width / 2 - it.size).toInt(), y, width / 2, y + model.fluvHeight), false)
-                }
+                drawLastBackground(canvas, y.toFloat(), i % 2 != 0)
+                y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
+                i = 0
+                drawFirst(canvas, y.toFloat(), true)
+                model.fluvs.forEach{
+                    if (i++%2==0){
+                        drawFluv(canvas, Rect((width / 2)-1, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true, i == 1, i == model.fluvNumber)
+                    }
+                    else{
+                        drawFluv(canvas, Rect((width / 2 - it.size).toInt(), y, (width / 2)+1, y + model.fluvHeight), false, i == 1, i == model.fluvNumber)
+                    }
 
-                y += model.fluvHeight
+                    y += model.fluvHeight
+                }
+                drawLast(canvas, y.toFloat(), i % 2 != 0)
+
+
+
+                canvas.rotate(theme.rotation.toFloat(), (width / 2).toFloat(), ((height - hOffset) / 2).toFloat())
+
+                canvas.restore()
+
+                val shaderHeight=theme.dimHeight
+                paintAlpha.alpha = theme.dimAlpha
+                canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha)
+                canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height) - shaderHeight).toFloat(), width.toFloat(), (height).toFloat()), paintAlpha)
+
+
+
+
+
+
             }
-            drawLastBackground(canvas, y.toFloat(), i % 2 != 0)
-            y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
-            i = 0
-            drawFirst(canvas, y.toFloat(), true)
-            model.fluvs.forEach{
-                if (i++%2==0){
-                    drawFluv(canvas, Rect((width / 2)-1, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true, i == 1, i == model.fluvNumber)
-                }
-                else{
-                    drawFluv(canvas, Rect((width / 2 - it.size).toInt(), y, (width / 2)+1, y + model.fluvHeight), false, i == 1, i == model.fluvNumber)
-                }
-
-                y += model.fluvHeight
-            }
-            drawLast(canvas, y.toFloat(), i % 2 != 0)
-
-
-
-            canvas.rotate(theme.rotation.toFloat(), (width / 2).toFloat(), ((height - hOffset) / 2).toFloat())
-
-            canvas.restore()
-
-            val shaderHeight=theme.dimHeight
-            paintAlpha.alpha = theme.dimAlpha
-            canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha)
-            canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height) - shaderHeight).toFloat(), width.toFloat(), (height).toFloat()), paintAlpha)
-
-
-
-
-//            if (theme.widgetSelected>0){
-//
-//                val widgetX =  theme.widgetX
-//                val widgetY =  theme.widgetY
-//
-//                    widget.init(context, widgetX!!, widgetY!!, theme.widgetXsize!!, theme.widgetXsize!!)
-//
-//
-//                widget.draw(canvas, false, widgetX!!, widgetY!!)
-//            }
-
-
         }
+        else{
+            hOffset = height
+
+            canvas.save()
+            //canvas.translate(horizontalOffset.toFloat(),verticalOffset.toFloat())
+
+            canvas.rotate(theme.rotation.toFloat(),width*0.5f,height*0.5f)
+
+
+            model.fluvHeight = Math.round((height / theme.fluvNumber).toDouble()).toInt()
+            model.fluvNumber = theme.fluvNumber
+            model.speed = theme.speed
+            model.fluvWeight = theme.fluvWeight
+            model.fps=60
+            model.wideness = 0
+            val color_ = theme.color
+            val colorRight_ = theme.colorRight
+            val colorLeft_ = theme.colorLeft
+            paint.color = color
+
+
+
+            canvas.drawColor(Color.BLACK)
+
+            if (model.fluvWeight!=0) {
+
+                var y = height / -2//-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
+                var i = 0
+                model.bars.forEach {
+                    paint.color = it.actualColor
+                    canvas.drawRect(-1f * width, y * 1f - 2, width * 2f, y * 1f +model.fluvHeight +2 , paint)
+
+                    y += Math.round(model.fluvHeight*1f)
+                }
+
+
+
+
+                canvas.rotate(-theme.rotation.toFloat(), width * 0.5f, height * 0.5f)
+
+                canvas.restore()
+
+                val shaderHeight = theme.dimHeight
+                paintAlpha.alpha = theme.dimAlpha
+                canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha)
+                canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height) - shaderHeight).toFloat(), width.toFloat(), (height).toFloat()), paintAlpha)
+
+
+            }
+        }
+
 
     }
 

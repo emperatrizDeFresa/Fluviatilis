@@ -1,6 +1,7 @@
 package emperatriz.fluviatilis.themes
 
 data class Theme (
+        var mode:Int,
         var fluvHeight:Int,
         var fluvNumber: Int,
         var fluvWeight: Int,
