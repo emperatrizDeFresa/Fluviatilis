@@ -102,6 +102,10 @@ data class WallpaperModel(var fluvHeight:Int,
         return 400
     }
 
+    fun maxBarSize():Int{
+        return 100
+    }
+
     fun maxSpeed():Int{
         return 10
     }
@@ -115,7 +119,7 @@ data class WallpaperModel(var fluvHeight:Int,
             bars = mutableListOf<Bar>()
         }
         bars?.let{it.clear()}
-        for (x in 1..fluvNumber*2){
+        for (x in 1..fluvNumber){
             val color = if (x%3==0) color1 else if (x%3==1) color2 else color3
             val color_ = if (x%3==0) color2 else if (x%3==1) color3 else color1
             bars.add(Bar(fluvHeight *1f, SuperColor(Color.red(color).toDouble(),Color.green(color).toDouble(),Color.blue(color).toDouble()),color, color, color_))

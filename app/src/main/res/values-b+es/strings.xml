@@ -17,7 +17,7 @@
 
     <string name="wide">Anchura de la línea central</string>
     <string name="wrinkles">Cantidad de pliegues</string>
-    <string name="bars">Cantidad de barras</string>
+    <string name="bars">Tamaño de barras</string>
     <string name="speed">Velocidad</string>
     <string name="amphor">Amplitud horizontal</string>
     <string name="ampver">Amplitud vertical</string>

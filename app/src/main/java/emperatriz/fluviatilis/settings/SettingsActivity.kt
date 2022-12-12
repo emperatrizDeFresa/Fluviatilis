@@ -375,9 +375,9 @@ class SettingsActivity : BaseSettingsActivity() {
 
 
 
-            fluvNumber_.min = 4
-            fluvNumber_.max = getRendererModel(preferences).maxFluvNumber()
-            fluvNumber_.progress = preferences.getInt("fluvNumber_", 4)
+            fluvNumber_.min = 1
+            fluvNumber_.max = getRendererModel(preferences).maxBarSize()
+            fluvNumber_.progress = preferences.getInt("fluvNumber_", 20)
             fluvNumber_.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
                     showAll(settingsPanel, settingsPanel2_)
@@ -389,14 +389,13 @@ class SettingsActivity : BaseSettingsActivity() {
 
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     vibra(2)
-                    getRendererModel(preferences).fluvNumber = Math.max(4, progress)
-                    getRendererModel(preferences).fluvHeight = Math.round(getRendererModel(preferences).height*1f / Math.max(4, progress)).toInt()
+                    getRendererModel(preferences).fluvHeight = progress
                     getRendererModel(preferences).initBars(preferences.getInt("colorLeft_", Color.rgb(50, 50, 50)),
                                                            preferences.getInt("color_", Color.rgb(50, 50, 50)),
                                                            preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
-                    preferences.edit().putInt("fluvNumber_", Math.max(4, progress)).apply()
+                    preferences.edit().putInt("fluvNumber_", Math.max(1, progress)).apply()
                     preferences.edit().putBoolean("changed", true).apply()
-                    separatorWidth.max = getRendererModel(preferences).maxFluvWeight()
+
                 }
             })
 
@@ -1429,6 +1428,7 @@ class SettingsActivity : BaseSettingsActivity() {
                             preferences.getInt("color_", Color.rgb(50, 50, 50)),
                             preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
                     preferences.edit().putBoolean("changed", true).apply()
+                    preferences.edit().putBoolean("changedWallpaper", true).apply()
                 }
 
                 val lumGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),
@@ -1470,6 +1470,7 @@ class SettingsActivity : BaseSettingsActivity() {
                             preferences.getInt("color_", Color.rgb(50, 50, 50)),
                             preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
                     preferences.edit().putBoolean("changed", true).apply()
+                    preferences.edit().putBoolean("changedWallpaper", true).apply()
                 }
 
 
@@ -1502,6 +1503,7 @@ class SettingsActivity : BaseSettingsActivity() {
                             preferences.getInt("color_", Color.rgb(50, 50, 50)),
                             preferences.getInt("colorRight_", Color.rgb(50, 50, 50)))
                     preferences.edit().putBoolean("changed", true).apply()
+                    preferences.edit().putBoolean("changedWallpaper", true).apply()
                 }
 
                 val satGradient = LinearGradient(0f, 0f, window.windowManager.defaultDisplay.width - (colorPicker.paddingLeft + colorPicker.paddingRight + cpColor.paddingLeft.toFloat() + cpColor.paddingRight.toFloat()),

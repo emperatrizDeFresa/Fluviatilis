@@ -135,34 +135,34 @@ class WallpaperDrawer : WallpaperRenderer {
 
     override fun setCanvasSize(width: Int, height: Int) {
 
-        val fluvheight = Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt()
-        paintArc.style = Paint.Style.STROKE
-        paintArc.strokeWidth = preferences.getInt("fluvWeight", 12).toFloat()
-        paintArc.isAntiAlias = true
-        paintLeft.strokeWidth = fluvheight.toFloat()+1
-        paintLeft.color=colorLeft
-        paintRight.strokeWidth = fluvheight.toFloat()+1
-        paintRight.color=colorRight
-        paintLeft2.strokeWidth = 0F
-        paintLeft2.color=colorLeft
-        paintRight2.strokeWidth = 0F
-        paintRight2.color=colorRight
+            val fluvheight = Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt()
+            paintArc.style = Paint.Style.STROKE
+            paintArc.strokeWidth = preferences.getInt("fluvWeight", 12).toFloat()
+            paintArc.isAntiAlias = true
+            paintLeft.strokeWidth = fluvheight.toFloat()+1
+            paintLeft.color=colorLeft
+            paintRight.strokeWidth = fluvheight.toFloat()+1
+            paintRight.color=colorRight
+            paintLeft2.strokeWidth = 0F
+            paintLeft2.color=colorLeft
+            paintRight2.strokeWidth = 0F
+            paintRight2.color=colorRight
 
-        if (preferences.getInt("mode",1)==1){
-            this.width = width
-            this.height = height+hOffset
-            var margin = preferences.getInt("fluvWeight", 12)*2
-            model = WallpaperModel(fluvheight,
-                    margin,
-                    (width / 2) - margin,
-                    preferences.getInt("fluvNumber", 16),
-                    preferences.getInt("fluvWeight", 12),
-                    60,
-                    isWallpaper,
-                    height,
-                    width,
-                    preferences.getInt("speed", 2),
-                    preferences.getInt("wideness", 380))
+            if (preferences.getInt("mode",1)==1){
+                this.width = width
+                this.height = height//+hOffset
+                var margin = preferences.getInt("fluvWeight", 12)*2
+                model = WallpaperModel(fluvheight,
+                        margin,
+                        (height / 2) - margin,
+                        preferences.getInt("fluvNumber", 16),
+                        preferences.getInt("fluvWeight", 12),
+                        60,
+                        isWallpaper,
+                        height,
+                        height,
+                        preferences.getInt("speed", 2),
+                        preferences.getInt("wideness", 380))
 //            paintArc.style = Paint.Style.STROKE
 //            paintArc.strokeWidth = preferences.getInt("fluvWeight", 12).toFloat()
 //            paintArc.isAntiAlias = true
@@ -174,28 +174,27 @@ class WallpaperDrawer : WallpaperRenderer {
 //            paintLeft2.color=colorLeft
 //            paintRight2.strokeWidth = 0F
 //            paintRight2.color=colorRight
-            model.initFluvs()
-        }
-        else{
-            this.width = width
-            this.height = height+hOffset
-            color_ = preferences.getInt("color_", Color.BLACK)
-            colorRight_ = preferences.getInt("colorRight_", Color.rgb(100, 100, 100))
-            colorLeft_ = preferences.getInt("colorLeft_", Color.rgb(50, 50, 50))
-            model = WallpaperModel(Math.round((height/ preferences.getInt("fluvNumber_", 16)).toDouble()).toInt(),
-                    4,
-                    100,
-                    preferences.getInt("fluvNumber_", 16),
-                    preferences.getInt("fluvWeight_", 12),
-                    60,
-                    isWallpaper,
-                    height,
-                    width,
-                    preferences.getInt("speed_", 2),
-                    0)
-            model.initBars(colorLeft_, color_, colorRight_)
-        }
-
+                model.initFluvs()
+            }
+            else{
+                this.width = width
+                this.height = height
+                color_ = preferences.getInt("color_", Color.BLACK)
+                colorRight_ = preferences.getInt("colorRight_", Color.rgb(100, 100, 100))
+                colorLeft_ = preferences.getInt("colorLeft_", Color.rgb(50, 50, 50))
+                model = WallpaperModel(preferences.getInt("fluvNumber_", 20),
+                        4,
+                        100,
+                        3,
+                        preferences.getInt("fluvWeight_", 12),
+                        60,
+                        isWallpaper,
+                        width,
+                        height,
+                        preferences.getInt("speed_", 2),
+                        0)
+                model.initBars(colorLeft_, color_, colorRight_)
+            }
     }
 
     fun refresh(theme: Theme){
@@ -205,283 +204,294 @@ class WallpaperDrawer : WallpaperRenderer {
     var lastUpdated:Boolean=false
 
     override fun draw(canvas: Canvas) {
-        if (preferences.getInt("mode",1)==1){
-            hOffset = height
 
-            if (preferences.getBoolean("showWidget", false)) {
-                when(preferences.getString("selectedWidget", "pypots")){
-                    "pypots" ->{
-                        widget = pypotsWidget
-                    }
-                    "spin" ->{
-                        widget = spinWidget
-                    }
-                    "custom" ->{
-                        widget = customWidget
-                    }
-                }
-            }
-
-            val verticalOffset = preferences.getInt("verticalOffset",0)
-            val horizontalOffset = preferences.getInt("horizontalOffset",0)
-            canvas.save()
-            canvas.translate(horizontalOffset.toFloat(),verticalOffset.toFloat())
-
-            canvas.rotate(preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height)/2).toFloat())
-
-            model.fluvHeight = Math.round(((height) * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt()
-            model.fluvNumber = preferences.getInt("fluvNumber", 16)
-            model.speed = preferences.getInt("speed", 2)
-            model.fluvWeight = preferences.getInt("fluvWeight", 12)
-            model.fps=60
-            model.wideness = preferences.getInt("wideness", 380)
-            color = preferences.getInt("color", Color.BLACK)
-            colorRight = preferences.getInt("colorRight", Color.rgb(100, 100, 100))
-            colorLeft = preferences.getInt("colorLeft", Color.rgb(50, 50, 50))
-            paint.color = color
-            paintLeft.color=colorLeft
-            paintLeft2.color=colorLeft
-            paintRight2.color=colorRight
-            paintRight.color=colorRight
-
-            if (preferences.getBoolean("changed", false)){
-                model.initFluvs()
-                preferences.edit().putBoolean("changed", false).apply()
-            }
-            if (isWallpaper && preferences.getBoolean("changedWallpaper", false)){
-                var margin = preferences.getInt("fluvWeight", 12)*2
-                model = WallpaperModel(Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt(),
-                        margin,
-                        (width / 2) - margin,
-                        preferences.getInt("fluvNumber", 16),
-                        preferences.getInt("fluvWeight", 12),
-                        60,
-                        isWallpaper,
-                        height,
-                        width,
-                        preferences.getInt("speed", 2),
-                        preferences.getInt("wideness", 380))
-                model.initFluvs()
-                preferences.edit().putBoolean("changedWallpaper", false).apply()
-            }
+            if (preferences.getInt("mode",1)==1){
+                hOffset = height
 
 
-            canvas.drawColor(Color.BLACK)
-
-            if (model.fluvWeight!=0){
-                paintArc.strokeWidth = model.fluvWeight.toFloat()
-                paintLeft.strokeWidth = 0f
-                paintRight.strokeWidth = 0f
-
-                canvas.drawRect((-height-hOffset).toFloat(),-hOffset*1f,width/2f,(height+hOffset*1f).toFloat(),paintLeft)
-                canvas.drawRect((width/2).toFloat(),-hOffset*1f,(height+hOffset).toFloat(),(height+hOffset*1f).toFloat(),paintRight)
-
-                paintLeft.strokeWidth = model.fluvHeight.toFloat()+1
-                paintRight.strokeWidth = model.fluvHeight.toFloat()+1
-
-                var y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
-                var i = 0
-                drawFirstBackground(canvas, y.toFloat(), true)
-                model.fluvs.forEach{
-                    if (i++%2==0){
-                        drawFluvBackground(canvas, Rect(width / 2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true)
-                    }
-                    else{
-                        drawFluvBackground(canvas, Rect((width / 2 - it.size).toInt(), y, width / 2, y + model.fluvHeight), false)
-                    }
-
-                    y += model.fluvHeight
-                }
-                drawLastBackground(canvas, y.toFloat(), i % 2 != 0)
-                y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
-                i = 0
-                drawFirst(canvas, y.toFloat(), true)
-                model.fluvs.forEach{
-                    if (i++%2==0){
-                        drawFluv(canvas, Rect((width / 2)-2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true, i == 1, i == model.fluvNumber)
-                    }
-                    else{
-                        drawFluv(canvas, Rect((width / 2 - it.size).toInt(), y, (width / 2)+2, y + model.fluvHeight), false, i == 1, i == model.fluvNumber)
-                    }
-
-                    y += model.fluvHeight
-                }
-                drawLast(canvas, y.toFloat(), i % 2 != 0)
-
-
-
-                canvas.rotate(-preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height-hOffset)/2).toFloat())
-
-                canvas.restore()
-
-                val shaderHeight=preferences.getInt("dimHeight", 100)
-                paintAlpha.alpha = preferences.getInt("dimAlpha", 125)
-                canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha)
-                canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height)-shaderHeight).toFloat(), width.toFloat(), (height).toFloat()), paintAlpha)
-
-
-
-                if (preferences.getLong("lastLocation",0L)>4*60*60*1000){
-                    if (ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                        LocationServices.getFusedLocationProviderClient(context).lastLocation.addOnSuccessListener {
-                            it?.let {
-                                preferences.edit().putLong("latitude",it.latitude.toLong())
-                                preferences.edit().putLong("longitude",it.longitude.toLong())
-                                preferences.edit().putLong("lastLocation",Calendar.getInstance().time.time)
-                            }
+                if (preferences.getBoolean("showWidget", false)) {
+                    when(preferences.getString("selectedWidget", "pypots")){
+                        "pypots" ->{
+                            widget = pypotsWidget
+                        }
+                        "spin" ->{
+                            widget = spinWidget
+                        }
+                        "custom" ->{
+                            widget = customWidget
                         }
                     }
                 }
 
+                val verticalOffset = preferences.getInt("verticalOffset",0)
+                val horizontalOffset = preferences.getInt("horizontalOffset",0)
+                canvas.save()
+                canvas.translate(horizontalOffset.toFloat(),verticalOffset.toFloat())
 
+                canvas.rotate(preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height)/2).toFloat())
 
-                if (preferences.getBoolean("showWidget", false)){
+                model.fluvHeight = Math.round(((height) * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt()
+                model.fluvNumber = preferences.getInt("fluvNumber", 16)
+                model.speed = preferences.getInt("speed", 2)
+                model.fluvWeight = preferences.getInt("fluvWeight", 12)
+                model.fps=60
+                model.wideness = preferences.getInt("wideness", 380)
+                color = preferences.getInt("color", Color.BLACK)
+                colorRight = preferences.getInt("colorRight", Color.rgb(100, 100, 100))
+                colorLeft = preferences.getInt("colorLeft", Color.rgb(50, 50, 50))
+                paint.color = color
+                paintLeft.color=colorLeft
+                paintLeft2.color=colorLeft
+                paintRight2.color=colorRight
+                paintRight.color=colorRight
 
-                    val widgetX =  preferences.getInt("widgetX", 0)// - preferences.getInt("widgetXsize", 454) / 2
-                    val widgetY =  preferences.getInt("widgetY", 0)// - preferences.getInt("widgetXsize", 454) / 2
-                    if (!widget.isInitialized()){
-                        widget.init(context, widgetX, widgetY, preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
-                    }
-                    if (isWallpaper && preferences.getBoolean("changedWidgetWallpaper", false)){
-                        widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
-                        preferences.edit().putBoolean("changedWidgetWallpaper", false).apply()
-                    }
-                    if (!isWallpaper && preferences.getBoolean("changedWidget", false)){
-                        widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
-                        preferences.edit().putBoolean("changedWidget", false).apply()
-                    }
-
-                    widget.draw(canvas, isWallpaper, widgetX, widgetY)
+                if (preferences.getBoolean("changed", false)){
+                    model.initFluvs()
+                    preferences.edit().putBoolean("changed", false).apply()
+                }
+                if (isWallpaper && preferences.getBoolean("changedWallpaper", false)){
+                    var margin = preferences.getInt("fluvWeight", 12)*2
+                    model = WallpaperModel(Math.round((height * (preferences.getInt("heightness", 15)).toFloat() / 100) / preferences.getInt("fluvNumber", 16)).toInt(),
+                            margin,
+                            (width / 2) - margin,
+                            preferences.getInt("fluvNumber", 16),
+                            preferences.getInt("fluvWeight", 12),
+                            60,
+                            isWallpaper,
+                            height,
+                            width,
+                            preferences.getInt("speed", 2),
+                            preferences.getInt("wideness", 380))
+                    model.initFluvs()
+                    preferences.edit().putBoolean("changedWallpaper", false).apply()
                 }
 
 
-                model.updateFluvs(preferences)
+                canvas.drawColor(Color.BLACK)
 
-            }
+                if (model.fluvWeight!=0){
+                    paintArc.strokeWidth = model.fluvWeight.toFloat()
+                    paintLeft.strokeWidth = 0f
+                    paintRight.strokeWidth = 0f
 
-        }
-        else{
-            hOffset = height
+                    canvas.drawRect((-height-hOffset).toFloat(),-hOffset*1f,width/2f,(height+hOffset*1f).toFloat(),paintLeft)
+                    canvas.drawRect((width/2).toFloat(),-hOffset*1f,(height+hOffset).toFloat(),(height+hOffset*1f).toFloat(),paintRight)
 
-            if (preferences.getBoolean("showWidget", false)) {
-                when(preferences.getString("selectedWidget", "pypots")){
-                    "pypots" ->{
-                        widget = pypotsWidget
+                    paintLeft.strokeWidth = model.fluvHeight.toFloat()+1
+                    paintRight.strokeWidth = model.fluvHeight.toFloat()+1
+
+                    var y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
+                    var i = 0
+                    drawFirstBackground(canvas, y.toFloat(), true)
+                    model.fluvs.forEach{
+                        if (i++%2==0){
+                            drawFluvBackground(canvas, Rect(width / 2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true)
+                        }
+                        else{
+                            drawFluvBackground(canvas, Rect((width / 2 - it.size).toInt(), y, width / 2, y + model.fluvHeight), false)
+                        }
+
+                        y += model.fluvHeight
                     }
-                    "spin" ->{
-                        widget = spinWidget
+                    drawLastBackground(canvas, y.toFloat(), i % 2 != 0)
+                    y = height/2-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
+                    i = 0
+                    drawFirst(canvas, y.toFloat(), true)
+                    model.fluvs.forEach{
+                        if (i++%2==0){
+                            drawFluv(canvas, Rect((width / 2)-2, y, (width / 2 + it.size).toInt(), y + model.fluvHeight), true, i == 1, i == model.fluvNumber)
+                        }
+                        else{
+                            drawFluv(canvas, Rect((width / 2 - it.size).toInt(), y, (width / 2)+2, y + model.fluvHeight), false, i == 1, i == model.fluvNumber)
+                        }
+
+                        y += model.fluvHeight
                     }
-                    "custom" ->{
-                        widget = customWidget
-                    }
-                }
-            }
-
-            val verticalOffset = preferences.getInt("verticalOffset_",0)
-            val horizontalOffset = preferences.getInt("horizontalOffset_",0)
-            canvas.save()
-            //canvas.translate(horizontalOffset.toFloat(),verticalOffset.toFloat())
-
-            canvas.rotate(preferences.getInt("rotation_", 0).toFloat(),width*0.5f,height*0.5f)
-
-
-            model.fluvHeight = Math.round((height / preferences.getInt("fluvNumber_", 4)).toDouble()).toInt()
-            model.fluvNumber = preferences.getInt("fluvNumber_", 4)
-            model.speed = preferences.getInt("speed_", 2)
-            model.fluvWeight = preferences.getInt("fluvWeight_", 12)
-            model.fps=60
-            model.wideness = 0
-            color_ = preferences.getInt("color_", Color.BLACK)
-            colorRight_ = preferences.getInt("colorRight_", Color.rgb(100, 100, 100))
-            colorLeft_ = preferences.getInt("colorLeft_", Color.rgb(50, 50, 50))
-            paint_.color = color
-
-            if (preferences.getBoolean("changed", false)){
-                model.initBars(colorLeft_, color_, colorRight_)
-                preferences.edit().putBoolean("changed", false).apply()
-            }
-            if (isWallpaper && preferences.getBoolean("changedWallpaper", false)){
-                model = WallpaperModel(Math.round((height/ preferences.getInt("fluvNumber_", 4)).toDouble()).toInt(),
-                        0,
-                        100,
-                        preferences.getInt("fluvNumber_", 4),
-                        preferences.getInt("fluvWeight_", 12),
-                        60,
-                        isWallpaper,
-                        height,
-                        width,
-                        preferences.getInt("speed_", 2),
-                        preferences.getInt("wideness_", 380))
-                model.initBars(colorLeft_, color_, colorRight_)
-                preferences.edit().putBoolean("changedWallpaper", false).apply()
-            }
-
-
-            canvas.drawColor(Color.BLACK)
-
-            if (model.fluvWeight!=0){
-
-                var y = height/-2//-((model.fluvHeight*model.fluvNumber)+model.fluvWeight)/2
-                var i = 0
-                model.bars.forEach{
-                    paint_.color = it.actualColor
-                    canvas.drawRect(-1f*width,y*1f-2,width*2f,y*1f+it.size+2,paint_)
-
-                    y += model.fluvHeight
-                }
+                    drawLast(canvas, y.toFloat(), i % 2 != 0)
 
 
 
+                    canvas.rotate(-preferences.getInt("rotation", 0).toFloat(),(width/2).toFloat(),((height-hOffset)/2).toFloat())
 
-                canvas.rotate(-preferences.getInt("rotation_", 0).toFloat(),width*0.5f,height*0.5f)
+                    canvas.restore()
 
-                canvas.restore()
-
-                val shaderHeight=preferences.getInt("dimHeight_", 100)
-                paintAlpha_.alpha = preferences.getInt("dimAlpha_", 125)
-                canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha_)
-                canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height)-shaderHeight).toFloat(), width.toFloat(), (height).toFloat()), paintAlpha_)
-
+                    val shaderHeight=preferences.getInt("dimHeight", 100)
+                    paintAlpha.alpha = preferences.getInt("dimAlpha", 125)
+                    canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha)
+                    canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height)-shaderHeight).toFloat(), width.toFloat(), (height).toFloat()), paintAlpha)
 
 
-                if (preferences.getLong("lastLocation",0L)>4*60*60*1000){
-                    if (ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                        LocationServices.getFusedLocationProviderClient(context).lastLocation.addOnSuccessListener {
-                            it?.let {
-                                preferences.edit().putLong("latitude",it.latitude.toLong())
-                                preferences.edit().putLong("longitude",it.longitude.toLong())
-                                preferences.edit().putLong("lastLocation",Calendar.getInstance().time.time)
+
+                    if (preferences.getLong("lastLocation",0L)>4*60*60*1000){
+                        if (ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                            LocationServices.getFusedLocationProviderClient(context).lastLocation.addOnSuccessListener {
+                                it?.let {
+                                    preferences.edit().putLong("latitude",it.latitude.toLong())
+                                    preferences.edit().putLong("longitude",it.longitude.toLong())
+                                    preferences.edit().putLong("lastLocation",Calendar.getInstance().time.time)
+                                }
                             }
+                        }
+                    }
+
+
+
+                    if (preferences.getBoolean("showWidget", false)){
+
+                        val widgetX =  preferences.getInt("widgetX", 0)// - preferences.getInt("widgetXsize", 454) / 2
+                        val widgetY =  preferences.getInt("widgetY", 0)// - preferences.getInt("widgetXsize", 454) / 2
+                        if (!widget.isInitialized()){
+                            widget.init(context, widgetX, widgetY, preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
+                        }
+                        if (isWallpaper && preferences.getBoolean("changedWidgetWallpaper", false)){
+                            widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
+                            preferences.edit().putBoolean("changedWidgetWallpaper", false).apply()
+                        }
+                        if (!isWallpaper && preferences.getBoolean("changedWidget", false)){
+                            widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
+                            preferences.edit().putBoolean("changedWidget", false).apply()
+                        }
+
+                        widget.draw(canvas, isWallpaper, widgetX, widgetY)
+                    }
+
+
+                    model.updateFluvs(preferences)
+
+                }
+
+            }
+            else{
+
+                hOffset = height
+
+                if (preferences.getBoolean("showWidget", false)) {
+                    when(preferences.getString("selectedWidget", "pypots")){
+                        "pypots" ->{
+                            widget = pypotsWidget
+                        }
+                        "spin" ->{
+                            widget = spinWidget
+                        }
+                        "custom" ->{
+                            widget = customWidget
                         }
                     }
                 }
 
+                canvas.save()
+
+                canvas.rotate(preferences.getInt("rotation_", 0).toFloat(),width*0.5f,height*0.5f)
 
 
-                if (preferences.getBoolean("showWidget", false)){
+                model.fluvHeight = preferences.getInt("fluvNumber_", 20)
+                model.fluvNumber = 3
+                model.speed = preferences.getInt("speed_", 2)
+                model.fluvWeight = preferences.getInt("fluvWeight_", 12)
+                model.fps=60
+                model.wideness = 0
+                color_ = preferences.getInt("color_", Color.BLACK)
+                colorRight_ = preferences.getInt("colorRight_", Color.rgb(100, 100, 100))
+                colorLeft_ = preferences.getInt("colorLeft_", Color.rgb(50, 50, 50))
+                paint_.color = color
 
-                    val widgetX =  preferences.getInt("widgetX", 0)// - preferences.getInt("widgetXsize", 454) / 2
-                    val widgetY =  preferences.getInt("widgetY", 0)// - preferences.getInt("widgetXsize", 454) / 2
-                    if (!widget.isInitialized()){
-                        widget.init(context, widgetX, widgetY, preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
-                    }
-                    if (isWallpaper && preferences.getBoolean("changedWidgetWallpaper", false)){
-                        widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
-                        preferences.edit().putBoolean("changedWidgetWallpaper", false).apply()
-                    }
-                    if (!isWallpaper && preferences.getBoolean("changedWidget", false)){
-                        widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
-                        preferences.edit().putBoolean("changedWidget", false).apply()
-                    }
-
-                    widget.draw(canvas, isWallpaper, widgetX, widgetY)
+                if (preferences.getBoolean("changed", false)){
+                    model.initBars(colorLeft_, color_, colorRight_)
+                    preferences.edit().putBoolean("changed", false).apply()
+                }
+                if (isWallpaper && preferences.getBoolean("changedWallpaper", false)){
+                    model = WallpaperModel(preferences.getInt("fluvNumber_", 20),
+                            0,
+                            100,
+                            3,
+                            preferences.getInt("fluvWeight_", 12),
+                            60,
+                            isWallpaper,
+                            height,
+                            width,
+                            preferences.getInt("speed_", 2),
+                            preferences.getInt("wideness_", 380))
+                    model.initBars(colorLeft_, color_, colorRight_)
+                    preferences.edit().putBoolean("changedWallpaper", false).apply()
                 }
 
 
-                model.updateBars(preferences)
+                canvas.drawColor(Color.BLACK)
 
+                if (model.fluvWeight!=0){
+
+
+
+                    var d = height/2
+                    var u = d
+
+
+                    while (d<height*2){
+                        model.bars.forEach{
+                            paint_.color = it.actualColor
+                            canvas.drawRect(-2f*width,d*1f,width*2f,d*1f+it.size+1,paint_)
+
+                            d += (it.size).toInt()
+                        }
+                    }
+                    while (u>height*-2){
+                        model.bars.reversed().forEach{
+                            paint_.color = it.actualColor
+                            canvas.drawRect(-2f*width,u*1f-it.size ,width*2f,u*1f+1,paint_)
+
+                            u -= (it.size).toInt()
+                        }
+                    }
+
+                    canvas.rotate(-preferences.getInt("rotation_", 0).toFloat(),width*0.5f,height*0.5f)
+
+                    canvas.restore()
+
+                    val shaderHeight=preferences.getInt("dimHeight_", 100)
+                    paintAlpha_.alpha = preferences.getInt("dimAlpha_", 125)
+                    canvas.drawBitmap(gradientTop, null, RectF(0F, 0F, width.toFloat(), shaderHeight.toFloat()), paintAlpha_)
+                    canvas.drawBitmap(gradientBottom, null, RectF(0F, ((height)-shaderHeight).toFloat(), width.toFloat(), (height).toFloat()), paintAlpha_)
+
+
+
+                    if (preferences.getLong("lastLocation",0L)>4*60*60*1000){
+                        if (ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                            LocationServices.getFusedLocationProviderClient(context).lastLocation.addOnSuccessListener {
+                                it?.let {
+                                    preferences.edit().putLong("latitude",it.latitude.toLong())
+                                    preferences.edit().putLong("longitude",it.longitude.toLong())
+                                    preferences.edit().putLong("lastLocation",Calendar.getInstance().time.time)
+                                }
+                            }
+                        }
+                    }
+
+
+
+                    if (preferences.getBoolean("showWidget", false)){
+
+                        val widgetX =  preferences.getInt("widgetX", 0)// - preferences.getInt("widgetXsize", 454) / 2
+                        val widgetY =  preferences.getInt("widgetY", 0)// - preferences.getInt("widgetXsize", 454) / 2
+                        if (!widget.isInitialized()){
+                            widget.init(context, widgetX, widgetY, preferences.getInt("widgetXsize", 454), preferences.getInt("widgetXsize", 454))
+                        }
+                        if (isWallpaper && preferences.getBoolean("changedWidgetWallpaper", false)){
+                            widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
+                            preferences.edit().putBoolean("changedWidgetWallpaper", false).apply()
+                        }
+                        if (!isWallpaper && preferences.getBoolean("changedWidget", false)){
+                            widget.init(context, widgetX,widgetY,preferences.getInt("widgetXsize", 454),preferences.getInt("widgetXsize", 454))
+                            preferences.edit().putBoolean("changedWidget", false).apply()
+                        }
+
+                        widget.draw(canvas, isWallpaper, widgetX, widgetY)
+                    }
+
+
+                    model.updateBars(preferences)
+
+                }
             }
-        }
 
     }
 
